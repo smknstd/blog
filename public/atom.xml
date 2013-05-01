@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[My Octopress Blog]]></title>
+  <title><![CDATA[smknstd.io]]></title>
   <link href="http://yoursite.com/atom.xml" rel="self"/>
   <link href="http://yoursite.com/"/>
-  <updated>2013-04-29T08:47:33+02:00</updated>
+  <updated>2013-05-01T17:43:37+02:00</updated>
   <id>http://yoursite.com/</id>
   <author>
-    <name><![CDATA[Your Name]]></name>
+    <name><![CDATA[smknstd]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
@@ -15,18 +15,18 @@
   
   <entry>
     <title type="html"><![CDATA[hello world3]]></title>
-    <link href="http://yoursite.com/blog/2013/04/29/hello-world3/"/>
+    <link href="http://yoursite.com/2013/04/29/hello-world3/"/>
     <updated>2013-04-29T08:46:00+02:00</updated>
-    <id>http://yoursite.com/blog/2013/04/29/hello-world3</id>
+    <id>http://yoursite.com/2013/04/29/hello-world3</id>
     <content type="html"><![CDATA[<p>zinizn</p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[hello world]]></title>
-    <link href="http://yoursite.com/blog/2012/08/10/hello-world/"/>
+    <link href="http://yoursite.com/2012/08/10/hello-world/"/>
     <updated>2012-08-10T00:19:00+02:00</updated>
-    <id>http://yoursite.com/blog/2012/08/10/hello-world</id>
+    <id>http://yoursite.com/2012/08/10/hello-world</id>
     <content type="html"><![CDATA[<h1>hello world</h1>
 
 <p>hello world !</p>
@@ -35,9 +35,9 @@
   
   <entry>
     <title type="html"><![CDATA[hello world2]]></title>
-    <link href="http://yoursite.com/blog/2011/04/29/hello-world2/"/>
+    <link href="http://yoursite.com/2011/04/29/hello-world2/"/>
     <updated>2011-04-29T08:12:00+02:00</updated>
-    <id>http://yoursite.com/blog/2011/04/29/hello-world2</id>
+    <id>http://yoursite.com/2011/04/29/hello-world2</id>
     <content type="html"><![CDATA[<p>titi</p>
 ]]></content>
   </entry>

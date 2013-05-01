@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: datastage | smknstd.io]]></title>
+  <link href="http://yoursite.com/categories/datastage/atom.xml" rel="self"/>
+  <link href="http://yoursite.com/"/>
+  <updated>2013-05-01T17:43:37+02:00</updated>
+  <id>http://yoursite.com/</id>
+  <author>
+    <name><![CDATA[smknstd]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[hello world2]]></title>
+    <link href="http://yoursite.com/2011/04/29/hello-world2/"/>
+    <updated>2011-04-29T08:12:00+02:00</updated>
+    <id>http://yoursite.com/2011/04/29/hello-world2</id>
+    <content type="html"><![CDATA[<p>titi</p>
+]]></content>
+  </entry>
+  
+</feed>
