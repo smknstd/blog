@@ -4,7 +4,7 @@
   <title><![CDATA[smknstd.io]]></title>
   <link href="http://yoursite.com/atom.xml" rel="self"/>
   <link href="http://yoursite.com/"/>
-  <updated>2013-05-20T13:18:14+02:00</updated>
+  <updated>2013-05-20T13:33:47+02:00</updated>
   <id>http://yoursite.com/</id>
   <author>
     <name><![CDATA[smknstd]]></name>
@@ -14,10 +14,10 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Hiding Yourself]]></title>
-    <link href="http://yoursite.com/2013/05/20/hiding-yourself/"/>
-    <updated>2013-05-20T00:00:00+02:00</updated>
-    <id>http://yoursite.com/2013/05/20/hiding-yourself</id>
+    <title type="html"><![CDATA[Hiding yourself]]></title>
+    <link href="http://yoursite.com/2013/05/19/hiding-yourself/"/>
+    <updated>2013-05-19T05:59:00+02:00</updated>
+    <id>http://yoursite.com/2013/05/19/hiding-yourself</id>
     <content type="html"><![CDATA[<p><img src="./thewire.png" title="Avon Barksdale's hint on hinding himself" alt="the wire screencap" /></p>
 
 <h1>How did I get a different and secured password for every service</h1>
