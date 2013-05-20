@@ -1,27 +1,27 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
-        <loc>http://yoursite.com/2011/04/29/hello-world2/</loc>
+        <loc>http://peaceful-lake-6775.herokuapp.com//2011/04/29/hello-world2/</loc>
         <lastmod>2013-05-20T12:51:27+02:00</lastmod>
     </url>
     <url>
-        <loc>http://yoursite.com/2012/08/10/hello-world/</loc>
+        <loc>http://peaceful-lake-6775.herokuapp.com//2012/08/10/hello-world/</loc>
         <lastmod>2013-05-20T12:51:27+02:00</lastmod>
     </url>
     <url>
-        <loc>http://yoursite.com/2013/04/29/hello-world3/</loc>
+        <loc>http://peaceful-lake-6775.herokuapp.com//2013/04/29/hello-world3/</loc>
         <lastmod>2013-05-20T12:51:27+02:00</lastmod>
     </url>
     <url>
-        <loc>http://yoursite.com/2013/05/19/hiding-yourself/</loc>
-        <lastmod>2013-05-20T13:33:08+02:00</lastmod>
+        <loc>http://peaceful-lake-6775.herokuapp.com//2013/05/19/hiding-yourself/</loc>
+        <lastmod>2013-05-20T14:51:41+02:00</lastmod>
     </url>
     <url>
-        <loc>http://yoursite.com/</loc>
-        <lastmod>2013-05-20T13:33:08+02:00</lastmod>
+        <loc>http://peaceful-lake-6775.herokuapp.com//</loc>
+        <lastmod>2013-05-20T14:51:41+02:00</lastmod>
     </url>
     <url>
-        <loc>http://yoursite.com/index.html.old</loc>
+        <loc>http://peaceful-lake-6775.herokuapp.com//index.html.old</loc>
         <lastmod>2013-05-20T12:51:27+02:00</lastmod>
     </url>
 </urlset>
