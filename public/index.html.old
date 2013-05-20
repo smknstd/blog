@@ -5,15 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Blog Archive - smknstd.io</title>
+  <title>smknstd.io</title>
   <meta name="author" content="smknstd">
 
   
-  <meta name="description" content=" Blog Archive 2013 Hiding Yourself
-May 20 2013 hello world3
-Apr 29 2013 2012 hello world
-Aug 10 2012 2011 hello world2
-Apr 29 2011 ">
+  <meta name="description" content=" Blog Archives ">
   
 
   <meta name="HandheldFriendly" content="True">
@@ -21,7 +17,7 @@ Apr 29 2011 ">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://yoursite.com/">
+  <link rel="canonical" href="http://yoursite.com/.old">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -52,65 +48,14 @@ Apr 29 2011 ">
 </nav>
   <div id="main">
     <div id="content">
-      <div>
-<article role="article">
+      <div class="blog-index">
   
-  <header>
-    <h1 class="entry-title">Blog Archive</h1>
+  
+  <div class="pagination">
     
-  </header>
-  
-  <div id="blog-archives">
-
-
-
-  
-  <h2>2013</h2>
-
-<article>
-  
-<h1><a href="/2013/05/20/hiding-yourself/">Hiding Yourself</a></h1>
-<time datetime="2013-05-20T00:00:00+02:00" pubdate><span class='month'>May</span> <span class='day'>20</span> <span class='year'>2013</span></time>
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/2013/04/29/hello-world3/">hello world3</a></h1>
-<time datetime="2013-04-29T08:46:00+02:00" pubdate><span class='month'>Apr</span> <span class='day'>29</span> <span class='year'>2013</span></time>
-
-</article>
-
-
-
-  
-  <h2>2012</h2>
-
-<article>
-  
-<h1><a href="/2012/08/10/hello-world/">hello world</a></h1>
-<time datetime="2012-08-10T00:19:00+02:00" pubdate><span class='month'>Aug</span> <span class='day'>10</span> <span class='year'>2012</span></time>
-
-</article>
-
-
-
-  
-  <h2>2011</h2>
-
-<article>
-  
-<h1><a href="/2011/04/29/hello-world2/">hello world2</a></h1>
-<time datetime="2011-04-29T08:12:00+02:00" pubdate><span class='month'>Apr</span> <span class='day'>29</span> <span class='year'>2011</span></time>
-
-</article>
-
-</div>
-
-  
-</article>
+    <a href="/blog/archives">Blog Archives</a>
+    
+  </div>
 </div>
 
     </div>
