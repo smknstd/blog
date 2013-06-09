@@ -2,16 +2,20 @@
   #content > div { &, > article { padding-top: 0; } }
 }
 #blog-archives {
+  padding-bottom: 0px;
   article {
-    padding: 1em 0 1em;
+    padding-top: 10px;
+    padding-bottom: 0px;
+    padding-left: 20px;
+
     position: relative;
-    background: $img-border bottom left repeat-x;
+    border-bottom: 3px solid #F3EFED;
     &:last-child {
       background: none;
     }
     footer { padding: 0; margin: 0;}
   }
-  h1 { color: $text-color; margin-bottom: .3em; }
+  h1 { color: $text-color; margin-bottom: 10px; margin-top: 9px; margin-left: 80px;}
   h2 { display: none; }
   h1 {
     font-size: 1.5em;
@@ -32,6 +36,7 @@
   time {
     font-size: .9em;
     line-height: 1.2em;
+    margin-left: 40px;
     .month, .day { display: inline-block; }
     .month { text-transform: uppercase; }
   }
@@ -39,14 +44,15 @@
   &, .entry-content { a { @include link-colors(inherit, $link-color-hover); }}
   a:hover { color: $link-color-hover; }
   @media only screen and (min-width: 550px) {
-    article { margin-left: 5em; }
+    article { margin-left: 0; }
     h2 {
-      margin-bottom: .3em;
+      margin-bottom: 0;
       font-weight: normal;
       display: inline-block;
-      position: relative; top: -1px;
+      position: relative;
+      top: -1px;
       float: left;
-      &:first-child { padding-top: .75em; }
+      padding-top: 0px;
     }
     time {
       position: absolute;
@@ -54,7 +60,7 @@
       left: 0em;
       top: 1.8em;
     }
-    .year { display: none; }
+    .year { display: true; }
     article {
       padding:{left: 4.5em; bottom: .7em;}
     }
@@ -66,7 +72,7 @@
 #content > .category {
   article {
     margin-left: 0;
-    padding-left: 6.8em;
+    padding-left: 0;
   }
   .year { display: inline; }
 }

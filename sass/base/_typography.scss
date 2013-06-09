@@ -26,6 +26,10 @@ body > header h2 {
   font-family: $header-subtitle-font-family;
 }
 
+body > nav > intro {
+  font-family: "adelle",serif;
+}
+
 body {
   line-height: 1.5em;
   color: $text-color;
