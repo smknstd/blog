@@ -15,8 +15,8 @@ $sidebar-width-wide: 300px !default;
 $indented-lists: false !default;
 
 $header-font-size: 1em !default;
-$header-padding-top: 1.5em !default;
-$header-padding-bottom: 1.5em !default;
+$header-padding-top: 20px !default;
+$header-padding-bottom: 20px !default;
 
 .group { @include pie-clearfix; }
 
@@ -44,6 +44,7 @@ $header-padding-bottom: 1.5em !default;
 }
 
 body {
+  font-family: "Helvetica Neue",Arial,sans-serif;
   -webkit-text-size-adjust: none;
   //max-width: $max-width;
   position: relative;
@@ -73,13 +74,52 @@ body {
   > header {
     font-size: $header-font-size;
     padding-top: $header-padding-top;
+    bacjground-color: #fff;
     padding-bottom: $header-padding-bottom;
   }
 }
 
+#presentation {
+  position: relative;
+  border-bottom: 3px solid #F3EFED;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+#archive_header {
+  display: block;
+  height: 60px;
+}
+
+#atom {
+  float: left;
+  padding-left: 10px;
+}
+
+#title_archive {
+  float: left;
+}
+
+#legend {
+  margin-left: 40px;
+  float: left;
+  font-family: "Adelle Semibold",serif;
+
+  font-size: 14px;
+  color: #839496;
+}
+
+#logo {
+  margin-left: 40px;
+}
+
 #intro {
   margin-left: 40px;
-  font-family: "adelle",serif;
+  width: 900px;
+  font-family: "Adelle Semibold",serif;
+  font-size: 23px;
+  padding-top: 25px;
+  padding-bottom: 22px;
 }
 
 #content {
