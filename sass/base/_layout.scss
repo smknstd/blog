@@ -91,6 +91,18 @@ body {
   height: 60px;
 }
 
+#archive_header2 {
+  border-top: 3px solid #F3EFED;
+  display: block;
+  height: 60px;
+}
+
+#archive_header3 {
+    margin-left: 40px;
+    margin-right: 40px;
+    padding-top: 15px;
+}
+
 #atom {
   float: left;
   padding-left: 10px;
@@ -116,10 +128,16 @@ body {
 #intro {
   margin-left: 40px;
   width: 900px;
-  font-family: "Adelle Semibold",serif;
+  font-family: "Adelle",serif;
+  font-weight: 600;
   font-size: 23px;
   padding-top: 25px;
   padding-bottom: 22px;
+
+  a { color: #444444;
+      text-decoration: none;
+      border-bottom: 2px solid #AEAEAE;
+      &:hover { color: #AEAEAE; text-decoration: none; border-bottom: 2px solid #FA0054; } }
 }
 
 #content {

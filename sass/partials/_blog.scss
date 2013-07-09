@@ -1,5 +1,5 @@
 article {
-  padding-top: 1em;
+  padding-top: 0px;
   a { @extend .force-wrap; }
   header {
     position: relative;
@@ -14,15 +14,25 @@ article {
       a { text-decoration: none;
         &:hover { text-decoration: underline; } }
     }
-    p {
-      font-size: 20px;
-      color: $text-color-light;
+    h2 {
+      margin-left: 40px;
+      font-family: "Adelle",serif;
+      font-weight: 600;
+      padding-top: 16px;
+      font-size: 32px;
+      a { text-decoration: none;
+        &:hover { text-decoration: underline; } }
+    }
+    h3 {
+      font-size: 0.9em;
+      line-height: 1.2em;
+      color: #AAAAAA;
       margin: 0;
-      &.meta {
-        @extend .sans;
-        text-transform: uppercase;
-        position: absolute; top: 0;
-      }
+      @extend .sans;
+      margin-left: 40px;
+      margin-top: 22px;
+      text-transform: uppercase;
+      position: absolute;
     }
     @media only screen and (min-width: 768px) {
       margin-bottom: 0;
@@ -30,11 +40,18 @@ article {
       //background: $img-border bottom left repeat-x;
     }
   }
+  h1 {
+    font-size: 32px;
+  }
   h2 {
     padding-top: 0.8em;
     //background: $img-border top left repeat-x;
   }
-  .entry-content & h2:first-child, header + h2 { padding-top: 0; }
+  .entry-content { 
+    margin-top: 20px;
+    margin-left: 40px;
+  }
+
   h2:first-child, header + h2 { background: none; }
   .feature {
     padding-top: .5em;
@@ -46,10 +63,14 @@ article {
   }
   
   > footer {
-    padding-bottom: 2.5em;
+    border-top: 3px solid #F3EFED;
+    border-bottom: 3px solid #F3EFED;
+    padding-bottom: 0;
     margin-top: 2em;
     @extend .sans;
     p.meta {
+      margin-left: 40px;
+      margin-top: 15px;
       margin-bottom: .8em;
       font-size: .85em;
       clear: both;
