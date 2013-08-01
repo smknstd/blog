@@ -106,10 +106,12 @@ body {
 #atom {
   float: left;
   padding-left: 10px;
+  padding-top: 10px;
 }
 
 #title_archive {
   float: left;
+  padding-top: 10px;
 }
 
 #legend {
@@ -118,7 +120,7 @@ body {
   font-family: "Adelle Semibold",serif;
 
   font-size: 14px;
-  color: #839496;
+  color: #CCCCCC;
 }
 
 #logo {
@@ -126,18 +128,47 @@ body {
 }
 
 #intro {
+  float: left;
   margin-left: 40px;
-  width: 900px;
+  width: 800px;
   font-family: "Adelle",serif;
   font-weight: 600;
-  font-size: 23px;
-  padding-top: 25px;
+  font-size: 21px;
+  padding-top: 40px;
   padding-bottom: 22px;
 
   a { color: #444444;
       text-decoration: none;
       border-bottom: 2px solid #AEAEAE;
-      &:hover { color: #AEAEAE; text-decoration: none; border-bottom: 2px solid #FA0054; } }
+      padding-bottom: -2px;
+      &:hover { color: #AEAEAE; text-decoration: none; border-bottom: 2px solid #FA0054; padding-bottom: -2px; } }
+}
+
+#lienemail {
+  a { color: #FA0054;
+      text-decoration: none;
+      border-bottom: 2px solid #AEAEAE;
+      padding-bottom: -2px;
+      &:hover { color: #AEAEAE; text-decoration: none; border-bottom: 2px solid #FA0054; padding-bottom: -2px; } }
+}
+
+#imageintro {
+  padding-top: 25px;
+  padding-left: 55px;
+  float: left;
+}
+
+#legende {
+  padding-top: 0px;
+  padding-left: 35px;
+  padding-bottom: 20px;
+  color: #AAAAAA;
+  font-size: 15px;
+  font-family: "Helvetica Neue",Arial,sans-serif;
+}
+
+.entry-content {
+  width: 1000px;
 }
 
 #content {
