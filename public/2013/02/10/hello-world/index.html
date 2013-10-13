@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>hello world - smknstd.io</title>
+  <meta name="author" content="smknstd">
+
+  
+  <meta name="description" content="Bienvenue à tous. Normalement vous trouverez ici, de manière plus ou moins régulière, quelques humbles notes et commentaires qui me paraissent &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://peaceful-lake-6775.herokuapp.com//2013/02/10/hello-world/">
+  <link href="/images/favicon.ico" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="smknstd.io" type="application/atom+xml">
+  <script type="text/javascript" src="//use.typekit.net/oqc4yak.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<script type="text/javascript">
+function show_new() {
+	var j=0;
+    var chila = document.getElementById("blog-archives").children;
+	for(var i = 0; i < chila.length; i++) {
+		    var lien = chila[i].getElementsByTagName('h1')[0].getElementsByTagName('a')[0].getAttribute("href");
+		    mytab = lien.split("/");
+		    var parsedDate = new Date(parseInt(mytab[1]), parseInt(mytab[2])-1, parseInt(mytab[3]), 0, 0, 0, 0);
+		    var today = new Date();
+		    var diffDays = Math.floor((today - parsedDate)/(1000*60*60*24));
+		    if(diffDays<90){
+		    	j++;
+		        chila[i].getElementsByTagName('h1')[0].innerHTML=chila[i].getElementsByTagName('h1')[0].innerHTML+"<div id='new'>NEW</div>";
+		    }
+	}
+	console.log("[function show_new] " + j +" articles de moins de 90 jours (rajout de l'etiquette NEW)");
+}
+</script>
+
+  
+
+</head>
+
+<body onload="show_new()"   >
+  <header role="banner">  <div id="logo"><a href="/"><img src="/images/logo.png" alt="logo" /></a></div>
+  <div id="legend">{type: "web log", about: "trapped all day, got my cheese and an indexed key"}</div>
+
+</header>
+  <nav role="navigation">
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    <div id="archive_header">
+    
+      <h2 class="entry-title">Hello World</h2>
+    
+    </div>
+  </header>
+  <header>
+    <div id="archive_header">
+    
+      <h3 class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-10T00:19:00+01:00" pubdate data-updated="true">Feb 10<span>th</span>, 2013</time>
+      </h3>
+    
+    </div>
+  </header>
+
+
+<div class="entry-content"><p>Bienvenue à tous. Normalement vous trouverez ici, de manière plus ou moins régulière, quelques humbles notes et commentaires qui me paraissent remarquables.</p>
+
+<p>Pour les partager, j&#8217;ai choisi d&#8217;utiliser &#8220;octopress&#8221;. Un outil très pratique qui permet de générer des pages statiques, ce qui a tellement d&#8217;avantages que je ne saurai pas tous les citer. Dans mon ordre de préférence: pas de SGBD, maintenance en ligne de commande dont synchronisation avec GIT, le formattage simplifié du langage markdown, la sauvegarde, le chargement plus rapide lors de la visite. Et il y&#8217;en a d&#8217;autres! Même sans maitriser ruby, j&#8217;ai facilement pu personnaliser l&#8217;application grâce au langage de template <a href="http://liquidmarkup.org">liquid</a>. J&#8217;en ai par ailleurs vu les limites sur la gestion des dates et j&#8217;ai vite compris que je n&#8217;étais pas le <a href="http://skipjack.info/?p=899">seul</a>.</p>
+
+<p>Si vous voyez des erreurs dans ce que j&#8217;ai écrit, n&#8217;hesitez pas à me corriger en m&#8217;envoyant un email. Je ne suis pas sur twitter, j&#8217;avais bien un compte mais c&#8217;etait avant l&#8217;ère des applications &#8220;mobile&#8221;, quand les messages étaient encore envoyés par <a href="https://www.youtube.com/watch?v=IGcAYSeN7E4">SMS</a>. lol.</p>
+
+<p>A bientôt.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">smknstd</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-10T00:19:00+01:00" pubdate data-updated="true">Feb 10<span>th</span>, 2013</time>
+      
+
+
+    </p>
+    <div id="archive_header2">
+      <div id="archive_header3">
+      
+      
+        <a class="basic-alignment right" href="/2013/04/29/hello-world3/" title="Next Post: hello world3">hello world3 &raquo;</a>
+      
+      </div>
+    </div>
+  </footer>
+</article>
+</div>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  2013 - smknstd -
+  <span class="credit">designed with <a href="http://octopress.org">Octopress</a> and hosted by <a href="http://heroku.com">Heroku</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

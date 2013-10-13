@@ -1,2 +1,20 @@
 <script type="text/javascript" src="//use.typekit.net/oqc4yak.js"></script>
 <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<script type="text/javascript">
+function show_new() {
+	var j=0;
+    var chila = document.getElementById("blog-archives").children;
+	for(var i = 0; i < chila.length; i++) {
+		    var lien = chila[i].getElementsByTagName('h1')[0].getElementsByTagName('a')[0].getAttribute("href");
+		    mytab = lien.split("/");
+		    var parsedDate = new Date(parseInt(mytab[1]), parseInt(mytab[2])-1, parseInt(mytab[3]), 0, 0, 0, 0);
+		    var today = new Date();
+		    var diffDays = Math.floor((today - parsedDate)/(1000*60*60*24));
+		    if(diffDays<90){
+		    	j++;
+		        chila[i].getElementsByTagName('h1')[0].innerHTML=chila[i].getElementsByTagName('h1')[0].innerHTML+"<div id='new'>NEW</div>";
+		    }
+	}
+	console.log("[function show_new] " + j +" articles de moins de 90 jours (rajout de l'etiquette NEW)");
+}
+</script>
