@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[smknstd.io]]></title>
-  <link href="http://peaceful-lake-6775.herokuapp.com//atom.xml" rel="self"/>
-  <link href="http://peaceful-lake-6775.herokuapp.com//"/>
-  <updated>2013-10-13T18:45:26+02:00</updated>
-  <id>http://peaceful-lake-6775.herokuapp.com//</id>
+  <link href="http://mlnstd.io/atom.xml" rel="self"/>
+  <link href="http://mlnstd.io/"/>
+  <updated>2013-10-22T20:36:01+02:00</updated>
+  <id>http://mlnstd.io/</id>
   <author>
     <name><![CDATA[smknstd]]></name>
     
@@ -14,17 +14,17 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Montre moi ton mot de passe et je te dirai qui tu es]]></title>
-    <link href="http://peaceful-lake-6775.herokuapp.com//2013/05/19/hiding-yourself/"/>
+    <title type="html"><![CDATA[Votre mot de passe est-il trop simple ?]]></title>
+    <link href="http://mlnstd.io/2013/05/19/hiding-yourself/"/>
     <updated>2013-05-19T14:59:00+02:00</updated>
-    <id>http://peaceful-lake-6775.herokuapp.com//2013/05/19/hiding-yourself</id>
-    <content type="html"><![CDATA[<p>Qui n&#8217;a pas été victime de la <a href="http://en.wikipedia.org/wiki/Password_fatigue">&#8220;fatigue des mots de passe&#8221;</a> ? Je sais bien que les <a href="http://en.wikipedia.org/wiki/Password_manager">Gestionnaires de mots de passe</a> présentent des avantages mais je n&#8217;ai jamais pu me faire à leur defauts. Sans aucune prétention, je vais vous décrire ma facon de retenir facilement un mot de passe unique et complexe pour chaque service avec une seule règle et d&#8217;éviter l&#8217;<a href="http://www.codinghorror.com/blog/2009/05/i-just-logged-in-as-you.html">effroyable</a>!</p>
+    <id>http://mlnstd.io/2013/05/19/hiding-yourself</id>
+    <content type="html"><![CDATA[<p>Qui n&#8217;a pas été victime de la <a href="http://en.wikipedia.org/wiki/Password_fatigue">&#8220;fatigue des mots de passe&#8221;</a> ? Je sais bien que les <a href="http://en.wikipedia.org/wiki/Password_manager">Gestionnaires de mots de passe</a> présentent des avantages mais je n&#8217;ai jamais pu me faire à leur defauts. Sans aucune prétention, je vais vous décrire ma facon de retenir facilement un mot de passe unique et complexe pour chaque service que j&#8217;utilise sur internet avec une seule règle et d&#8217;éviter l&#8217;<a href="http://www.codinghorror.com/blog/2009/05/i-just-logged-in-as-you.html">effroyable</a>!</p>
 
-<p>Mon astuce n&#8217;est qu&#8217;une variante très simple du <a href="http://en.wikipedia.org/wiki/Caesar_cipher">chiffrement par décalage</a>, que j&#8217;ai imaginé en regardant un épisode de  <a href="http://en.wikipedia.org/wiki/The_Wire">&#8220;sur écoute&#8221;</a>. Dans la série, des trafficants de stupéfiant méfiants s&#8217;échangent des numéros de téléphone  par <a href="http://en.wikipedia.org/wiki/Pager">pagers</a>. Ces numéros sont échangés de manière codée, ainsi si le message est intercepté par la police, il menera à une fausse piste. Dans un souci de commodité, les opérations de cryptage et de décryptage ont été simplifiées: elle se font sans algorithme mathématique mais simplement par une sorte de <a href="http://en.wikipedia.org/wiki/Point_reflection">symétrie</a> appliquée à la disposition d&#8217;un clavier de numérotation téléphonique, et donc très facile à appliquer et à retenir. <em>#NOBRAINER</em></p>
+<p>Mon astuce n&#8217;est qu&#8217;une variante très simple du <a href="http://en.wikipedia.org/wiki/Caesar_cipher">chiffrement par décalage</a>, que j&#8217;ai imaginé en regardant un épisode de  <a href="http://en.wikipedia.org/wiki/The_Wire">&#8220;sur écoute&#8221;</a>. Dans la série, les hommes de main de <a href="http://en.wikipedia.org/wiki/Stringer_Bell">Stringer Bell</a> s&#8217;échangent des numéros de téléphone  par <a href="http://en.wikipedia.org/wiki/Pager">pagers</a>. Ces numéros sont échangés de manière codée, ainsi si le message est intercepté par la police, il ne menera à rien. Dans un souci de commodité, les opérations de cryptage et de décryptage ont été simplifiées: elle se font sans algorithme mathématique mais simplement par une sorte de <a href="http://en.wikipedia.org/wiki/Point_reflection">symétrie</a> appliquée à la disposition d&#8217;un clavier de numérotation téléphonique, et donc très facile à appliquer et à retenir. <em>#NOBRAINER</em></p>
 
 <p>&#8220;if it was a code that involves math, algebra or whatever, these littles yos in the project wouldn&#8217;t be able to follow along. Ain&#8217;t no math to it. It&#8217;s just&#8230; how the phone looks when you look at it.&#8221;</p>
 
-<p><img src="http://peaceful-lake-6775.herokuapp.com//images/thewire.png" title="Avon Barksdale's hint on hinding himself" alt="the wire screencap" /></p>
+<p><img src="http://mlnstd.io/images/thewire.png" title="Avon Barksdale's hint on hinding himself" alt="the wire screencap" /></p>
 
 <p>Pour être capable de mémoriser mes mots de passes, j&#8217;ai librement adapté cette idée aux claviers <a href="http://en.wikipedia.org/wiki/AZERTY">AZERTY</a> que j&#8217;utilise la plupart du temps. Evidemment pour que le mot de passe de chaque service soit unique, il faut intégrer un élément propre: le nom du service evidemment ! Ainsi je transpose chaque lettre du nom d&#8217;un service, et elle devient la lettre suivante selon le sens des 3 lignes du clavier (en minuscule). <code>A</code> devient <code>Z</code>, <code>Z</code> devient <code>E</code>, <code>P</code> devient <code>Q</code>, <code>N</code> devient <code>A</code>, etc. Eventuellement il est possible de faire pareil avec les chiffres: <code>1</code> devient <code>2</code>, <code>2</code> devient <code>3</code>, <code>0</code> devient <code>1</code>, etc. Cette façon de faire est facile à mémoriser et à appliquer. #WIN</p>
 
@@ -40,9 +40,9 @@
 
 <p><em>J&#8217;ai bien pris soin de finir mon radical par des lettres en minuscule, ainsi l&#8217;analogie entre le nom du service et une partie du mot de passe est plus difficile à faire que quelquechose comme <code>MONRADICALyxoyyrt</code>)</em></p>
 
-<p>Cette méthode n&#8217;est pas parfaite et n&#8217;est qu&#8217;un compromis, d&#8217;ailleurs dans l&#8217;épisode de la série dont je me suis inspiré, &#8220;Prezbo&#8221; déjoue assez facilement le stratagème, probablement parcequ&#8217;il a pu récupérer plusieurs numéros différents et procéder par <a href="http://en.wikipedia.org/wiki/Analogy">analogie</a>. Evidemment je considère que la probabilité que quelqu&#8217;un récupère plusieurs de mes mots de passe (et se donne la peine de retrouver ma facon de faire) est assez faible pour continuer à utiliser cette technique. Aussi par prudence, je l&#8217;exclus pour les services dont j&#8217;éstime la sécurité critique (compte mail, paypal, dropbox etc).</p>
+<p>Cette méthode n&#8217;est pas parfaite et n&#8217;est qu&#8217;un compromis, d&#8217;ailleurs dans l&#8217;épisode de la série dont je me suis inspiré, <a href="http://en.wikipedia.org/wiki/Roland_Pryzbylewski">&#8220;Prezbo&#8221;</a> déjoue assez facilement le stratagème, probablement parcequ&#8217;il a pu récupérer plusieurs numéros différents et procéder par <a href="http://en.wikipedia.org/wiki/Analogy">analogie</a>. Evidemment je considère que la probabilité que quelqu&#8217;un récupère plusieurs de mes mots de passe (et se donne la peine de retrouver ma facon de faire) est assez faible pour continuer à utiliser cette technique. Aussi par prudence, je l&#8217;exclus pour les services dont j&#8217;éstime la sécurité critique (compte mail, paypal, dropbox etc).</p>
 
-<h4>Bibliographie</h4>
+<h4>Ressources</h4>
 
 <ul>
 <li><a href="http://www.wired.com/politics/security/commentary/securitymatters/2006/12/72300?currentPage=all">article de 2006</a> dans lequel Bruce Schneier révèle qu&#8217;un des mots de passe les plus courants sur myspace était &#8220;Blink182&#8221;</li>
@@ -50,24 +50,20 @@
 <li><a href="http://www.passwordmeter.com/">password strength meter</a></li>
 <li><a href="https://www.grc.com/haystack.htm">how big is your haystack</a></li>
 <li><a href="http://stackoverflow.com/questions/98768/should-i-impose-a-maximum-length-on-passwords">WTF</a> !?</li>
+<li><a href="http://en.wikipedia.org/wiki/Three_Days_of_the_Condor">un film</a> que j&#8217;aime beaucoup :)</li>
 </ul>
 
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[hello world3]]></title>
-    <link href="http://peaceful-lake-6775.herokuapp.com//2013/04/29/hello-world3/"/>
+    <title type="html"><![CDATA[my favorite 'prompting' tips]]></title>
+    <link href="http://mlnstd.io/2013/04/29/hello-world3/"/>
     <updated>2013-04-29T08:46:00+02:00</updated>
-    <id>http://peaceful-lake-6775.herokuapp.com//2013/04/29/hello-world3</id>
-    <content type="html"><![CDATA[<p>qsqs qsqs qs q sq s q s q s q sqs q s qs  qsdfsf dsf qsd fd sf dsq f ds</p>
+    <id>http://mlnstd.io/2013/04/29/hello-world3</id>
+    <content type="html"><![CDATA[<h2>Something has failed alert</h2>
 
-<h1>zizi</h1>
-
-<p>zinizn</p>
-
-<figure class='code'><figcaption><span>Mon .profile sur ubuntu (.profile)</span> <a href='http://peaceful-lake-6775.herokuapp.com//downloads/code/.profile'>download</a></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -76,108 +72,61 @@
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># ~/.profile: executed by the command interpreter for login shells.</span>
-</span><span class='line'><span class="c"># This file is not read by bash(1), if ~/.bash_profile or ~/.bash_login</span>
-</span><span class='line'><span class="c"># exists.</span>
-</span><span class='line'><span class="c"># see /usr/share/doc/bash/examples/startup-files for examples.</span>
-</span><span class='line'><span class="c"># the files are located in the bash-doc package.</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># the default umask is set in /etc/profile; for setting the umask</span>
-</span><span class='line'><span class="c"># for ssh logins, install and configure the libpam-umask package.</span>
-</span><span class='line'><span class="c">#umask 022</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># if running bash</span>
-</span><span class='line'><span class="k">if</span> <span class="o">[</span> -n <span class="s2">&quot;$BASH_VERSION&quot;</span> <span class="o">]</span>; <span class="k">then</span>
-</span><span class='line'>    <span class="c"># include .bashrc if it exists</span>
-</span><span class='line'>    <span class="k">if</span> <span class="o">[</span> -f <span class="s2">&quot;$HOME/.bashrc&quot;</span> <span class="o">]</span>; <span class="k">then</span>
-</span><span class='line'>  . <span class="s2">&quot;$HOME/.bashrc&quot;</span>
-</span><span class='line'>    <span class="k">fi</span>
-</span><span class='line'><span class="k">fi</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># set PATH so it includes user&#39;s private bin if it exists</span>
-</span><span class='line'><span class="k">if</span> <span class="o">[</span> -d <span class="s2">&quot;$HOME/bin&quot;</span> <span class="o">]</span> ; <span class="k">then</span>
-</span><span class='line'><span class="k">    </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;$HOME/bin:$PATH&quot;</span>
-</span><span class='line'><span class="k">fi</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">COLOR_YELLOW</span><span class="o">=</span><span class="s2">&quot;\[\e[0;33m\]&quot;</span>
-</span><span class='line'><span class="nv">COLOR_RED</span><span class="o">=</span><span class="s2">&quot;\[\e[0;31m\]&quot;</span>
-</span><span class='line'><span class="nv">COLOR_GREEN</span><span class="o">=</span><span class="s2">&quot;\[\e[0;32m\]&quot;</span>
-</span><span class='line'><span class="nv">COLOR_LIGHT_BLUE</span><span class="o">=</span><span class="s2">&quot;\[\e[1;34m\]&quot;</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">COLOR_RED</span><span class="o">=</span><span class="s2">&quot;\[\e[0;31m\]&quot;</span>
 </span><span class='line'><span class="nv">COLOR_NONE</span><span class="o">=</span><span class="s2">&quot;\[\e[0m\]&quot;</span>
 </span><span class='line'>
-</span><span class='line'>git_dirty_flag<span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>  git status 2&gt; /dev/null | grep -c : | awk <span class="s1">&#39;{if ($1 &gt; 0) print &quot;⚡&quot;}&#39;</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>prompt_func<span class="o">()</span>
-</span><span class='line'><span class="o">{</span>
-</span><span class='line'>    <span class="nv">previous_return_value</span><span class="o">=</span><span class="nv">$?</span>;
-</span><span class='line'>    <span class="nv">prompt</span><span class="o">=</span><span class="s2">&quot;${COLOR_LIGHT_BLUE}\w${COLOR_NONE}$(__git_ps1)${COLOR_YELLOW}$(git_dirty_flag)${COLOR_NONE} &quot;</span>
-</span><span class='line'>    <span class="k">if </span><span class="nb">test</span> <span class="nv">$previous_return_value</span> -eq 0
-</span><span class='line'>    <span class="k">then</span>
-</span><span class='line'><span class="k">        </span><span class="nv">PS1</span><span class="o">=</span><span class="s2">&quot;${prompt}➔ &quot;</span>
-</span><span class='line'>    <span class="k">else</span>
-</span><span class='line'><span class="k">        </span><span class="nv">PS1</span><span class="o">=</span><span class="s2">&quot;${prompt}${COLOR_RED}➔${COLOR_NONE} &quot;</span>
-</span><span class='line'>    <span class="k">fi</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'><span class="nv">PROMPT_COMMAND</span><span class="o">=</span>prompt_func
-</span><span class='line'>
-</span><span class='line'><span class="nb">alias </span><span class="nv">ack</span><span class="o">=</span>ack-grep
+</span><span class='line'><span class="k">if </span><span class="nb">test</span> <span class="nv">$?</span> -eq 0
+</span><span class='line'><span class="k">then</span>
+</span><span class='line'><span class="k">    </span><span class="nv">PS1</span><span class="o">=</span><span class="s2">&quot;${prompt}➔ &quot;</span>
+</span><span class='line'><span class="k">else</span>
+</span><span class='line'><span class="k">    </span><span class="nv">PS1</span><span class="o">=</span><span class="s2">&quot;${prompt}${COLOR_RED}➔${COLOR_NONE} &quot;</span>
+</span><span class='line'><span class="k">fi</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>eze zez ez e ze z e  ze z e</p>
+<h2>Current git branch</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">prompt</span><span class="o">=</span><span class="s2">&quot;\w$(__git_ps1)&quot;</span><span class="err">&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Don&#8217;t mess with the commit</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git status 2&gt; /dev/null | grep -c : | awk <span class="s1">&#39;{if ($1 &gt; 0) print &quot;⚡&quot;}&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>BONUS: Jumping to git root directory</h2>
+
+<p>http://stackoverflow.com/questions/957928/is-there-a-way-to-get-to-the-git-root-directory-in-one-command</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">alias </span>git-root<span class="o">=</span><span class="s1">&#39;cd $(git rev-parse --show-toplevel)&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Since I can&#8217;t search properly into my feeds, I cannot give a shout to any of the usefull blogs, which I took those tips from.</p>
+
+<h4>Resources</h4>
+
+<ul>
+<li>probably the most useful <a href="http://mywiki.wooledge.org/BashPitfalls">page</a> about bash on the whole internet</li>
+<li>pretty interesting <a href="http://www.computerworld.com.au/article/222764/a-z_programming_languages_bash_bourne-again_shell/">interview</a></li>
+</ul>
+
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[hello world]]></title>
-    <link href="http://peaceful-lake-6775.herokuapp.com//2013/02/10/hello-world/"/>
+    <link href="http://mlnstd.io/2013/02/10/hello-world/"/>
     <updated>2013-02-10T00:19:00+01:00</updated>
-    <id>http://peaceful-lake-6775.herokuapp.com//2013/02/10/hello-world</id>
-    <content type="html"><![CDATA[<p>Bienvenue à tous. Normalement vous trouverez ici, de manière plus ou moins régulière, quelques humbles notes et commentaires qui me paraissent remarquables.</p>
+    <id>http://mlnstd.io/2013/02/10/hello-world</id>
+    <content type="html"><![CDATA[<p>Bienvenue à tous. Vous etes sur mon blog. Qui est surtout un pretexte pour essayer &#8220;octopress&#8221;. Un outil très pratique qui permet de générer des pages statiques, ce qui a tellement d&#8217;avantages que je ne saurai pas tous les citer (et peut être quelques <a href="http://liquidmarkup.org">limites</a> malgré tout).</p>
 
-<p>Pour les partager, j&#8217;ai choisi d&#8217;utiliser &#8220;octopress&#8221;. Un outil très pratique qui permet de générer des pages statiques, ce qui a tellement d&#8217;avantages que je ne saurai pas tous les citer. Dans mon ordre de préférence: pas de SGBD, maintenance en ligne de commande dont synchronisation avec GIT, le formattage simplifié du langage markdown, la sauvegarde, le chargement plus rapide lors de la visite. Et il y&#8217;en a d&#8217;autres! Même sans maitriser ruby, j&#8217;ai facilement pu personnaliser l&#8217;application grâce au langage de template <a href="http://liquidmarkup.org">liquid</a>. J&#8217;en ai par ailleurs vu les limites sur la gestion des dates et j&#8217;ai vite compris que je n&#8217;étais pas le <a href="http://skipjack.info/?p=899">seul</a>.</p>
-
-<p>Si vous voyez des erreurs dans ce que j&#8217;ai écrit, n&#8217;hesitez pas à me corriger en m&#8217;envoyant un email. Je ne suis pas sur twitter, j&#8217;avais bien un compte mais c&#8217;etait avant l&#8217;ère des applications &#8220;mobile&#8221;, quand les messages étaient encore envoyés par <a href="https://www.youtube.com/watch?v=IGcAYSeN7E4">SMS</a>. lol.</p>
+<p>J&#8217;aime le <a href="http://jessicahische.is/monkeyingaround">souci</a> du <a href="http://www.creads.org/blog/logos/le-logo-sncf-a-eu-le-droit-a-un-lifting/">détails</a>, alors si quelquechose ne va pas, n&#8217;hesitez pas à me corriger en m&#8217;envoyant un email. Je ne suis pas sur twitter, j&#8217;avais bien un compte mais c&#8217;était avant l&#8217;ère des applications &#8220;mobile&#8221;, quand les messages étaient encore envoyés par <a href="https://www.youtube.com/watch?v=IGcAYSeN7E4">SMS</a>. #LOL</p>
 
 <p>A bientôt.</p>
 ]]></content>
