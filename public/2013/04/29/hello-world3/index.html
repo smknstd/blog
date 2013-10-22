@@ -9,18 +9,7 @@
   <meta name="author" content="smknstd">
 
   
-  <meta name="description" content="Something has failed alert 1
-2
-3
-4
-5
-6
-7
-8
-9
-COLOR_RED=&quot;\[\e[0;31m\]&quot;
-COLOR_NONE=&quot;\[\e[0m\]&quot; if test $? -eq 0
-then PS1=&quot;${ &hellip;">
+  <meta name="description" content="Who don&#8217;t spend too much time on the command line ? Here are some findings. But unfortunatly since I can&#8217;t search properly into my feeds &hellip;">
   
 
   <meta name="HandheldFriendly" content="True">
@@ -102,7 +91,13 @@ function show_new() {
   </header>
 
 
-<div class="entry-content"><h2>Something has failed alert</h2>
+<div class="entry-content"><p><img src="/images/promptdemo.png" title="prompting tips demo" alt="prompt demo screencap" /></p>
+
+<p>Who don&#8217;t spend too much time on the command line ? Here are some findings. But unfortunatly since I can&#8217;t search properly into my feeds <a href="http://blog.chron.com/techblog/files/2013/03/googlereaderrip_thumb.jpg">anymore</a>, I cannot give a shout to any of the usefull blogs, which I took those tips from.</p>
+
+<h2>Something has failed alert</h2>
+
+<p>When something go wrong, you can notive with colored prompt. Of course it is red alert + you can use <a href="http://goetter.fr/unicode/">unicode</a> !</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -127,12 +122,16 @@ function show_new() {
 
 <h2>Current git branch</h2>
 
+<p>Isn&#8217;t it so comfortable to always know which branch you&#8217;re working on ?</p>
+
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">prompt</span><span class="o">=</span><span class="s2">&quot;\w$(__git_ps1)&quot;</span><span class="err">&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
 <h2>Don&#8217;t mess with the commit</h2>
+
+<p>And of course, wouldn&#8217;t it be even more comfortable to know when you have uncommited changes ?</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>git status 2&gt; /dev/null | grep -c : | awk <span class="s1">&#39;{if ($1 &gt; 0) print &quot;⚡&quot;}&#39;</span>
@@ -141,20 +140,17 @@ function show_new() {
 
 <h2>BONUS: Jumping to git root directory</h2>
 
-<p>http://stackoverflow.com/questions/957928/is-there-a-way-to-get-to-the-git-root-directory-in-one-command</p>
-
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">alias </span>git-root<span class="o">=</span><span class="s1">&#39;cd $(git rev-parse --show-toplevel)&#39;</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
-<p>Since I can&#8217;t search properly into my feeds, I cannot give a shout to any of the usefull blogs, which I took those tips from.</p>
 
 <h4>Resources</h4>
 
 <ul>
 <li>probably the most useful <a href="http://mywiki.wooledge.org/BashPitfalls">page</a> about bash on the whole internet</li>
 <li>pretty interesting <a href="http://www.computerworld.com.au/article/222764/a-z_programming_languages_bash_bourne-again_shell/">interview</a></li>
+<li><a href="http://stackoverflow.com/questions/957928/is-there-a-way-to-get-to-the-git-root-directory-in-one-command">stackoverflow</a>&#8217;s always right</li>
 </ul>
 
 </div>
