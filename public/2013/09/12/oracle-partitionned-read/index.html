@@ -1,0 +1,259 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Extraction Oracle massive en //: la methode de lecture partitionnée - smknstd.io</title>
+  <meta name="author" content="smknstd">
+
+  
+  <meta name="description" content="Un avantage de travailler avec Oracle est bien sûr de bénéficier des outils proposés par l&#8217;éditeur. La gestion des executions de tâche en &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://mlnstd.io/2013/09/12/oracle-partitionned-read/">
+  <link href="/images/favicon.ico" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feedpress.me/smknstd" rel="alternate" title="smknstd.io" type="application/atom+xml">
+  <script type="text/javascript" src="//use.typekit.net/oqc4yak.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<script type="text/javascript">
+function show_new() {
+	var j=0;
+    var chila = document.getElementById("blog-archives").children;
+	for(var i = 0; i < chila.length; i++) {
+		    var lien = chila[i].getElementsByTagName('h1')[0].getElementsByTagName('a')[0].getAttribute("href");
+		    mytab = lien.split("/");
+		    var parsedDate = new Date(parseInt(mytab[1]), parseInt(mytab[2])-1, parseInt(mytab[3]), 0, 0, 0, 0);
+		    var today = new Date();
+		    var diffDays = Math.floor((today - parsedDate)/(1000*60*60*24));
+		    if(diffDays<90){
+		    	j++;
+		        chila[i].getElementsByTagName('h1')[0].innerHTML=chila[i].getElementsByTagName('h1')[0].innerHTML+"<div id='new'>NEW</div>";
+		    }
+	}
+	console.log("[function show_new] " + j +" articles de moins de 90 jours (rajout de l'etiquette NEW)");
+}
+</script>
+
+  
+
+</head>
+
+<body onload="show_new()"   >
+  <header role="banner">  <div id="logo"><a href="/"><img src="/images/logo.png" alt="logo" /></a></div>
+  <div id="legend">{type: "web log", about: "trapped all day, got my cheese and an indexed key"}</div>
+
+</header>
+  <nav role="navigation">
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    <div id="archive_header">
+    
+      <h2 class="entry-title">Extraction Oracle Massive en //: La Methode De Lecture Partitionnée</h2>
+    
+    </div>
+  </header>
+  <header>
+    <div id="archive_header">
+    
+      <h3 class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-12T23:58:00+02:00" pubdate data-updated="true">Sep 12<span>th</span>, 2013</time>
+      </h3>
+    
+    </div>
+  </header>
+
+
+<div class="entry-content"><p>Un avantage de travailler avec Oracle est bien sûr de bénéficier des outils proposés par l&#8217;éditeur. La gestion des executions de tâche en <a href="http://docs.oracle.com/cd/E11882_01/server.112/e25523/parallel002.htm">parallèle</a> est à mon avis indispensable. D&#8217;autres  <a href="http://docs.oracle.com/cd/E11882_01/appdev.112/e25788/d_parallel_ex.htm">outils</a> plus méconnus existent. Toutefois certains besoins sortent des cas d&#8217;utilisation prévus. Quand on souhaite traiter massivement des données issus d&#8217;Oracle, pour les traiter en //, l&#8217;opération d&#8217;extraction des données en un seul bloc peut représenter une goulot d&#8217;etranglement. La méthode décrite ici propose d&#8217;accélerer le processus d&#8217;extraction d&#8217;une table Oracle pour un traitement des données en //.</p>
+
+<h2>La stratégie</h2>
+
+<p>Au lieu d&#8217;extraire toutes les données d&#8217;une table au travers d&#8217;une seule et unique connexion, puis dans un deuxieme temps de partitionner les données. L&#8217;idée consiste à extraire simultanement des différentes parties de la table depusi des connexions différentes. Même si ces connexions concurrentes peuvent être effectuée depuis une même machine, un avantage important est qu&#8217;il est possible d&#8217;effectuer ces connexions depuis des machines distinctes.</p>
+
+<p>Pour donner une exemple concret voici un contexte dans lequel j&#8217;ai pu appliquer ce principe avec succès: le traitement de données s&#8217;effectue dans un cluster de machines.</p>
+
+<h2>La construction des requètes</h2>
+
+<p>Pour procéder, je me suis largement inspiré des autres outils procedant en // et notemment de cet etonnant <a href="http://www.jlcomp.demon.co.uk/big_upd.html">article</a> traitant d&#8217;une problématique proche et liée au <a href="http://en.wikipedia.org/wiki/Year_2000_problem">bug de l&#8217;an 2000</a> !? Autrement dit, la methode se base sur la structure avantageuse du champ ROWID (Même si le principe reste le même dans toutes les versions, les details de l&#8217;explication suivante sont valable pour les versions 10 et 11), qu&#8217;on va utiliser pour créer autant de plages de ROWID qu&#8217;on a besoin de faire de partitions.</p>
+
+<p>Voici un extrait de la documentation officielle:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>An extended rowid has a four-piece format, OOOOOOFFFBBBBBBRRR:
+</span><span class='line'>
+</span><span class='line'>    OOOOOO: The data object number that identifies the database segment (AAAAao in the example). Schema objects in the same segment, such as a cluster of tables, have the same data object number.
+</span><span class='line'>
+</span><span class='line'>    FFF: The tablespace-relative datafile number of the datafile that contains the row (file AAT in the example).
+</span><span class='line'>
+</span><span class='line'>    BBBBBB: The data block that contains the row (block AAABrX in the example). Block numbers are relative to their datafile, not tablespace. Therefore, two rows with identical block numbers could reside in two different datafiles of the same tablespace.
+</span><span class='line'>
+</span><span class='line'>    RRR: The row in the block.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>En se servant du catalogue systeme de l&#8217;instance, il est possible pour la table donnée, d&#8217;identifier le ou les &#8220;Datafiles&#8221;, puis les groupes de &#8220;blocks&#8221; qu&#8217;elle occupe. A partir de ces informations, on va pouvoir estimer comment sont réparties les données et surtout essayer de découper des groupes de blocks pour répartir le mieux possible les données Autrement dit equitablement entre les partitions.</p>
+
+<p>On peut lister l&#8217;identifiant de l&#8217;objet de cette manière:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>SELECT DATA_OBJECT_ID FROM DBA_OBJECTS WHERE OWNER = 'USER1' AND OBJECT_NAME = 'TABLE1'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>On peut lister les Datafiles concernés par les données de la table de cette manière:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>SELECT DISTINCT FILE_ID FROM DBA_EXTENTS WHERE SEGMENT_NAME='TABLE1' AND SEGMENT_TYPE='TABLE'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>On peut lister les différents &#8220;extents&#8221; concernés par les données de la table de cette manière:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>SELECT BLOCK_ID, BLOCKS FROM DBA_EXTENTS WHERE SEGMENT_NAME='TABLE1' AND SEGMENT_TYPE='TABLE'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Pour la construction de la limite inferieure d&#8217;une plage de ROWID,  on se content d&#8217;un numéro de block fourni par le catalogue (BLOCK_ID) et on renseigne le numero de ligne par la valeur la plus faible possible : &#8220;AAA&#8221;.</p>
+
+<p>Pour la construction de la limite supérieur, il faut calculer le numero du dernier block à partir de la taille fournie par le catalogue (BLOCKS) et on renseigne le numéro de ligne par la valeur de la derniere ligne. En théorie cette dernière information n&#8217;est pas si facile à deviner, car le nombre de lignes dans un block dépend de plusieurs facteurs:
+- la taille du block
+- la taille des lignes
+- certains parametres comme PCTFREE qui définissent la taille reservée (pour une possible extension)</p>
+
+<p>On peut déterminer la taille des blocks de cette manière:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>SELECT VALUE FROM V$PARAMETER WHERE NAME LIKE 'DB_BLOCK_SIZE'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Pour moi le plus simple consiste a renseigner la valeur la plus élévée possible. Malheuresement cette valeur théorique n&#8217;est pas bien documentée. Sans pouvoir citer de source, j&#8217;ai utilisé &#8220;H//&#8221;.</p>
+
+<p>Notons bien, que cette méthode profite de plusieurs opportunités:
+- bien sûr de la structure du champ ROWID et de son format d&#8217;<a href="http://en.wikipedia.org/wiki/Base64">encodage</a> qui permet non seulement de construire les bornes des plages mais aussi l&#8217;utilisation des opérateurs &#8220;supérieur&#8221; et &#8220;inferieur&#8221; pour chercher à l&#8217;interieur
+- le fait que l&#8217;execution de la requete ne soit pas gênée par des identifiants &#8220;ROWID&#8221; manquants</p>
+
+<p>Au final on écrit autant de requete qu&#8217;on souhaite de partitions de données sous la forme suivante:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>SELECT * FROM TABLE1 WHERE TABLE1.ROWID BETWEEN 'AAARvrAAEAAAAVpAAA' AND 'AAARvrAAEAAAAVuH//' AND (COL1 &gt; 10)</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>IRL</h2>
+
+<h2>Quelques variantes</h2>
+
+<p>On peut imaginer partager les données de la table en partitions plus simplement, en parcourant pour chaque requete toute la table mais en se contentant de garder qu&#8217;une partie des données. Evidemment, ce mechanisme se ressentirait directement au niveau des performances.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>SELECT * FROM TABLE1 WHERE MOD(DBMS_ROWID.ROWID_ROW_NUMBER(TABLE1.ROWID), 4) = 0 AND COL1 &gt; 10</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Si on dispose de tables partitionnées, alors il est tout a fait imaginable tirer profit des ces partitions en ecrivant des requetes du type:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>SELECT * FROM TABLE1 PARTITION(PART1) WHERE COL1 &gt; 10</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Les limites</h2>
+
+<ol>
+<li>Cette methode n&#8217;a d&#8217;interet que si l&#8217;on n&#8217;a aucune exigence sur la répartition des données entre les différentes partitions. En effet les données ne sont réparties dans les blocks selon aucun critère particulier. S&#8217;il est necessaire de regrouper les données d&#8217;une quelqonque manière (date, clef, hash, etc) cette methode devient immédiatement inutile ou alors d&#8217;un interet très limité puisqu&#8217;il serait necessaire de rassembler les données.</li>
+<li>Cette methode est reservée à des extractions basiques et n&#8217;est bien evidemment pas possible sur des requetes effectuant des jointures entre plusieurs tables ou des opérations de groupement. Par ailleurs des filtres sur les données elle-mêmes sont possibles.</li>
+</ol>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">smknstd</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-12T23:58:00+02:00" pubdate data-updated="true">Sep 12<span>th</span>, 2013</time>
+      
+
+
+    </p>
+    <div id="archive_header2">
+      <div id="archive_header3">
+      
+        <a class="basic-alignment left" href="/2013/05/19/hiding-yourself/" title="Previous Post: Votre mot de passe est-il trop simple ?">&laquo; Votre mot de passe est-il trop simple ?</a>
+      
+      
+        <a class="basic-alignment right" href="/2013/10/22/non-printing-characters/" title="Next Post: Survivre aux caractères non-imprimables">Survivre aux caractères non-imprimables &raquo;</a>
+      
+      </div>
+    </div>
+  </footer>
+</article>
+</div>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  2013 - smknstd -
+  <span class="credit">designed with <a href="http://octopress.org">Octopress</a> and hosted by <a href="http://heroku.com">Heroku</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
