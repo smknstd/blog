@@ -4,7 +4,7 @@
   <title><![CDATA[smknstd.io]]></title>
   <link href="http://mlnstd.io/atom.xml" rel="self"/>
   <link href="http://mlnstd.io/"/>
-  <updated>2013-10-28T12:46:51+01:00</updated>
+  <updated>2013-10-28T12:53:22+01:00</updated>
   <id>http://mlnstd.io/</id>
   <author>
     <name><![CDATA[smknstd]]></name>
@@ -107,16 +107,12 @@
 
 <p>Voici un extrait de la documentation officielle:</p>
 
-<p>`An extended rowid has a four-piece format, OOOOOOFFFBBBBBBRRR:</p>
+<blockquote><p>An extended rowid has a four-piece format, OOOOOOFFFBBBBBBRRR:</p>
 
-<pre><code>OOOOOO: The data object number that identifies the database segment (AAAAao in the example). Schema objects in the same segment, such as a cluster of tables, have the same data object number.
-
-FFF: The tablespace-relative datafile number of the datafile that contains the row (file AAT in the example).
-
-BBBBBB: The data block that contains the row (block AAABrX in the example). Block numbers are relative to their datafile, not tablespace. Therefore, two rows with identical block numbers could reside in two different datafiles of the same tablespace.
-
-RRR: The row in the block.`
-</code></pre>
+<p>   OOOOOO: The data object number that identifies the database segment (AAAAao in the example). Schema objects in the same segment, such as a cluster of tables, have the same data object number.
+   FFF: The tablespace-relative datafile number of the datafile that contains the row (file AAT in the example).
+   BBBBBB: The data block that contains the row (block AAABrX in the example). Block numbers are relative to their datafile, not tablespace. Therefore, two rows with identical block numbers could reside in two different datafiles of the same tablespace.
+   RRR: The row in the block.</p></blockquote>
 
 <p>En se servant du catalogue systeme de l&#8217;instance, il est possible pour la table donnée, d&#8217;identifier le ou les &#8220;Datafiles&#8221;, puis les groupes de &#8220;blocks&#8221; qu&#8217;elle occupe. A partir de ces informations, on va pouvoir estimer comment sont réparties les données et surtout essayer de découper des groupes de blocks pour répartir le mieux possible les données Autrement dit equitablement entre les partitions.</p>
 

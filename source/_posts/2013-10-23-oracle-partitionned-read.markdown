@@ -22,15 +22,12 @@ Pour procéder, je me suis largement inspiré des autres outils procedant en // 
 
 Voici un extrait de la documentation officielle:
 
-`An extended rowid has a four-piece format, OOOOOOFFFBBBBBBRRR:
-
-    OOOOOO: The data object number that identifies the database segment (AAAAao in the example). Schema objects in the same segment, such as a cluster of tables, have the same data object number.
-
-    FFF: The tablespace-relative datafile number of the datafile that contains the row (file AAT in the example).
-
-    BBBBBB: The data block that contains the row (block AAABrX in the example). Block numbers are relative to their datafile, not tablespace. Therefore, two rows with identical block numbers could reside in two different datafiles of the same tablespace.
-
-    RRR: The row in the block.`
+> An extended rowid has a four-piece format, OOOOOOFFFBBBBBBRRR:
+>
+>    OOOOOO: The data object number that identifies the database segment (AAAAao in the example). Schema objects in the same segment, such as a cluster of tables, have the same data object number.
+>    FFF: The tablespace-relative datafile number of the datafile that contains the row (file AAT in the example).
+>    BBBBBB: The data block that contains the row (block AAABrX in the example). Block numbers are relative to their datafile, not tablespace. Therefore, two rows with identical block numbers could reside in two different datafiles of the same tablespace.
+>    RRR: The row in the block.
 
 En se servant du catalogue systeme de l'instance, il est possible pour la table donnée, d'identifier le ou les "Datafiles", puis les groupes de "blocks" qu'elle occupe. A partir de ces informations, on va pouvoir estimer comment sont réparties les données et surtout essayer de découper des groupes de blocks pour répartir le mieux possible les données Autrement dit equitablement entre les partitions.  
 
