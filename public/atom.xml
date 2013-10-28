@@ -4,7 +4,7 @@
   <title><![CDATA[smknstd.io]]></title>
   <link href="http://mlnstd.io/atom.xml" rel="self"/>
   <link href="http://mlnstd.io/"/>
-  <updated>2013-10-24T00:12:28+02:00</updated>
+  <updated>2013-10-28T12:46:51+01:00</updated>
   <id>http://mlnstd.io/</id>
   <author>
     <name><![CDATA[smknstd]]></name>
@@ -97,7 +97,9 @@
 
 <p>Au lieu d&#8217;extraire toutes les données d&#8217;une table au travers d&#8217;une seule et unique connexion, puis dans un deuxieme temps de partitionner les données. L&#8217;idée consiste à extraire simultanement des différentes parties de la table depusi des connexions différentes. Même si ces connexions concurrentes peuvent être effectuée depuis une même machine, un avantage important est qu&#8217;il est possible d&#8217;effectuer ces connexions depuis des machines distinctes.</p>
 
-<p>Pour donner une exemple concret voici un contexte dans lequel j&#8217;ai pu appliquer ce principe avec succès: le traitement de données s&#8217;effectue dans un cluster de machines.</p>
+<p>Voici une représentation schématique d&#8217;un exemple concret d&#8217;un contexte dans lequel j&#8217;ai pu appliquer ce principe avec succès: le traitement de données s&#8217;effectue dans un cluster de 4 machines.</p>
+
+<p><img src="http://mlnstd.io/images/oracle_avant_apres.png" title="schema" alt="photo_blocnote" /></p>
 
 <h2>La construction des requètes</h2>
 
@@ -105,45 +107,30 @@
 
 <p>Voici un extrait de la documentation officielle:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>An extended rowid has a four-piece format, OOOOOOFFFBBBBBBRRR:
-</span><span class='line'>
-</span><span class='line'>    OOOOOO: The data object number that identifies the database segment (AAAAao in the example). Schema objects in the same segment, such as a cluster of tables, have the same data object number.
-</span><span class='line'>
-</span><span class='line'>    FFF: The tablespace-relative datafile number of the datafile that contains the row (file AAT in the example).
-</span><span class='line'>
-</span><span class='line'>    BBBBBB: The data block that contains the row (block AAABrX in the example). Block numbers are relative to their datafile, not tablespace. Therefore, two rows with identical block numbers could reside in two different datafiles of the same tablespace.
-</span><span class='line'>
-</span><span class='line'>    RRR: The row in the block.</span></code></pre></td></tr></table></div></figure>
+<p>`An extended rowid has a four-piece format, OOOOOOFFFBBBBBBRRR:</p>
 
+<pre><code>OOOOOO: The data object number that identifies the database segment (AAAAao in the example). Schema objects in the same segment, such as a cluster of tables, have the same data object number.
+
+FFF: The tablespace-relative datafile number of the datafile that contains the row (file AAT in the example).
+
+BBBBBB: The data block that contains the row (block AAABrX in the example). Block numbers are relative to their datafile, not tablespace. Therefore, two rows with identical block numbers could reside in two different datafiles of the same tablespace.
+
+RRR: The row in the block.`
+</code></pre>
 
 <p>En se servant du catalogue systeme de l&#8217;instance, il est possible pour la table donnée, d&#8217;identifier le ou les &#8220;Datafiles&#8221;, puis les groupes de &#8220;blocks&#8221; qu&#8217;elle occupe. A partir de ces informations, on va pouvoir estimer comment sont réparties les données et surtout essayer de découper des groupes de blocks pour répartir le mieux possible les données Autrement dit equitablement entre les partitions.</p>
 
 <p>On peut lister l&#8217;identifiant de l&#8217;objet de cette manière:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>SELECT DATA_OBJECT_ID FROM DBA_OBJECTS WHERE OWNER = 'USER1' AND OBJECT_NAME = 'TABLE1'</span></code></pre></td></tr></table></div></figure>
-
+<p><code>SELECT DATA_OBJECT_ID FROM DBA_OBJECTS WHERE OWNER = 'USER1' AND OBJECT_NAME = 'TABLE1'</code></p>
 
 <p>On peut lister les Datafiles concernés par les données de la table de cette manière:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>SELECT DISTINCT FILE_ID FROM DBA_EXTENTS WHERE SEGMENT_NAME='TABLE1' AND SEGMENT_TYPE='TABLE'</span></code></pre></td></tr></table></div></figure>
-
+<p><code>SELECT DISTINCT FILE_ID FROM DBA_EXTENTS WHERE SEGMENT_NAME='TABLE1' AND SEGMENT_TYPE='TABLE'</code></p>
 
 <p>On peut lister les différents &#8220;extents&#8221; concernés par les données de la table de cette manière:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>SELECT BLOCK_ID, BLOCKS FROM DBA_EXTENTS WHERE SEGMENT_NAME='TABLE1' AND SEGMENT_TYPE='TABLE'</span></code></pre></td></tr></table></div></figure>
-
+<p><code>SELECT BLOCK_ID, BLOCKS FROM DBA_EXTENTS WHERE SEGMENT_NAME='TABLE1' AND SEGMENT_TYPE='TABLE'</code></p>
 
 <p>Pour la construction de la limite inferieure d&#8217;une plage de ROWID,  on se content d&#8217;un numéro de block fourni par le catalogue (BLOCK_ID) et on renseigne le numero de ligne par la valeur la plus faible possible : &#8220;AAA&#8221;.</p>
 
@@ -154,11 +141,8 @@
 
 <p>On peut déterminer la taille des blocks de cette manière:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>SELECT VALUE FROM V$PARAMETER WHERE NAME LIKE 'DB_BLOCK_SIZE'</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Pour moi le plus simple consiste a renseigner la valeur la plus élévée possible. Malheuresement cette valeur théorique n&#8217;est pas bien documentée. Sans pouvoir citer de source, j&#8217;ai utilisé &#8220;H//&#8221;.</p>
+<p><code>SELECT VALUE FROM V$PARAMETER WHERE NAME LIKE 'DB_BLOCK_SIZE'</code>
+Pour moi le plus simple consiste a renseigner la valeur la plus élévée possible. Malheuresement cette valeur théorique n&#8217;est pas bien documentée. Sans pouvoir citer de source, j&#8217;ai utilisé &#8220;H//&#8221;.</p>
 
 <p>Notons bien, que cette méthode profite de plusieurs opportunités:
 - bien sûr de la structure du champ ROWID et de son format d&#8217;<a href="http://en.wikipedia.org/wiki/Base64">encodage</a> qui permet non seulement de construire les bornes des plages mais aussi l&#8217;utilisation des opérateurs &#8220;supérieur&#8221; et &#8220;inferieur&#8221; pour chercher à l&#8217;interieur
@@ -166,31 +150,23 @@
 
 <p>Au final on écrit autant de requete qu&#8217;on souhaite de partitions de données sous la forme suivante:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>SELECT * FROM TABLE1 WHERE TABLE1.ROWID BETWEEN 'AAARvrAAEAAAAVpAAA' AND 'AAARvrAAEAAAAVuH//' AND (COL1 &gt; 10)</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>IRL</h2>
+<p><code>SELECT * FROM TABLE1 WHERE TABLE1.ROWID BETWEEN 'AAARvrAAEAAAAVpAAA' AND 'AAARvrAAEAAAAVuH//' AND (COL1 &gt; 10)</code></p>
 
 <h2>Quelques variantes</h2>
 
 <p>On peut imaginer partager les données de la table en partitions plus simplement, en parcourant pour chaque requete toute la table mais en se contentant de garder qu&#8217;une partie des données. Evidemment, ce mechanisme se ressentirait directement au niveau des performances.</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>SELECT * FROM TABLE1 WHERE MOD(DBMS_ROWID.ROWID_ROW_NUMBER(TABLE1.ROWID), 4) = 0 AND COL1 &gt; 10</span></code></pre></td></tr></table></div></figure>
-
+<p><code>SELECT * FROM TABLE1 WHERE MOD(DBMS_ROWID.ROWID_ROW_NUMBER(TABLE1.ROWID), 4) = 0 AND COL1 &gt; 10</code></p>
 
 <p>Si on dispose de tables partitionnées, alors il est tout a fait imaginable tirer profit des ces partitions en ecrivant des requetes du type:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>SELECT * FROM TABLE1 PARTITION(PART1) WHERE COL1 &gt; 10</span></code></pre></td></tr></table></div></figure>
-
+<p><code>SELECT * FROM TABLE1 PARTITION(PART1) WHERE COL1 &gt; 10</code></p>
 
 <h2>Les limites</h2>
 
 <ol>
-<li>Cette methode n&#8217;a d&#8217;interet que si l&#8217;on n&#8217;a aucune exigence sur la répartition des données entre les différentes partitions. En effet les données ne sont réparties dans les blocks selon aucun critère particulier. S&#8217;il est necessaire de regrouper les données d&#8217;une quelqonque manière (date, clef, hash, etc) cette methode devient immédiatement inutile ou alors d&#8217;un interet très limité puisqu&#8217;il serait necessaire de rassembler les données.</li>
-<li>Cette methode est reservée à des extractions basiques et n&#8217;est bien evidemment pas possible sur des requetes effectuant des jointures entre plusieurs tables ou des opérations de groupement. Par ailleurs des filtres sur les données elle-mêmes sont possibles.</li>
+<li><p>Cette methode n&#8217;a d&#8217;interet que si l&#8217;on n&#8217;a aucune exigence sur la répartition des données entre les différentes partitions. En effet les données ne sont réparties dans les blocks selon aucun critère particulier. S&#8217;il est necessaire de regrouper les données d&#8217;une quelqonque manière (date, clef, hash, etc) cette methode devient immédiatement inutile ou alors d&#8217;un interet très limité puisqu&#8217;il serait necessaire de rassembler les données.</p></li>
+<li><p>Cette methode est reservée à des extractions basiques et n&#8217;est bien evidemment pas possible sur des requetes effectuant des jointures entre plusieurs tables ou des opérations de groupement. Par ailleurs des filtres sur les données elle-mêmes sont possibles.</p></li>
 </ol>
 
 ]]></content>
@@ -240,17 +216,19 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[my favorite 'prompting' tips]]></title>
+    <title type="html"><![CDATA[Astuces pour une commande 'prompt' utile]]></title>
     <link href="http://mlnstd.io/2013/04/29/hello-world3/"/>
     <updated>2013-04-29T08:46:00+02:00</updated>
     <id>http://mlnstd.io/2013/04/29/hello-world3</id>
-    <content type="html"><![CDATA[<p><img src="http://mlnstd.io/images/promptdemo.png" title="prompting tips demo" alt="prompt demo screencap" /></p>
+    <content type="html"><![CDATA[<p>Vous aimez votre terminal ? moi aussi. Comme j&#8217;y passe souvent beaucoup trop de temps, j&#8217;ai découvert au cours du temps quelques astuces bien utiles. J&#8217;aurai aimé citer les sources de cette note, et rendre à Caesar ce qui est à Caesar, mais <a href="http://blog.chron.com/techblog/files/2013/03/googlereaderrip_thumb.jpg">désormais</a> je ne sais plus rechercher correctement dans mes fils rss. :(</p>
 
-<p>Who don&#8217;t spend too much time on the command line ? Here are some findings. But unfortunatly since I can&#8217;t search properly into my feeds <a href="http://blog.chron.com/techblog/files/2013/03/googlereaderrip_thumb.jpg">anymore</a>, I cannot give a shout to any of the usefull blogs, which I took those tips from.</p>
+<h2>Votre terminal supporte l&#8217;unicode</h2>
 
-<h2>Something has failed alert</h2>
+<p>Très utile pour personnaliser l&#8217;invite et retranscrire des informations complexes avec des pictogrammes. Le rappel de modification git decrit plsu bas est un bon exemple, mais je suis persuadé qu&#8217;il y a bien d&#8217;autres cas d&#8217;utilisatioon possible parmis le <a href="http://goetter.fr/unicode/">panel</a> disponible.</p>
 
-<p>When something go wrong, you can notive with colored prompt. Of course it is red alert + you can use <a href="http://goetter.fr/unicode/">unicode</a> !</p>
+<h2>Something went wrong : RED ALERT</h2>
+
+<p>Quand on a fini d&#8217;executer une commande, on peut bien sûr intérroger son code retour, mais il est beaucoup plus simple de récupérer automatiquement cette information et l&#8217;afficher avec un code couleur ! Très simple et pourtant diablement efficace.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -273,32 +251,34 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h2>Current git branch</h2>
+<h2>Afficher la branche courante</h2>
 
-<p>Isn&#8217;t it so comfortable to always know which branch you&#8217;re working on ?</p>
+<p>J&#8217;aime GIT. Mais je fais des erreurs. Afficher le nom de la branche courante des qu&#8217;on se place dans un repository peut eviter bien des problèmes. Honetement, je ne peux plus m&#8217;en passer.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">prompt</span><span class="o">=</span><span class="s2">&quot;\w$(__git_ps1)&quot;</span><span class="err">&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h2>Don&#8217;t mess with the commit</h2>
+<h2>N&#8217;oubliez plus de commiter</h2>
 
-<p>And of course, wouldn&#8217;t it be even more comfortable to know when you have uncommited changes ?</p>
+<p>Avez vous déjà quitter un repository avec des modifications non commitées ? Voici un moyen de ne plus le faire. On affiche en permanence l&#8217;etat (avec un pictogramme unicode !): infaillible !</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>git status 2&gt; /dev/null | grep -c : | awk <span class="s1">&#39;{if ($1 &gt; 0) print &quot;⚡&quot;}&#39;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h2>BONUS: Jumping to git root directory</h2>
+<h2>retourner à la racine du repository courant</h2>
+
+<p>Toutes les projets n&#8217;ont pas des raborescences interminables, mais ce petit raccourci peut être utile, j&#8217;en suis sûr.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">alias </span>git-root<span class="o">=</span><span class="s1">&#39;cd $(git rev-parse --show-toplevel)&#39;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h4>Resources</h4>
+<h4>Liens utiles</h4>
 
 <ul>
 <li>probably the most useful <a href="http://mywiki.wooledge.org/BashPitfalls">page</a> about bash on the whole internet</li>

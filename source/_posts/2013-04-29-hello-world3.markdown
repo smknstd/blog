@@ -1,18 +1,21 @@
 ---
 layout: post
-title: "my favorite 'prompting' tips"
+title: "Astuces pour une commande 'prompt' utile"
 date: 2013-04-29 08:46
 comments: false
 categories: 
 ---
+Vous aimez votre terminal ? moi aussi. Comme j'y passe souvent beaucoup trop de temps, j'ai découvert au cours du temps quelques astuces bien utiles. J'aurai aimé citer les sources de cette note, et rendre à Caesar ce qui est à Caesar, mais [désormais](http://blog.chron.com/techblog/files/2013/03/googlereaderrip_thumb.jpg) je ne sais plus rechercher correctement dans mes fils rss. :(
 
-![prompt demo screencap]({{ root_url }}/images/promptdemo.png "prompting tips demo")
 
-Who don't spend too much time on the command line ? Here are some findings. But unfortunatly since I can't search properly into my feeds [anymore](http://blog.chron.com/techblog/files/2013/03/googlereaderrip_thumb.jpg), I cannot give a shout to any of the usefull blogs, which I took those tips from.
+## Votre terminal supporte l'unicode
 
-## Something has failed alert
+Très utile pour personnaliser l'invite et retranscrire des informations complexes avec des pictogrammes. Le rappel de modification git decrit plsu bas est un bon exemple, mais je suis persuadé qu'il y a bien d'autres cas d'utilisatioon possible parmis le [panel](http://goetter.fr/unicode/) disponible.
 
-When something go wrong, you can notive with colored prompt. Of course it is red alert + you can use [unicode](http://goetter.fr/unicode/) !
+
+## Something went wrong : RED ALERT
+
+Quand on a fini d'executer une commande, on peut bien sûr intérroger son code retour, mais il est beaucoup plus simple de récupérer automatiquement cette information et l'afficher avec un code couleur ! Très simple et pourtant diablement efficace.
 
 ``` bash
 COLOR_RED="\[\e[0;31m\]"
@@ -26,31 +29,35 @@ else
 fi
 ```
 
-## Current git branch
 
-Isn't it so comfortable to always know which branch you're working on ?
+## Afficher la branche courante
+
+J'aime GIT. Mais je fais des erreurs. Afficher le nom de la branche courante des qu'on se place dans un repository peut eviter bien des problèmes. Honetement, je ne peux plus m'en passer.
 
 ``` bash
 prompt="\w$(__git_ps1)""
 ```
 
-## Don't mess with the commit
 
-And of course, wouldn't it be even more comfortable to know when you have uncommited changes ?
+## N'oubliez plus de commiter
+
+Avez vous déjà quitter un repository avec des modifications non commitées ? Voici un moyen de ne plus le faire. On affiche en permanence l'etat (avec un pictogramme unicode !): infaillible !
 
 ``` bash
 git status 2> /dev/null | grep -c : | awk '{if ($1 > 0) print "⚡"}'
 ```
 
-## BONUS: Jumping to git root directory
+
+## retourner à la racine du repository courant
+
+Toutes les projets n'ont pas des raborescences interminables, mais ce petit raccourci peut être utile, j'en suis sûr.
 
 ``` bash
 alias git-root='cd $(git rev-parse --show-toplevel)'
 ```
 
 
-
-#### Resources ####
+#### Liens utiles ####
 
 - probably the most useful [page](http://mywiki.wooledge.org/BashPitfalls) about bash on the whole internet
 - pretty interesting [interview](http://www.computerworld.com.au/article/222764/a-z_programming_languages_bash_bourne-again_shell/)
