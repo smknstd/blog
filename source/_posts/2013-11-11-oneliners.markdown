@@ -26,19 +26,16 @@ Mais awk est aussi un véritable langage de programmation puisqu'il dispose d'ou
 En parcourant cette instructive [matrice de comparaison](http://hyperpolyglot.org/scripting), je me suis rappelé que cela n’était pas toujours bien connu. Les options nécessaires pour simuler le comportement d'awk sont les mêmes dans les deux langages. En voici l'énumération et une explication propre:
 
 
-```
--a: turns on auto-split-mode: this splits the input into an array. The default separator is one (or many) spaces.
-
--n: makes Perl/Ruby process the input in an implicit while loop around the input, which is processed line-wise: "as long as there is another line, process it!"
-
--e: execute the next command line argument as a program.
-```
+> - a: turns on auto-split-mode: this splits the input into an array. The default separator is one (or many) spaces.
+>
+> - n: makes Perl/Ruby process the input in an implicit while loop around the input, which is processed line-wise: "as long as there is another line, process it!"
+>
+> - e: execute the next command line argument as a program.
 
 Spécifiquement pour PERL, la gestion des sauts de lignes:
 
-```
--l: "chomps" the input (which here means: removes newlines if present) from each line, and automatically adds a newline to each output newline
-```
+> - l: "chomps" the input (which here means: removes newlines if present) from each line, and automatically adds a newline to each output newline
+
 
 Enfin voici une retranscription d'un petit programme awk qui compile quelques fonctionnalités généralement appréciées:
 

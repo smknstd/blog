@@ -15,7 +15,7 @@ Et cela peut être très utile pour personnaliser l'invite et retranscrire des i
 
 ## Alerte rouge
 
-Quand on a fini d’exécuter une commande ou un programme, on peut bien sûr interroger son code retour. Mais comme on ne le fait pas systématiquement et surtout lorsqu'on ne s'y attend pas, on peut passer à coté et perdre beaucoup de temps. Il est tellement plus simple de récupérer automatiquement cette information et l'afficher avec un code couleur ! Diablement efficace !
+Quand on a fini d’exécuter une commande ou un programme, on peut bien sûr interroger son code retour. Mais comme on ne le fait pas systématiquement et surtout lorsqu'on ne s'y attend pas, on peut passer à coté et perdre beaucoup de temps. Il est tellement plus simple de récupérer automatiquement cette information et l'afficher avec un code couleur. #EFFICACE
 
 ``` bash
 COLOR_RED="\[\e[0;31m\]"

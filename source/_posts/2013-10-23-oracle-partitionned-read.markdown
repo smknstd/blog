@@ -27,9 +27,12 @@ Voici un extrait de la documentation officielle:
 > An extended rowid has a four-piece format, OOOOOOFFFBBBBBBRRR:
 >
 >    OOOOOO: The data object number that identifies the database segment (AAAAao in the example). Schema objects in the same segment, such as a cluster of tables, have the same data object number.
+>
 >    FFF: The tablespace-relative datafile number of the datafile that contains the row (file AAT in the example).
+>
 >    BBBBBB: The data block that contains the row (block AAABrX in the example). Block numbers are relative to their datafile, not tablespace. Therefore, two rows with identical block numbers could reside in two different datafiles of the same tablespace.
 >    RRR: The row in the block.
+>
 
 En se servant du catalogue système de l'instance, on essaie de cartographier au mieux la disposition des données dans le "file system". A partir de ces informations, il faut essayer de découper des groupes de blocks pour répartir le plus équitablement possible entre les partitions. Aussi il faut prendre soin en choisissant les bornes des plages de ROWID à n'exclure aucune données. Dans la pratique les informations nécessaires sont données principalement par les "Datafiles", puis les groupes de "blocks" occupés.
 

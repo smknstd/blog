@@ -8,9 +8,7 @@ categories:
 
 Lorsqu'on manipule des données, on se heurte bien souvent à des subtilités comme l'encodage des caractères. Si souvent d'ailleurs, que s'en méfier devient un automatisme, voir une seconde nature. Par contre, je n'ai jamais réussi à m'habituer aux caractères [non imprimables](http://en.wikipedia.org/wiki/Control_character).
 
-En écrivant des flux d'[intégration de données](http://en.wikipedia.org/wiki/Data_integration), j'ai souvent rencontré des erreurs inattendues et des comportements anormaux sur différentes technologies.
-
-Même dans l'investigation d'un problème, le plus dur est parfois de simplement les identifier:
+En écrivant des flux d'[intégration de données](http://en.wikipedia.org/wiki/Data_integration), j'ai souvent rencontré des erreurs inattendues et des comportements anormaux à leur encontre. Dans l'investigation d'un éventuel problème, le plus dur est parfois de simplement les identifier:
 
 ```
 >  sqlplus -l -s user/password@INSTANCE @test.sql | cat

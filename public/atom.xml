@@ -4,7 +4,7 @@
   <title><![CDATA[smknstd.io]]></title>
   <link href="http://mlnstd.io/atom.xml" rel="self"/>
   <link href="http://mlnstd.io/"/>
-  <updated>2013-11-11T22:42:11+01:00</updated>
+  <updated>2013-11-11T23:12:10+01:00</updated>
   <id>http://mlnstd.io/</id>
   <author>
     <name><![CDATA[smknstd]]></name>
@@ -40,23 +40,19 @@
 
 <p>En parcourant cette instructive <a href="http://hyperpolyglot.org/scripting">matrice de comparaison</a>, je me suis rappelé que cela n’était pas toujours bien connu. Les options nécessaires pour simuler le comportement d&#8217;awk sont les mêmes dans les deux langages. En voici l&#8217;énumération et une explication propre:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>-a: turns on auto-split-mode: this splits the input into an array. The default separator is one (or many) spaces.
-</span><span class='line'>
-</span><span class='line'>-n: makes Perl/Ruby process the input in an implicit while loop around the input, which is processed line-wise: "as long as there is another line, process it!"
-</span><span class='line'>
-</span><span class='line'>-e: execute the next command line argument as a program.</span></code></pre></td></tr></table></div></figure>
-
+<blockquote><ul>
+<li><p>a: turns on auto-split-mode: this splits the input into an array. The default separator is one (or many) spaces.</p></li>
+<li><p>n: makes Perl/Ruby process the input in an implicit while loop around the input, which is processed line-wise: &#8220;as long as there is another line, process it!&#8221;</p></li>
+<li><p>e: execute the next command line argument as a program.</p></li>
+</ul>
+</blockquote>
 
 <p>Spécifiquement pour PERL, la gestion des sauts de lignes:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>-l: "chomps" the input (which here means: removes newlines if present) from each line, and automatically adds a newline to each output newline</span></code></pre></td></tr></table></div></figure>
-
+<blockquote><ul>
+<li>l: &#8220;chomps&#8221; the input (which here means: removes newlines if present) from each line, and automatically adds a newline to each output newline</li>
+</ul>
+</blockquote>
 
 <p>Enfin voici une retranscription d&#8217;un petit programme awk qui compile quelques fonctionnalités généralement appréciées:</p>
 
@@ -99,9 +95,7 @@
     <id>http://mlnstd.io/2013/10/22/non-printing-characters</id>
     <content type="html"><![CDATA[<p>Lorsqu&#8217;on manipule des données, on se heurte bien souvent à des subtilités comme l&#8217;encodage des caractères. Si souvent d&#8217;ailleurs, que s&#8217;en méfier devient un automatisme, voir une seconde nature. Par contre, je n&#8217;ai jamais réussi à m&#8217;habituer aux caractères <a href="http://en.wikipedia.org/wiki/Control_character">non imprimables</a>.</p>
 
-<p>En écrivant des flux d&#8217;<a href="http://en.wikipedia.org/wiki/Data_integration">intégration de données</a>, j&#8217;ai souvent rencontré des erreurs inattendues et des comportements anormaux sur différentes technologies.</p>
-
-<p>Même dans l&#8217;investigation d&#8217;un problème, le plus dur est parfois de simplement les identifier:</p>
+<p>En écrivant des flux d&#8217;<a href="http://en.wikipedia.org/wiki/Data_integration">intégration de données</a>, j&#8217;ai souvent rencontré des erreurs inattendues et des comportements anormaux à leur encontre. Dans l&#8217;investigation d&#8217;un éventuel problème, le plus dur est parfois de simplement les identifier:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -190,9 +184,11 @@
 
 <blockquote><p>An extended rowid has a four-piece format, OOOOOOFFFBBBBBBRRR:</p>
 
-<p>   OOOOOO: The data object number that identifies the database segment (AAAAao in the example). Schema objects in the same segment, such as a cluster of tables, have the same data object number.
-   FFF: The tablespace-relative datafile number of the datafile that contains the row (file AAT in the example).
-   BBBBBB: The data block that contains the row (block AAABrX in the example). Block numbers are relative to their datafile, not tablespace. Therefore, two rows with identical block numbers could reside in two different datafiles of the same tablespace.
+<p>   OOOOOO: The data object number that identifies the database segment (AAAAao in the example). Schema objects in the same segment, such as a cluster of tables, have the same data object number.</p>
+
+<p>   FFF: The tablespace-relative datafile number of the datafile that contains the row (file AAT in the example).</p>
+
+<p>   BBBBBB: The data block that contains the row (block AAABrX in the example). Block numbers are relative to their datafile, not tablespace. Therefore, two rows with identical block numbers could reside in two different datafiles of the same tablespace.
    RRR: The row in the block.</p></blockquote>
 
 <p>En se servant du catalogue système de l&#8217;instance, on essaie de cartographier au mieux la disposition des données dans le &#8220;file system&#8221;. A partir de ces informations, il faut essayer de découper des groupes de blocks pour répartir le plus équitablement possible entre les partitions. Aussi il faut prendre soin en choisissant les bornes des plages de ROWID à n&#8217;exclure aucune données. Dans la pratique les informations nécessaires sont données principalement par les &#8220;Datafiles&#8221;, puis les groupes de &#8220;blocks&#8221; occupés.</p>
@@ -262,7 +258,7 @@ Pour moi le plus simple consiste a renseigner la valeur la plus élevée possibl
     <link href="http://mlnstd.io/2013/05/19/hiding-yourself/"/>
     <updated>2013-05-19T14:59:00+02:00</updated>
     <id>http://mlnstd.io/2013/05/19/hiding-yourself</id>
-    <content type="html"><![CDATA[<p>Utilisez vous le même mot de passe plusieurs fois ? Qui n&#8217;a pas été victime de la <a href="http://en.wikipedia.org/wiki/Password_fatigue">&#8220;fatigue des mots de passe&#8221;</a> ? Je sais bien que les <a href="http://en.wikipedia.org/wiki/Password_manager">Gestionnaires de mots de passe</a> présentent des avantages mais je n&#8217;ai jamais pu me faire à leur defauts. Sans aucune prétention, je vais vous décrire ma facon de retenir facilement un mot de passe unique et complexe pour chaque service que j&#8217;utilise sur internet avec une seule règle et d&#8217;éviter l&#8217;<a href="http://www.codinghorror.com/blog/2009/05/i-just-logged-in-as-you.html">effroyable</a>!</p>
+    <content type="html"><![CDATA[<p>Utilisez vous le même mot de passe plusieurs fois ? Qui n&#8217;a pas été victime de la <a href="http://en.wikipedia.org/wiki/Password_fatigue">&#8220;fatigue des mots de passe&#8221;</a> ? Je sais bien que les <a href="http://en.wikipedia.org/wiki/Password_manager">Gestionnaires</a> présentent des avantages mais je n&#8217;ai jamais pu me faire à leur defauts. Sans aucune prétention, je vais vous décrire ma facon d&#8217;en retenir un facilement qui soit unique et complexe pour chaque service que j&#8217;utilise sur internet avec une seule règle &#8230; et d&#8217;éviter l&#8217;<a href="http://www.codinghorror.com/blog/2009/05/i-just-logged-in-as-you.html">effroyable</a>!</p>
 
 <p>Mon astuce n&#8217;est qu&#8217;une variante très simple du <a href="http://en.wikipedia.org/wiki/Caesar_cipher">chiffrement par décalage</a>, que j&#8217;ai imaginé en regardant un épisode de  <a href="http://en.wikipedia.org/wiki/The_Wire">&#8220;sur écoute&#8221;</a>. Dans la série, les hommes de main de <a href="http://en.wikipedia.org/wiki/Stringer_Bell">Stringer Bell</a> s&#8217;échangent des numéros de téléphone  par <a href="http://en.wikipedia.org/wiki/Pager">pagers</a>. Ces numéros sont échangés de manière codée, ainsi si le message est intercepté par la police, il ne menera à rien. Dans un souci de commodité, les opérations de cryptage et de décryptage ont été simplifiées: elle se font sans algorithme mathématique mais simplement par une sorte de <a href="http://en.wikipedia.org/wiki/Point_reflection">symétrie</a> appliquée à la disposition d&#8217;un clavier de numérotation téléphonique, et donc très facile à appliquer et à retenir. <em>#NOBRAINER</em></p>
 
@@ -313,7 +309,7 @@ Pour moi le plus simple consiste a renseigner la valeur la plus élevée possibl
 
 <h2>Alerte rouge</h2>
 
-<p>Quand on a fini d’exécuter une commande ou un programme, on peut bien sûr interroger son code retour. Mais comme on ne le fait pas systématiquement et surtout lorsqu&#8217;on ne s&#8217;y attend pas, on peut passer à coté et perdre beaucoup de temps. Il est tellement plus simple de récupérer automatiquement cette information et l&#8217;afficher avec un code couleur ! Diablement efficace !</p>
+<p>Quand on a fini d’exécuter une commande ou un programme, on peut bien sûr interroger son code retour. Mais comme on ne le fait pas systématiquement et surtout lorsqu&#8217;on ne s&#8217;y attend pas, on peut passer à coté et perdre beaucoup de temps. Il est tellement plus simple de récupérer automatiquement cette information et l&#8217;afficher avec un code couleur. #EFFICACE</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -379,19 +375,13 @@ Pour moi le plus simple consiste a renseigner la valeur la plus élevée possibl
     <link href="http://mlnstd.io/2013/02/10/hello-world/"/>
     <updated>2013-02-10T00:19:00+01:00</updated>
     <id>http://mlnstd.io/2013/02/10/hello-world</id>
-    <content type="html"><![CDATA[<p>Bienvenue à tous. Vous etes sur mon blog. Qui est surtout un pretexte pour essayer &#8220;octopress&#8221;. Un outil très pratique qui permet de générer des pages statiques, ce qui a tellement d&#8217;avantages que je ne saurai pas tous les citer (et peut être quelques <a href="http://liquidmarkup.org">limites</a> malgré tout).</p>
-
-<p>J&#8217;aime le <a href="http://jessicahische.is/monkeyingaround">souci</a> du <a href="http://www.creads.org/blog/logos/le-logo-sncf-a-eu-le-droit-a-un-lifting/">détails</a>, alors si quelquechose ne va pas, n&#8217;hesitez pas à me corriger en m&#8217;envoyant un email. Je ne suis pas sur twitter, j&#8217;avais bien un compte mais c&#8217;était avant l&#8217;ère des applications &#8220;mobile&#8221;, quand les messages étaient encore envoyés par <a href="https://www.youtube.com/watch?v=IGcAYSeN7E4">SMS</a>. #LOL</p>
-
-<p>A bientôt.</p>
-
-<p>Bienvenue sur mon blog. Qui est surtout un prétexte pour essayer “octopress”. Un outil très pratique qui permet de générer des pages statiques. Ce qui a tellement d’avantages que je ne saurai pas tous les citer.</p>
+    <content type="html"><![CDATA[<p>Bienvenue sur mon blog. Qui est surtout un prétexte pour essayer “octopress”. Un outil très pratique qui permet de générer des pages statiques. Ce qui a tellement d’avantages que je ne saurai pas tous les citer.</p>
 
 <p>J&#8217;aime le <a href="http://jessicahische.is/monkeyingaround">souci</a> du <a href="http://www.creads.org/blog/logos/le-logo-sncf-a-eu-le-droit-a-un-lifting/">détails</a>. J&#8217;ai essayé d&#8217;imaginer mon propre thème mais ne m&#8217;en demandez pas trop non plus! Désolé si vous attendiez un site &#8220;responsive&#8221; ou &#8220;flat design&#8221;, malheureusement, il faudra se contenter d&#8217;une bannière trop large et de quelques utilisations douteuses de CSS. J&#8217;ai peut être préféré me concentrer sur l&#8217;<a href="https://davidlyness.com/post/email-address-obfuscation">utile</a>.</p>
 
 <p>J&#8217;aime programmer. J&#8217;aime mon métier. J&#8217;aime utiliser <a href="http://www.sublimetext.com/">les</a> <a href="https://www.hipchat.com/">bons</a> <a href="https://trello.com/">outils</a>. Bien sûr il arrive que les &#8220;rockstars&#8221; de l&#8217;industrie me donnent des complexes, mais pouvoir profiter du génie des <a href="http://en.wikipedia.org/wiki/Standing_on_the_shoulders_of_giants">autres</a> est quelque-chose de très excitant, non ?</p>
 
-<p>Si vous voyez quelque-chose qui ne va pas, n’hésitez pas à m’envoyer un email. Même si je suis <a href="https://twitter.com/LulzSec/status/81115804636155906">un</a> <a href="https://twitter.com/nathanfielder/status/364093225637650433">grand</a> <a href="https://twitter.com/ciaotiga/status/384391149835661312">fan</a> <a href="https://twitter.com/BretEastonEllis/statuses/128369721790840832">du</a> <a href="https://twitter.com/firefox/status/327784629543239681">service</a>, je ne suis malheureusement pas sur twitter :( J’avais bien un compte relié à mon nokia, mais c’était il y a des années, avant l’ère des applications “mobile” quand les messages étaient encore envoyés par SMS. Que le temps passe vite !</p>
+<p>Si vous voyez quelque-chose qui ne va pas, n’hésitez pas à m’envoyer un email. Même si je suis <a href="https://twitter.com/LulzSec/status/81115804636155906">un</a> <a href="https://twitter.com/nathanfielder/status/364093225637650433">grand</a> <a href="https://twitter.com/ciaotiga/status/384391149835661312">fan</a> <a href="https://twitter.com/BretEastonEllis/statuses/128369721790840832">du</a> <a href="https://twitter.com/firefox/status/327784629543239681">service</a>, je ne suis malheureusement pas sur twitter :( J’avais bien un compte relié à mon nokia, mais c’était il y a des années, avant l’ère des applications “mobile” quand les messages étaient encore envoyés par <a href="https://www.youtube.com/watch?v=IGcAYSeN7E4">SMS</a>. #140signs</p>
 
 <p>A bientôt.</p>
 ]]></content>

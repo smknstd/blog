@@ -51,7 +51,7 @@ function show_new() {
 
 <body onload="show_new()"   >
   <header role="banner">  <div id="logo"><a href="/"><img src="/images/logo.png" alt="logo" /></a></div>
-  <div id="legend">{type: "web log", about: "trapped all day, got my cheese and an indexed key"}</div>
+  <div id="legend">{type: "web log", localhost: "Paris", about: "trapped all day, got my cheese and an indexed key"}</div>
 
 </header>
   <nav role="navigation">
@@ -113,23 +113,19 @@ function show_new() {
 
 <p>En parcourant cette instructive <a href="http://hyperpolyglot.org/scripting">matrice de comparaison</a>, je me suis rappelé que cela n’était pas toujours bien connu. Les options nécessaires pour simuler le comportement d&#8217;awk sont les mêmes dans les deux langages. En voici l&#8217;énumération et une explication propre:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>-a: turns on auto-split-mode: this splits the input into an array. The default separator is one (or many) spaces.
-</span><span class='line'>
-</span><span class='line'>-n: makes Perl/Ruby process the input in an implicit while loop around the input, which is processed line-wise: "as long as there is another line, process it!"
-</span><span class='line'>
-</span><span class='line'>-e: execute the next command line argument as a program.</span></code></pre></td></tr></table></div></figure>
-
+<blockquote><ul>
+<li><p>a: turns on auto-split-mode: this splits the input into an array. The default separator is one (or many) spaces.</p></li>
+<li><p>n: makes Perl/Ruby process the input in an implicit while loop around the input, which is processed line-wise: &#8220;as long as there is another line, process it!&#8221;</p></li>
+<li><p>e: execute the next command line argument as a program.</p></li>
+</ul>
+</blockquote>
 
 <p>Spécifiquement pour PERL, la gestion des sauts de lignes:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>-l: "chomps" the input (which here means: removes newlines if present) from each line, and automatically adds a newline to each output newline</span></code></pre></td></tr></table></div></figure>
-
+<blockquote><ul>
+<li>l: &#8220;chomps&#8221; the input (which here means: removes newlines if present) from each line, and automatically adds a newline to each output newline</li>
+</ul>
+</blockquote>
 
 <p>Enfin voici une retranscription d&#8217;un petit programme awk qui compile quelques fonctionnalités généralement appréciées:</p>
 
