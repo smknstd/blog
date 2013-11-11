@@ -9,7 +9,7 @@
   <meta name="author" content="smknstd">
 
   
-  <meta name="description" content="Lorsqu&#8217;on manipule des données, on se heurte bien souvent à des subtilités comme l&#8217;encodage des caracteres. Si souvent d&#8217;ailleurs, &hellip;">
+  <meta name="description" content="Lorsqu&#8217;on manipule des données, on se heurte bien souvent à des subtilités comme l&#8217;encodage des caractères. Si souvent d&#8217;ailleurs, &hellip;">
   
 
   <meta name="HandheldFriendly" content="True">
@@ -91,9 +91,11 @@ function show_new() {
   </header>
 
 
-<div class="entry-content"><p>Lorsqu&#8217;on manipule des données, on se heurte bien souvent à des subtilités comme l&#8217;encodage des caracteres. Si souvent d&#8217;ailleurs, que s&#8217;en méfier devient un atomatisme, voir une seconde nature. Par contre, une subtilité à laquelle je n&#8217;ai jamais pu m&#8217;habituer sont bien les caractères <a href="http://en.wikipedia.org/wiki/Control_character">non imprimables</a>. En théorie bien sûr ces caractère ne sont pas sensé être très genant. Malheuresement dans la pratique, j&#8217;ai pu me rendre compte que de nombreuses applications ont tendance à produire des comportements anormaux à leur encontre. Le plus dur est peut être de les identifier, et ceci est le meilleur moyen que j&#8217;ai trouvé pour le faire.</p>
+<div class="entry-content"><p>Lorsqu&#8217;on manipule des données, on se heurte bien souvent à des subtilités comme l&#8217;encodage des caractères. Si souvent d&#8217;ailleurs, que s&#8217;en méfier devient un automatisme, voir une seconde nature. Par contre, je n&#8217;ai jamais réussi à m&#8217;habituer aux caractères <a href="http://en.wikipedia.org/wiki/Control_character">non imprimables</a>.</p>
 
-<p>Voici un exemple d&#8217;une chaine de caractère à l&#8217;origine d&#8217;un comportement anormal d&#8217;un programme:</p>
+<p>En écrivant des flux d&#8217;<a href="http://en.wikipedia.org/wiki/Data_integration">intégration de données</a>, j&#8217;ai souvent rencontré des erreurs inattendues et des comportements anormaux sur différentes technologies.</p>
+
+<p>Même dans l&#8217;investigation d&#8217;un problème, le plus dur est parfois de simplement les identifier:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -105,7 +107,19 @@ function show_new() {
 </span><span class='line'>22/08/2011 (retour congé)</span></code></pre></td></tr></table></div></figure>
 
 
-<p>A première vu, rien de remarquable. Heuresement, par miracle, un <a href="http://en.wikipedia.org/wiki/Od_%28Unix%29">outil</a> peut m&#8217;aider en imprimant à l&#8217;écran l&#8217;imprimable !</p>
+<p>Heureusement il existe <a href="http://www.thelinuxtips.com/tag/cat-v-command/">plusieurs</a> <a href="http://stackoverflow.com/questions/6943928/show-special-characters-in-unix-while-using-less-command">moyens</a> de les afficher:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt;  sqlplus -l -s user/password@INSTANCE @test.sql | cat -v
+</span><span class='line'>REVISION DES PRIX 2011 coef 1.107138^M
+</span><span class='line'>reM-gu le 22/07/2011 mis en application le
+</span><span class='line'>22/08/2011 (retour congM-i)^M</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Et pour moi, l&#8217;outil de loin le plus utile s&#8217;appelle: <a href="http://en.wikipedia.org/wiki/Od_%28Unix%29">od</a>. Avec ses options de détails caractère par caractère, il permet non seulement d&#8217;imprimer à l&#8217;écran l&#8217;imprimable, mais il s&#8217;avère aussi utile sur de nombreuses problématiques, notemment pour élucider certaines ambiguités d&#8217;encodage. Le connaissiez-vous ?</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -142,20 +156,6 @@ function show_new() {
 </span><span class='line'>          r       c   o   n   g 351   )  \r  \n  \n
 </span><span class='line'>0000153</span></code></pre></td></tr></table></div></figure>
 
-
-<p>Tout devient plus clair! Bien sûr, une fois qu&#8217;on le sait, il y&#8217;a d&#8217;<a href="http://www.thelinuxtips.com/tag/cat-v-command/">autres</a> <a href="http://stackoverflow.com/questions/6943928/show-special-characters-in-unix-while-using-less-command">moyens</a> de les afficher et la présence de ces caracteres devient presque évidente:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&gt;  sqlplus -l -s user/password@INSTANCE @test.sql | cat -v
-</span><span class='line'>REVISION DES PRIX 2011 coef 1.107138^M
-</span><span class='line'>reM-gu le 22/07/2011 mis en application le
-</span><span class='line'>22/08/2011 (retour congM-i)^M</span></code></pre></td></tr></table></div></figure>
-
-
-<p>&#8220;od&#8221; (et ses options de détails caractère par caractère) est pour moi un outils extrement utile si ce n&#8217;est irremplacable dès lors qu&#8217;on manipule des chaines de caracteres. Le connaissiez-vous ?</p>
 </div>
 
 
@@ -186,8 +186,10 @@ function show_new() {
     <div id="archive_header2">
       <div id="archive_header3">
       
-        <a class="basic-alignment left" href="/2013/09/12/oracle-partitionned-read/" title="Previous Post: Extraction Oracle massive en //: la methode de lecture partitionnée">&laquo; Extraction Oracle massive en //: la methode de lecture partitionnée</a>
+        <a class="basic-alignment left" href="/2013/09/12/oracle-partitionned-read/" title="Previous Post: Extraction Oracle massive en //: la méthode de lecture partitionnée">&laquo; Extraction Oracle massive en //: la méthode de lecture partitionnée</a>
       
+      
+        <a class="basic-alignment right" href="/2013/11/11/oneliners/" title="Next Post: unilignes: l'héritage d'awk dans les langages interprétés modernes">unilignes: l'héritage d'awk dans les langages interprétés modernes &raquo;</a>
       
       </div>
     </div>

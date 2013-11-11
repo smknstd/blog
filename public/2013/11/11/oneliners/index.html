@@ -1,0 +1,226 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>unilignes: l'héritage d'awk dans les langages interprétés modernes - smknstd.io</title>
+  <meta name="author" content="smknstd">
+
+  
+  <meta name="description" content="Il y a seulement quelques années, lorsque j&#8217;ai commencé à utiliser la commande shell, j&#8217;ai très vite pu apprécié la puissance et l&#8217; &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://mlnstd.io/2013/11/11/oneliners/">
+  <link href="/images/favicon.ico" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feedpress.me/smknstd" rel="alternate" title="smknstd.io" type="application/atom+xml">
+  <script type="text/javascript" src="//use.typekit.net/oqc4yak.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<script type="text/javascript">
+function show_new() {
+	var j=0;
+    var chila = document.getElementById("blog-archives").children;
+	for(var i = 0; i < chila.length; i++) {
+		    var lien = chila[i].getElementsByTagName('h1')[0].getElementsByTagName('a')[0].getAttribute("href");
+		    mytab = lien.split("/");
+		    var parsedDate = new Date(parseInt(mytab[1]), parseInt(mytab[2])-1, parseInt(mytab[3]), 0, 0, 0, 0);
+		    var today = new Date();
+		    var diffDays = Math.floor((today - parsedDate)/(1000*60*60*24));
+		    if(diffDays<90){
+		    	j++;
+		        chila[i].getElementsByTagName('h1')[0].innerHTML=chila[i].getElementsByTagName('h1')[0].innerHTML+"<div id='new'>NEW</div>";
+		    }
+	}
+	console.log("[function show_new] " + j +" articles de moins de 90 jours (rajout de l'etiquette NEW)");
+}
+</script>
+
+  
+
+</head>
+
+<body onload="show_new()"   >
+  <header role="banner">  <div id="logo"><a href="/"><img src="/images/logo.png" alt="logo" /></a></div>
+  <div id="legend">{type: "web log", about: "trapped all day, got my cheese and an indexed key"}</div>
+
+</header>
+  <nav role="navigation">
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    <div id="archive_header">
+    
+      <h2 class="entry-title">Unilignes: L'héritage D'awk Dans Les Langages Interprétés Modernes</h2>
+    
+    </div>
+  </header>
+  <header>
+    <div id="archive_header">
+    
+      <h3 class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-11T19:37:00+01:00" pubdate data-updated="true">Nov 11<span>th</span>, 2013</time>
+      </h3>
+    
+    </div>
+  </header>
+
+
+<div class="entry-content"><p>Il y a seulement quelques années, lorsque j&#8217;ai commencé à utiliser la commande shell, j&#8217;ai très vite pu apprécié la puissance et l&#8217;ingéniosité de certains outils surtout dans la manipulation courante des données. A ce stade, je savais écrire un programme en C ou en java, mais Xavier, un programmeur expérimenté de 25 ans mon aîné que j&#8217;avais désigné comme mon mentor, a particulièrement attiré mon attention sur cet étrange outil dont j&#8217;ignorais tout: awk.</p>
+
+<p>J&#8217;ai rapidement compris que malgré son apparence rebutante, il allait me devenir indispensable! Associé au <a href="http://doc.cat-v.org/unix/pipes/">&#8220;pipe&#8221;</a>, il est capable de résoudre de véritables casse-têtes en une commande d&#8217;une seule ligne. Bien sûr le prix d&#8217;une ligne c&#8217;est qu&#8217;elle est souvent à rallonge, mais pour de nombreuses opérations elle évite d&#8217;écrire un script. Au moins deux spécificités sont particulièrement appréciées dans Awk:</p>
+
+<ol>
+<li>il traite un fichier ligne par ligne</li>
+<li>il permet de découper chaque ligne selon un délimiteur et manipuler facilement les champs ainsi découpés</li>
+</ol>
+
+
+<p><em>Attention ces exemples ne sont vraiment pas originaux !</em> Pour toutes les lignes d&#8217;un fichier CSV, on peut garder uniquement la 4ème colonne:</p>
+
+<p><code>gawk -F; '{print $4}' ./exemple.csv</code></p>
+
+<p>Aussi il dispose d&#8217;un système de &#8220;modèle/action&#8221; bien pratique et qui rend par exemple très facile de filtrer les lignes sur certains critères. On peut par exemple facilement exclure certaines lignes (les 3 premières lignes):</p>
+
+<p><code>gawk -F; 'NR&gt;3 { print $4 }' ./exemple.csv</code></p>
+
+<p>Mais awk est aussi un véritable langage de programmation puisqu&#8217;il dispose d&#8217;outils élaborés (tableaux, boucles, types, librairies de fonctions, etc). Awk date de la fin des années 70 et en m’intéressant à la <a href="http://cm.bell-labs.com/cm/cs/awkbook/index.html">littérature de l&#8217;époque</a>, j&#8217;ai réalisé qu&#8217;il avait comme ambition de résoudre des problèmes bien plus sophistiqués que peuvent le faire des unilignes. Évidemment, ces programmes sont aujourd&#8217;hui obsolètes, mais en plus d&#8217;être <a href="https://news.ycombinator.com/item?id=2933058">court</a>, la souplesse et la puissance de son modèle ont fait école. Il est bien connu que certains des <a href="http://en.wikipedia.org/wiki/Interpreted_language">langages interprétés</a> majeurs comme perl et ruby, s&#8217;en sont largement inspiré.</p>
+
+<p>En parcourant cette instructive <a href="http://hyperpolyglot.org/scripting">matrice de comparaison</a>, je me suis rappelé que cela n’était pas toujours bien connu. Les options nécessaires pour simuler le comportement d&#8217;awk sont les mêmes dans les deux langages. En voici l&#8217;énumération et une explication propre:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>-a: turns on auto-split-mode: this splits the input into an array. The default separator is one (or many) spaces.
+</span><span class='line'>
+</span><span class='line'>-n: makes Perl/Ruby process the input in an implicit while loop around the input, which is processed line-wise: "as long as there is another line, process it!"
+</span><span class='line'>
+</span><span class='line'>-e: execute the next command line argument as a program.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Spécifiquement pour PERL, la gestion des sauts de lignes:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>-l: "chomps" the input (which here means: removes newlines if present) from each line, and automatically adds a newline to each output newline</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Enfin voici une retranscription d&#8217;un petit programme awk qui compile quelques fonctionnalités généralement appréciées:</p>
+
+<ul>
+<li>filtre des données sur un champ donné</li>
+<li>numérotation des lignes</li>
+<li>selection d&#8217;un champ donné à partir de son numéro d’index</li>
+<li>sélection du dernier champ</li>
+</ul>
+
+
+<p><code>gawk -F; ' $1 = "toto" { print NR ";" $4 ";"$NF }' | sort -t";" -k 2 | uniq</code></p>
+
+<p>en PERL</p>
+
+<p><code>perl -F; -lane 'print "$.;$F[4];$F[-1]" if $F[0] = "toto"' | sort -t";" -k 2 | uniq</code></p>
+
+<p>et enfin en RUBY</p>
+
+<p><code>ruby -F; -ane 'print "$.;$F[4];$F.last" if $F[0] = "toto"' | sort -t";" -k 2 | uniq</code></p>
+
+<h3>Ressources</h3>
+
+<ul>
+<li><a href="http://www.pement.org/awk/awk1line.txt">le célèbres .txt de Eric Pement sur awk</a></li>
+<li><a href="http://www.computerworld.com.au/article/216844/a-z_programming_languages_awk">interview intéressante</a></li>
+<li><a href="http://web.archive.org/web/20090602215912/http://sial.org/howto/perl/one-liner/">inestimable ressource sur les &#8220;one-liners&#8221; en PERL</a> (merci à la bonne âme qui l&#8217;a archivée)</li>
+<li><a href="http://articles.mongueurs.net/magazines/linuxmag50.html">très bon tutoriel PERL</a> en français</li>
+<li><a href="http://tomayko.com/writings/awkward-ruby">article magistrale sur l&#8217;héritage d&#8217;awk dans ruby</a></li>
+<li>unilignes <a href="https://twitter.com/rubyoneliner">socials</a> ?!</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">smknstd</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-11T19:37:00+01:00" pubdate data-updated="true">Nov 11<span>th</span>, 2013</time>
+      
+
+
+    </p>
+    <div id="archive_header2">
+      <div id="archive_header3">
+      
+        <a class="basic-alignment left" href="/2013/10/22/non-printing-characters/" title="Previous Post: Survivre aux caractères non-imprimables">&laquo; Survivre aux caractères non-imprimables</a>
+      
+      
+      </div>
+    </div>
+  </footer>
+</article>
+</div>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  2013 - smknstd -
+  <span class="credit">designed with <a href="http://octopress.org">Octopress</a> and hosted by <a href="http://heroku.com">Heroku</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

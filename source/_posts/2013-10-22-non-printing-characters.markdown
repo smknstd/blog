@@ -3,12 +3,14 @@ layout: post
 title: "Survivre aux caractères non-imprimables"
 date: 2013-10-22 23:56
 comments: true
-categories: 
+categories:
 ---
 
-Lorsqu'on manipule des données, on se heurte bien souvent à des subtilités comme l'encodage des caracteres. Si souvent d'ailleurs, que s'en méfier devient un atomatisme, voir une seconde nature. Par contre, une subtilité à laquelle je n'ai jamais pu m'habituer sont bien les caractères [non imprimables](http://en.wikipedia.org/wiki/Control_character). En théorie bien sûr ces caractère ne sont pas sensé être très genant. Malheuresement dans la pratique, j'ai pu me rendre compte que de nombreuses applications ont tendance à produire des comportements anormaux à leur encontre. Le plus dur est peut être de les identifier, et ceci est le meilleur moyen que j'ai trouvé pour le faire.
+Lorsqu'on manipule des données, on se heurte bien souvent à des subtilités comme l'encodage des caractères. Si souvent d'ailleurs, que s'en méfier devient un automatisme, voir une seconde nature. Par contre, je n'ai jamais réussi à m'habituer aux caractères [non imprimables](http://en.wikipedia.org/wiki/Control_character).
 
-Voici un exemple d'une chaine de caractère à l'origine d'un comportement anormal d'un programme:
+En écrivant des flux d'[intégration de données](http://en.wikipedia.org/wiki/Data_integration), j'ai souvent rencontré des erreurs inattendues et des comportements anormaux sur différentes technologies.
+
+Même dans l'investigation d'un problème, le plus dur est parfois de simplement les identifier:
 
 ```
 >  sqlplus -l -s user/password@INSTANCE @test.sql | cat
@@ -17,7 +19,16 @@ reçu le 22/07/2011 mis en application le
 22/08/2011 (retour congé)
 ```
 
-A première vu, rien de remarquable. Heuresement, par miracle, un [outil](http://en.wikipedia.org/wiki/Od_%28Unix%29) peut m'aider en imprimant à l'écran l'imprimable !
+Heureusement il existe [plusieurs](http://www.thelinuxtips.com/tag/cat-v-command/) [moyens](http://stackoverflow.com/questions/6943928/show-special-characters-in-unix-while-using-less-command) de les afficher:
+
+```
+>  sqlplus -l -s user/password@INSTANCE @test.sql | cat -v
+REVISION DES PRIX 2011 coef 1.107138^M
+reM-gu le 22/07/2011 mis en application le
+22/08/2011 (retour congM-i)^M
+```
+
+Et pour moi, l'outil de loin le plus utile s'appelle: [od](http://en.wikipedia.org/wiki/Od_%28Unix%29). Avec ses options de détails caractère par caractère, il permet non seulement d'imprimer à l'écran l'imprimable, mais il s'avère aussi utile sur de nombreuses problématiques, notemment pour élucider certaines ambiguités d'encodage. Le connaissiez-vous ?
 
 ```
 >  sqlplus -l -s user/password@INSTANCE @test.sql | od -bc
@@ -38,14 +49,3 @@ A première vu, rien de remarquable. Heuresement, par miracle, un [outil](http:/
           r       c   o   n   g 351   )  \r  \n  \n
 0000153
 ```
-
-Tout devient plus clair! Bien sûr, une fois qu'on le sait, il y'a d'[autres](http://www.thelinuxtips.com/tag/cat-v-command/) [moyens](http://stackoverflow.com/questions/6943928/show-special-characters-in-unix-while-using-less-command) de les afficher et la présence de ces caracteres devient presque évidente:
-
-```
->  sqlplus -l -s user/password@INSTANCE @test.sql | cat -v
-REVISION DES PRIX 2011 coef 1.107138^M
-reM-gu le 22/07/2011 mis en application le
-22/08/2011 (retour congM-i)^M
-```
-
-"od" (et ses options de détails caractère par caractère) est pour moi un outils extrement utile si ce n'est irremplacable dès lors qu'on manipule des chaines de caracteres. Le connaissiez-vous ?

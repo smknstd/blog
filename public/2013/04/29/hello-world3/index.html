@@ -9,7 +9,7 @@
   <meta name="author" content="smknstd">
 
   
-  <meta name="description" content="Vous aimez votre terminal ? moi aussi. Comme j&#8217;y passe souvent beaucoup trop de temps, j&#8217;ai découvert au cours du temps quelques astuces &hellip;">
+  <meta name="description" content="Vous aimez votre terminal ? Moi aussi. Vous y passez beaucoup trop de temps ? Moi aussi. Qui n&#8217;a pas personnalisé l’affichage de sa commande &# &hellip;">
   
 
   <meta name="HandheldFriendly" content="True">
@@ -91,15 +91,15 @@ function show_new() {
   </header>
 
 
-<div class="entry-content"><p>Vous aimez votre terminal ? moi aussi. Comme j&#8217;y passe souvent beaucoup trop de temps, j&#8217;ai découvert au cours du temps quelques astuces bien utiles. J&#8217;aurai aimé citer les sources de cette note, et rendre à Caesar ce qui est à Caesar, mais <a href="http://blog.chron.com/techblog/files/2013/03/googlereaderrip_thumb.jpg">désormais</a> je ne sais plus rechercher correctement dans mes fils rss. :(</p>
+<div class="entry-content"><p>Vous aimez votre terminal ? Moi aussi. Vous y passez beaucoup trop de temps ? Moi aussi. Qui n&#8217;a pas personnalisé l’affichage de sa commande &#8220;prompt&#8221; ? Dernièrement, j&#8217;ai découvert quelques astuces bien utiles. J&#8217;aurai aimé vous renvoyer vers les articles originaux, pour rendre à Caesar ce qui est à Caesar, mais <a href="http://blog.chron.com/techblog/files/2013/03/googlereaderrip_thumb.jpg">désormais</a> je ne sais plus rechercher correctement dans mes fils rss et j&#8217;ai été incapable de retrouver mes sources.</p>
 
 <h2>Votre terminal supporte l&#8217;unicode</h2>
 
-<p>Très utile pour personnaliser l&#8217;invite et retranscrire des informations complexes avec des pictogrammes. Le rappel de modification git decrit plsu bas est un bon exemple, mais je suis persuadé qu&#8217;il y a bien d&#8217;autres cas d&#8217;utilisatioon possible parmis le <a href="http://goetter.fr/unicode/">panel</a> disponible.</p>
+<p>Et cela peut être très utile pour personnaliser l&#8217;invite et retranscrire des informations complexes avec des pictogrammes. Le rappel de modification dans git décrit plus bas est un bon exemple, mais je suis persuadé qu&#8217;il y a bien d&#8217;autres cas d’utilisation possible parmi le <a href="http://goetter.fr/unicode/">panel</a> disponible.</p>
 
-<h2>Something went wrong : RED ALERT</h2>
+<h2>Alerte rouge</h2>
 
-<p>Quand on a fini d&#8217;executer une commande, on peut bien sûr intérroger son code retour, mais il est beaucoup plus simple de récupérer automatiquement cette information et l&#8217;afficher avec un code couleur ! Très simple et pourtant diablement efficace.</p>
+<p>Quand on a fini d’exécuter une commande ou un programme, on peut bien sûr interroger son code retour. Mais comme on ne le fait pas systématiquement et surtout lorsqu&#8217;on ne s&#8217;y attend pas, on peut passer à coté et perdre beaucoup de temps. Il est tellement plus simple de récupérer automatiquement cette information et l&#8217;afficher avec un code couleur ! Diablement efficace !</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -124,7 +124,7 @@ function show_new() {
 
 <h2>Afficher la branche courante</h2>
 
-<p>J&#8217;aime GIT. Mais je fais des erreurs. Afficher le nom de la branche courante des qu&#8217;on se place dans un repository peut eviter bien des problèmes. Honetement, je ne peux plus m&#8217;en passer.</p>
+<p>J&#8217;aime GIT. Lorsqu&#8217;on explore une arborescence, savoir qu&#8217;on est dans un &#8220;repository&#8221; peut être très utile. Même quand on le sait, afficher le nom de la branche courante peut éviter bien des ambiguïtés et des erreurs.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">prompt</span><span class="o">=</span><span class="s2">&quot;\w$(__git_ps1)&quot;</span><span class="err">&quot;</span>
@@ -133,16 +133,16 @@ function show_new() {
 
 <h2>N&#8217;oubliez plus de commiter</h2>
 
-<p>Avez vous déjà quitter un repository avec des modifications non commitées ? Voici un moyen de ne plus le faire. On affiche en permanence l&#8217;etat (avec un pictogramme unicode !): infaillible !</p>
+<p>Avez vous déjà quitté un &#8220;repository&#8221; avec des modifications en cours sans finir par un &#8220;commit&#8221; ? Moi oui ! En tous cas voici un moyen de ne plus le faire. Il suffit d&#8217;interroger le &#8220;status&#8221; git et d&#8217;afficher un rappel lorsque c&#8217;est nécessaire. Mieux que la couleur, un pictogramme unicode est parfaitement désigné pour cette tâche.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>git status 2&gt; /dev/null | grep -c : | awk <span class="s1">&#39;{if ($1 &gt; 0) print &quot;⚡&quot;}&#39;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h2>retourner à la racine du repository courant</h2>
+<h2>Retourner à la racine du repository courant</h2>
 
-<p>Toutes les projets n&#8217;ont pas des raborescences interminables, mais ce petit raccourci peut être utile, j&#8217;en suis sûr.</p>
+<p>Toutes les projets n&#8217;ont pas des arborescences interminables, mais desfois il peut être utile de savoir ou commence un &#8220;repository&#8221;. Ce petit raccourci peut être utile, j&#8217;en suis sûr.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">alias </span>git-root<span class="o">=</span><span class="s1">&#39;cd $(git rev-parse --show-toplevel)&#39;</span>
@@ -152,9 +152,9 @@ function show_new() {
 <h4>Liens utiles</h4>
 
 <ul>
-<li>probably the most useful <a href="http://mywiki.wooledge.org/BashPitfalls">page</a> about bash on the whole internet</li>
-<li>pretty interesting <a href="http://www.computerworld.com.au/article/222764/a-z_programming_languages_bash_bourne-again_shell/">interview</a></li>
-<li><a href="http://stackoverflow.com/questions/957928/is-there-a-way-to-get-to-the-git-root-directory-in-one-command">stackoverflow</a>&#8217;s always right</li>
+<li>probablement une des <a href="http://mywiki.wooledge.org/BashPitfalls">pages</a> concernant bash les plus utiles de tout l&#8217;internet</li>
+<li>une <a href="http://www.computerworld.com.au/article/222764/a-z_programming_languages_bash_bourne-again_shell/">interview</a> plutôt intéressante</li>
+<li><a href="http://stackoverflow.com/questions/957928/is-there-a-way-to-get-to-the-git-root-directory-in-one-command">stackoverflow</a> a toujours raison</li>
 </ul>
 
 </div>
