@@ -14,3 +14,5 @@ fonts_dir = "source/fonts"
 
 line_comments = false
 output_style = :compressed
+
+sass_options = {:debug_info => true}

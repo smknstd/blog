@@ -31,17 +31,22 @@ function show_new() {
 	var j=0;
     var chila = document.getElementById("blog-archives").children;
 	for(var i = 0; i < chila.length; i++) {
-		    var lien = chila[i].getElementsByTagName('h1')[0].getElementsByTagName('a')[0].getAttribute("href");
+			var ch = chila[i].getElementsByTagName('h1')[0];
+		    var lien = ch.getElementsByTagName('a')[0].getAttribute("href");
 		    mytab = lien.split("/");
 		    var parsedDate = new Date(parseInt(mytab[1]), parseInt(mytab[2])-1, parseInt(mytab[3]), 0, 0, 0, 0);
 		    var today = new Date();
 		    var diffDays = Math.floor((today - parsedDate)/(1000*60*60*24));
-		    if(diffDays<90){
+		    if(diffDays<45){
 		    	j++;
-		        chila[i].getElementsByTagName('h1')[0].innerHTML=chila[i].getElementsByTagName('h1')[0].innerHTML+"<div id='new'>NEW</div>";
+		        ch.innerHTML=chila[i].getElementsByTagName('h1')[0].innerHTML+"<div id='new'>NEW</div>";
+		    }else{
+		    	// comme les articles sont ordonnées chronologiquement on peut s'arreter de chercher au premier article de plus de 45 jours trouvé 
+		    	break;
 		    }
+
 	}
-	console.log("[function show_new] " + j +" articles de moins de 90 jours (rajout de l'etiquette NEW)");
+	console.log("[function show_new] " + j +" articles de moins de 45 jours (rajout de l'etiquette NEW)");
 }
 </script>
 
@@ -115,10 +120,9 @@ function show_new() {
 
 <p>   FFF: The tablespace-relative datafile number of the datafile that contains the row (file AAT in the example).</p>
 
-<p>   BBBBBB: The data block that contains the row (block AAABrX in the example). Block numbers are relative to their datafile, not tablespace. Therefore, two rows with identical block numbers could reside in two different datafiles of the same tablespace.
-   RRR: The row in the block.</p></blockquote>
+<p>   BBBBBB: The data block that contains the row (block AAABrX in the example). Block numbers are relative to their datafile, not tablespace. Therefore, two rows with identical block numbers could reside in two different datafiles of the same tablespace.</p>
 
-<p>En se servant du catalogue système de l&#8217;instance, on essaie de cartographier au mieux la disposition des données dans le &#8220;file system&#8221;. A partir de ces informations, il faut essayer de découper des groupes de blocks pour répartir le plus équitablement possible entre les partitions. Aussi il faut prendre soin en choisissant les bornes des plages de ROWID à n&#8217;exclure aucune données. Dans la pratique les informations nécessaires sont données principalement par les &#8220;Datafiles&#8221;, puis les groupes de &#8220;blocks&#8221; occupés.</p>
+<p>   RRR: The row in the block.</p></blockquote>
 
 <p>On peut lister l&#8217;identifiant de l&#8217;objet de cette manière:</p>
 
@@ -145,8 +149,9 @@ function show_new() {
 
 <p>On peut déterminer la taille des blocks de cette manière:</p>
 
-<p><code>SELECT VALUE FROM V$PARAMETER WHERE NAME LIKE 'DB_BLOCK_SIZE'</code>
-Pour moi le plus simple consiste a renseigner la valeur la plus élevée possible. Malheureusement cette valeur théorique n&#8217;est pas bien documentée. Sans pouvoir citer de source, j&#8217;ai utilisé &#8220;H//&#8221;.</p>
+<p><code>SELECT VALUE FROM V$PARAMETER WHERE NAME LIKE 'DB_BLOCK_SIZE'</code></p>
+
+<p>Pour moi le plus simple consiste a renseigner la valeur la plus élevée possible. Malheureusement cette valeur théorique n&#8217;est pas bien documentée. Sans pouvoir citer de source, j&#8217;ai utilisé &#8220;H//&#8221;.</p>
 
 <p>Notons bien, que cette méthode profite de plusieurs opportunités:</p>
 

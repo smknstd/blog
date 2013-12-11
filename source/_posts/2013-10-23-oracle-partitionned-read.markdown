@@ -31,10 +31,9 @@ Voici un extrait de la documentation officielle:
 >    FFF: The tablespace-relative datafile number of the datafile that contains the row (file AAT in the example).
 >
 >    BBBBBB: The data block that contains the row (block AAABrX in the example). Block numbers are relative to their datafile, not tablespace. Therefore, two rows with identical block numbers could reside in two different datafiles of the same tablespace.
+>
 >    RRR: The row in the block.
 >
-
-En se servant du catalogue système de l'instance, on essaie de cartographier au mieux la disposition des données dans le "file system". A partir de ces informations, il faut essayer de découper des groupes de blocks pour répartir le plus équitablement possible entre les partitions. Aussi il faut prendre soin en choisissant les bornes des plages de ROWID à n'exclure aucune données. Dans la pratique les informations nécessaires sont données principalement par les "Datafiles", puis les groupes de "blocks" occupés.
 
 On peut lister l'identifiant de l'objet de cette manière:
 
@@ -59,6 +58,7 @@ Pour la construction de la limite supérieur, il faut calculer le numéro du der
 On peut déterminer la taille des blocks de cette manière:
 
 `SELECT VALUE FROM V$PARAMETER WHERE NAME LIKE 'DB_BLOCK_SIZE'`
+
 Pour moi le plus simple consiste a renseigner la valeur la plus élevée possible. Malheureusement cette valeur théorique n'est pas bien documentée. Sans pouvoir citer de source, j'ai utilisé "H//".
 
 Notons bien, que cette méthode profite de plusieurs opportunités:

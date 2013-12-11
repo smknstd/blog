@@ -31,17 +31,22 @@ function show_new() {
 	var j=0;
     var chila = document.getElementById("blog-archives").children;
 	for(var i = 0; i < chila.length; i++) {
-		    var lien = chila[i].getElementsByTagName('h1')[0].getElementsByTagName('a')[0].getAttribute("href");
+			var ch = chila[i].getElementsByTagName('h1')[0];
+		    var lien = ch.getElementsByTagName('a')[0].getAttribute("href");
 		    mytab = lien.split("/");
 		    var parsedDate = new Date(parseInt(mytab[1]), parseInt(mytab[2])-1, parseInt(mytab[3]), 0, 0, 0, 0);
 		    var today = new Date();
 		    var diffDays = Math.floor((today - parsedDate)/(1000*60*60*24));
-		    if(diffDays<90){
+		    if(diffDays<45){
 		    	j++;
-		        chila[i].getElementsByTagName('h1')[0].innerHTML=chila[i].getElementsByTagName('h1')[0].innerHTML+"<div id='new'>NEW</div>";
+		        ch.innerHTML=chila[i].getElementsByTagName('h1')[0].innerHTML+"<div id='new'>NEW</div>";
+		    }else{
+		    	// comme les articles sont ordonnées chronologiquement on peut s'arreter de chercher au premier article de plus de 45 jours trouvé 
+		    	break;
 		    }
+
 	}
-	console.log("[function show_new] " + j +" articles de moins de 90 jours (rajout de l'etiquette NEW)");
+	console.log("[function show_new] " + j +" articles de moins de 45 jours (rajout de l'etiquette NEW)");
 }
 </script>
 

@@ -1,0 +1,243 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>vim VS Sublime Text: ajout d'un numéro de séquence - smknstd.io</title>
+  <meta name="author" content="smknstd">
+
+  
+  <meta name="description" content="Quand vient la question de choisir son éditeur de texte, la discussion pour un développeur peut vite devenir passionnelle
+. Loin de moi l&#8217;idée &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://mlnstd.io/2013/11/30/vimvssublime/">
+  <link href="/images/favicon.ico" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feedpress.me/smknstd" rel="alternate" title="smknstd.io" type="application/atom+xml">
+  <script type="text/javascript" src="//use.typekit.net/oqc4yak.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<script type="text/javascript">
+function show_new() {
+	var j=0;
+    var chila = document.getElementById("blog-archives").children;
+	for(var i = 0; i < chila.length; i++) {
+			var ch = chila[i].getElementsByTagName('h1')[0];
+		    var lien = ch.getElementsByTagName('a')[0].getAttribute("href");
+		    mytab = lien.split("/");
+		    var parsedDate = new Date(parseInt(mytab[1]), parseInt(mytab[2])-1, parseInt(mytab[3]), 0, 0, 0, 0);
+		    var today = new Date();
+		    var diffDays = Math.floor((today - parsedDate)/(1000*60*60*24));
+		    if(diffDays<45){
+		    	j++;
+		        ch.innerHTML=chila[i].getElementsByTagName('h1')[0].innerHTML+"<div id='new'>NEW</div>";
+		    }else{
+		    	// comme les articles sont ordonnées chronologiquement on peut s'arreter de chercher au premier article de plus de 45 jours trouvé 
+		    	break;
+		    }
+
+	}
+	console.log("[function show_new] " + j +" articles de moins de 45 jours (rajout de l'etiquette NEW)");
+}
+</script>
+
+  
+
+</head>
+
+<body onload="show_new()"   >
+  <header role="banner">  <div id="logo"><a href="/"><img src="/images/logo.png" alt="logo" /></a></div>
+  <div id="legend">{type: "web log", localhost: "Paris", about: "trapped all day, got my cheese and an indexed key"}</div>
+
+</header>
+  <nav role="navigation">
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    <div id="archive_header">
+    
+      <h2 class="entry-title">Vim vs Sublime Text: Ajout D'un Numéro De Séquence</h2>
+    
+    </div>
+  </header>
+  <header>
+    <div id="archive_header">
+    
+      <h3 class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-30T19:12:00+01:00" pubdate data-updated="true">Nov 30<span>th</span>, 2013</time>
+      </h3>
+    
+    </div>
+  </header>
+
+
+<div class="entry-content"><p>Quand vient la question de choisir son éditeur de texte, la discussion pour un développeur peut vite devenir <a href="https://en.wikipedia.org/wiki/Editor_war">passionnelle</a>
+. Loin de moi l&#8217;idée dans cet article de vouloir convertir quiconque de changer d&#8217;éditeur, par contre si je m&#8217;écoutais j&#8217;en déconseillerais certains. Je souhaite simplement comparer la façon que j&#8217;ai de faire une opération spécifique dans deux éditeurs que j&#8217;ai l&#8217;habitude d&#8217;utiliser: générer une séquence numérique, qui s&#8217;apparente souvent dans mon utilisation à des identifiants uniques.</p>
+
+<p>Modifier le formatage ne pose jamais tant de problèmes et je sais facilement ajouter un numéro de séquence en début de ligne, avec une commande uniligne comme: <code>gawk '{ print NR";"$0 }' exemple.csv</code>. Mais pour des besoins plus spécifiques, j&#8217;aime bien utiliser mon éditeur de texte quand c&#8217;est possible.</p>
+
+<h2>vim</h2>
+
+<p>J&#8217;adore <em>vim</em> (et forcement <em>vi</em> aussi). Honnêtement j&#8217;ai appris à l&#8217;utiliser en intervenant sur des serveurs distants. Je suis loin d&#8217;être un expert, mais il ne cesse de me sauver la vie et je ne sais pas m&#8217;en passer. C&#8217;est un outils fascinant, et toutes les ressources disponibles m&#8217;étonneront toujours. Elles sont souvent une bonne leçon d&#8217;humilité aussi car tant d&#8217;ingéniosité force le respect.</p>
+
+<p>Je sais qu&#8217;il existe des <a href="http://vim.wikia.com/wiki/Generating_a_column_of_increasing_numbers">scripts</a> sûrement très pratiques, mais malheureusement, quand j&#8217;utilise cet éditeur je n&#8217;ai jamais le luxe de pouvoir ajouter des plugins, puisque c&#8217;est souvent la version brute installée sur un serveur d&#8217;application.  Ma méthode pour ajouter un numéro de séquence repose sur deux fonctionnalités géniales :</p>
+
+<ul>
+<li>les macros</li>
+<li>l&#8217;<a href="https://twitter.com/vcotwdorso/status/1602346985">incrémentation</a> d&#8217;un nombre</li>
+</ul>
+
+
+<p> Voici comment je procède:</p>
+
+<ol>
+<li><em>je place le curseur au bon endroit</em></li>
+<li><code>i</code> <em>j&#8217;active le mode &#8220;insertion&#8221;</em></li>
+<li><code>1</code> <em>je tape le premier numéro de ma séquence (on peut évidemment commencer à 2)</em></li>
+<li><code>esc</code> <em>je sors du mode &#8220;insertion&#8221;</em></li>
+<li><code>qa</code> <em>j&#8217;active le mode macro et je commence la macro qui s’appelle &#8220;a&#8221;</em></li>
+<li><code>x</code> <em>je coupe le nombre sous le curseur pour le récupérer dans le tampon (copier!?)</em></li>
+<li><code>p</code> <em>je le recolle aussitôt au même endroit</em></li>
+<li><code>j</code> <em>je déplace le curseur à l&#8217;endroit ou je veux dupliquer ma séquence, en l’occurrence à la ligne suivante donc je descend (j est l’équivalent de la flèche vers le bas)</em></li>
+<li><code>p</code> <em>je colle le contenu du tampon sous le curseur</em></li>
+<li><code>Ctrl+a</code> <em>j&#8217;incrémente le nombre sous le curseur <a href="https://en.wikipedia.org/wiki/Do_You_Believe_in_Magic_%28song%29">#doyoubelieveinmagic</a></em></li>
+<li><code>q</code> <em>j&#8217;ai terminé ma macro, je sors donc de ce mode</em></li>
+<li><code>10@a</code> <em>je répète autant de fois que nécessaire cette opération (10 dans cet exemple)</em></li>
+</ol>
+
+
+<p>On peut se servir des macros pour dupliquer simplement une chaîne de caractères sur plusieurs lignes comme par exemple <code>INSERT INTO MA_TABLE VALUES (</code>. Mais dans ce cas j&#8217;aime utiliser, une autre fonctionnalité géniale de VIM: le mode visuel !</p>
+
+<p>Pour rajouter un préfixe à mes 10 lignes je peux procéder de la sorte:</p>
+
+<ol>
+<li><code>gg</code> <em>pour positionner mon curseur au début du fichier</em></li>
+<li><code>Ctrl+v</code><em>pour activer le mode visuel</em></li>
+<li><code>10j</code> <em>pour sélectionner les 10 lignes suivantes, mais les autres commandes sont possibles, comme atteindre la dernière ligne par exemple</em></li>
+<li><code>I</code> <em>j&#8217;active le mode insertion (avec i en majuscule)</em></li>
+<li><code>INSERT INTO MA_TABLE VALUES(</code> <em>je tape mon texte sous le curseur</em></li>
+<li><code>esc</code> <em>je sors du mode visuel, ma modification s&#8217;applique à toutes les lignes sélectionnées précédemment</em> <a href="https://www.youtube.com/watch?v=GGXzlRoNtHU">#WIN</a></li>
+</ol>
+
+
+<h2>Sublime Text</h2>
+
+<p>J&#8217;adore <em>Sublime Text</em>. Je ne saurai même pas quoi lui reprocher. Si vous ne le connaissez pas, vous trouverez facilement des tonnes d&#8217;articles intéressants. Comme je l&#8217;utilise sur mon poste de travail, j&#8217;ai le luxe de pouvoir compter sur les nombreux plugins disponibles. C&#8217;est d&#8217;ailleurs de l&#8217;un d&#8217;eux que j&#8217;aime me servir: <a href="https://github.com/duydao/Text-Pastry">Text Pastry</a>. Souple et puissant, il est aussi incroyablement simple à utiliser.</p>
+
+<p><em>Text Pastry</em>, est entièrement basé sur une des possibilités géniale de Sublime Text: la sélection multiple. Bien sûr il n&#8217;est pas toujours évident de sélectionner tout ce qu&#8217;on souhaite, mais il y a toujours un moyen de le faire. Pour moi les deux opérations suivantes suffisent souvent:</p>
+
+<ul>
+<li>Add next occurrence of selected text to selection: <code>Ctrl + D</code></li>
+<li>Add all occurrences of the selected text to the selection: <code>Alt + F3</code></li>
+</ul>
+
+
+<p>Une fois que toutes les occurrences souhaitées sont sélectionnées, il suffit de faire:</p>
+
+<ol>
+<li><code>CMD + Alt + n</code> <em>pour ouvrir l&#8217;invite de commande</em></li>
+<li><code>\i1</code> <em>pour générer un numéro de séquence qui démarre à 1</em></li>
+</ol>
+
+
+<p><img src="/images/sublimetext2_demo.gif" title="demo text pastry" alt="demosubt2" /></p>
+
+<p>Enfantin ! En comparant avec la méthode VIM, je trouve que cela permet de bien réaliser combien la possibilité de sélectionner plusieurs zones simultanément est puissante, et peut remplacer des procédures compliquées.</p>
+
+<p>Ce qui est génial, c&#8217;est qu&#8217;à la place d&#8217;une simple séquence, on peut utiliser une liste de chaînes de caractères ou même simplement le <a href="https://en.wikipedia.org/wiki/Clipboard_%28computing%29">presse-papier</a>. Cela offre de belles perspectives, vous ne trouvez pas ?</p>
+
+<h3>Ressources</h3>
+
+<ul>
+<li>un <a href="https://github.com/tpope/vim-speeddating">plugin</a> incroyable (avec un nom très drôle) pour vim qui permet d&#8217;incrémenter une date (à condition qu&#8217;elle soit au bon <a href="http://en.wikipedia.org/wiki/ISO_8601">format</a>)</li>
+<li>le <a href="http://vim-adventures.com/">tutorial</a> qu&#8217;on ne présente plus</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">smknstd</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-30T19:12:00+01:00" pubdate data-updated="true">Nov 30<span>th</span>, 2013</time>
+      
+
+
+    </p>
+    <div id="archive_header2">
+      <div id="archive_header3">
+      
+        <a class="basic-alignment left" href="/2013/11/21/krustycss/" title="Previous Post: SASS/Compass pour les nuls">&laquo; SASS/Compass pour les nuls</a>
+      
+      
+      </div>
+    </div>
+  </footer>
+</article>
+</div>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  2013 - smknstd -
+  <span class="credit">designed with <a href="http://octopress.org">Octopress</a> and hosted by <a href="http://heroku.com">Heroku</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

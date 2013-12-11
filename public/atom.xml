@@ -4,7 +4,7 @@
   <title><![CDATA[smknstd.io]]></title>
   <link href="http://mlnstd.io/atom.xml" rel="self"/>
   <link href="http://mlnstd.io/"/>
-  <updated>2013-11-11T23:12:10+01:00</updated>
+  <updated>2013-12-12T00:41:32+01:00</updated>
   <id>http://mlnstd.io/</id>
   <author>
     <name><![CDATA[smknstd]]></name>
@@ -12,6 +12,245 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[vim VS Sublime Text: ajout d'un numéro de séquence]]></title>
+    <link href="http://mlnstd.io/2013/11/30/vimvssublime/"/>
+    <updated>2013-11-30T19:12:00+01:00</updated>
+    <id>http://mlnstd.io/2013/11/30/vimvssublime</id>
+    <content type="html"><![CDATA[<p>Quand vient la question de choisir son éditeur de texte, la discussion pour un développeur peut vite devenir <a href="https://en.wikipedia.org/wiki/Editor_war">passionnelle</a>
+. Loin de moi l&#8217;idée dans cet article de vouloir convertir quiconque de changer d&#8217;éditeur, par contre si je m&#8217;écoutais j&#8217;en déconseillerais certains. Je souhaite simplement comparer la façon que j&#8217;ai de faire une opération spécifique dans deux éditeurs que j&#8217;ai l&#8217;habitude d&#8217;utiliser: générer une séquence numérique, qui s&#8217;apparente souvent dans mon utilisation à des identifiants uniques.</p>
+
+<p>Modifier le formatage ne pose jamais tant de problèmes et je sais facilement ajouter un numéro de séquence en début de ligne, avec une commande uniligne comme: <code>gawk '{ print NR";"$0 }' exemple.csv</code>. Mais pour des besoins plus spécifiques, j&#8217;aime bien utiliser mon éditeur de texte quand c&#8217;est possible.</p>
+
+<h2>vim</h2>
+
+<p>J&#8217;adore <em>vim</em> (et forcement <em>vi</em> aussi). Honnêtement j&#8217;ai appris à l&#8217;utiliser en intervenant sur des serveurs distants. Je suis loin d&#8217;être un expert, mais il ne cesse de me sauver la vie et je ne sais pas m&#8217;en passer. C&#8217;est un outils fascinant, et toutes les ressources disponibles m&#8217;étonneront toujours. Elles sont souvent une bonne leçon d&#8217;humilité aussi car tant d&#8217;ingéniosité force le respect.</p>
+
+<p>Je sais qu&#8217;il existe des <a href="http://vim.wikia.com/wiki/Generating_a_column_of_increasing_numbers">scripts</a> sûrement très pratiques, mais malheureusement, quand j&#8217;utilise cet éditeur je n&#8217;ai jamais le luxe de pouvoir ajouter des plugins, puisque c&#8217;est souvent la version brute installée sur un serveur d&#8217;application.  Ma méthode pour ajouter un numéro de séquence repose sur deux fonctionnalités géniales :</p>
+
+<ul>
+<li>les macros</li>
+<li>l&#8217;<a href="https://twitter.com/vcotwdorso/status/1602346985">incrémentation</a> d&#8217;un nombre</li>
+</ul>
+
+
+<p> Voici comment je procède:</p>
+
+<ol>
+<li><em>je place le curseur au bon endroit</em></li>
+<li><code>i</code> <em>j&#8217;active le mode &#8220;insertion&#8221;</em></li>
+<li><code>1</code> <em>je tape le premier numéro de ma séquence (on peut évidemment commencer à 2)</em></li>
+<li><code>esc</code> <em>je sors du mode &#8220;insertion&#8221;</em></li>
+<li><code>qa</code> <em>j&#8217;active le mode macro et je commence la macro qui s’appelle &#8220;a&#8221;</em></li>
+<li><code>x</code> <em>je coupe le nombre sous le curseur pour le récupérer dans le tampon (copier!?)</em></li>
+<li><code>p</code> <em>je le recolle aussitôt au même endroit</em></li>
+<li><code>j</code> <em>je déplace le curseur à l&#8217;endroit ou je veux dupliquer ma séquence, en l’occurrence à la ligne suivante donc je descend (j est l’équivalent de la flèche vers le bas)</em></li>
+<li><code>p</code> <em>je colle le contenu du tampon sous le curseur</em></li>
+<li><code>Ctrl+a</code> <em>j&#8217;incrémente le nombre sous le curseur <a href="https://en.wikipedia.org/wiki/Do_You_Believe_in_Magic_%28song%29">#doyoubelieveinmagic</a></em></li>
+<li><code>q</code> <em>j&#8217;ai terminé ma macro, je sors donc de ce mode</em></li>
+<li><code>10@a</code> <em>je répète autant de fois que nécessaire cette opération (10 dans cet exemple)</em></li>
+</ol>
+
+
+<p>On peut se servir des macros pour dupliquer simplement une chaîne de caractères sur plusieurs lignes comme par exemple <code>INSERT INTO MA_TABLE VALUES (</code>. Mais dans ce cas j&#8217;aime utiliser, une autre fonctionnalité géniale de VIM: le mode visuel !</p>
+
+<p>Pour rajouter un préfixe à mes 10 lignes je peux procéder de la sorte:</p>
+
+<ol>
+<li><code>gg</code> <em>pour positionner mon curseur au début du fichier</em></li>
+<li><code>Ctrl+v</code><em>pour activer le mode visuel</em></li>
+<li><code>10j</code> <em>pour sélectionner les 10 lignes suivantes, mais les autres commandes sont possibles, comme atteindre la dernière ligne par exemple</em></li>
+<li><code>I</code> <em>j&#8217;active le mode insertion (avec i en majuscule)</em></li>
+<li><code>INSERT INTO MA_TABLE VALUES(</code> <em>je tape mon texte sous le curseur</em></li>
+<li><code>esc</code> <em>je sors du mode visuel, ma modification s&#8217;applique à toutes les lignes sélectionnées précédemment</em> <a href="https://www.youtube.com/watch?v=GGXzlRoNtHU">#WIN</a></li>
+</ol>
+
+
+<h2>Sublime Text</h2>
+
+<p>J&#8217;adore <em>Sublime Text</em>. Je ne saurai même pas quoi lui reprocher. Si vous ne le connaissez pas, vous trouverez facilement des tonnes d&#8217;articles intéressants. Comme je l&#8217;utilise sur mon poste de travail, j&#8217;ai le luxe de pouvoir compter sur les nombreux plugins disponibles. C&#8217;est d&#8217;ailleurs de l&#8217;un d&#8217;eux que j&#8217;aime me servir: <a href="https://github.com/duydao/Text-Pastry">Text Pastry</a>. Souple et puissant, il est aussi incroyablement simple à utiliser.</p>
+
+<p><em>Text Pastry</em>, est entièrement basé sur une des possibilités géniale de Sublime Text: la sélection multiple. Bien sûr il n&#8217;est pas toujours évident de sélectionner tout ce qu&#8217;on souhaite, mais il y a toujours un moyen de le faire. Pour moi les deux opérations suivantes suffisent souvent:</p>
+
+<ul>
+<li>Add next occurrence of selected text to selection: <code>Ctrl + D</code></li>
+<li>Add all occurrences of the selected text to the selection: <code>Alt + F3</code></li>
+</ul>
+
+
+<p>Une fois que toutes les occurrences souhaitées sont sélectionnées, il suffit de faire:</p>
+
+<ol>
+<li><code>CMD + Alt + n</code> <em>pour ouvrir l&#8217;invite de commande</em></li>
+<li><code>\i1</code> <em>pour générer un numéro de séquence qui démarre à 1</em></li>
+</ol>
+
+
+<p><img src="http://mlnstd.io/images/sublimetext2_demo.gif" title="demo text pastry" alt="demosubt2" /></p>
+
+<p>Enfantin ! En comparant avec la méthode VIM, je trouve que cela permet de bien réaliser combien la possibilité de sélectionner plusieurs zones simultanément est puissante, et peut remplacer des procédures compliquées.</p>
+
+<p>Ce qui est génial, c&#8217;est qu&#8217;à la place d&#8217;une simple séquence, on peut utiliser une liste de chaînes de caractères ou même simplement le <a href="https://en.wikipedia.org/wiki/Clipboard_%28computing%29">presse-papier</a>. Cela offre de belles perspectives, vous ne trouvez pas ?</p>
+
+<h3>Ressources</h3>
+
+<ul>
+<li>un <a href="https://github.com/tpope/vim-speeddating">plugin</a> incroyable (avec un nom très drôle) pour vim qui permet d&#8217;incrémenter une date (à condition qu&#8217;elle soit au bon <a href="http://en.wikipedia.org/wiki/ISO_8601">format</a>)</li>
+<li>le <a href="http://vim-adventures.com/">tutorial</a> qu&#8217;on ne présente plus</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[SASS/Compass pour les nuls]]></title>
+    <link href="http://mlnstd.io/2013/11/21/krustycss/"/>
+    <updated>2013-11-21T20:03:00+01:00</updated>
+    <id>http://mlnstd.io/2013/11/21/krustycss</id>
+    <content type="html"><![CDATA[<p>Je suis sûrement loin d&#8217;être un développeur web très expérimenté, pourtant l&#8217;écriture de ma première feuille de style CSS remonte à plus de 15 ans. Depuis ce temps j&#8217;ai bien eut le temps de comprendre que cet outil pouvait vite montrer ses limites, et réussir à organiser et maintenir une CSS fournie demandait des bons outils et beaucoup de discipline pour dire le moins. En modifiant le thème de base d&#8217;octopress, j&#8217;avais enfin l&#8217;occasion de m&#8217;introduire à SASS et Compass. Je ne souhaite pas alimenter le débat qui fait rage sur l&#8217;utilité de ce dispositif, il est évident qu&#8217;il ne convient pas à toutes les utilisations. Toutefois, même sans en faire une utilisation sophistiquée (j&#8217;ai délibérément réduit ce blog à seulement deux pages plutôt basiques), je pense en avoir cerné les principaux avantages dont voici une synthèse:</p>
+
+<h2>Partials</h2>
+
+<p>Quiconque a déjà modifié une feuille de style CSS sait que d&#8217;en organiser le contenu peut vite ressembler à un casse tête. Même avec de la bonne volonté, le résultat ressemble le plus souvent à fichier à rallonge où il est difficile de s&#8217;y retrouver. Bien sûr, il a toujours été possible de s&#8217;organiser en séparant le contenu dans plusieurs feuilles de styles. Mais les combiner sur une même page avec la directive <code>@import</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@import url('style.css');</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ou plusieurs balises <link></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;link rel="stylesheet" href="structure.css" media="all"&gt;
+</span><span class='line'>&lt;link rel="stylesheet" href="banner.css" media="all"&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>pose des problèmes évidents de performance de rendu par les navigateurs qui doivent gérer (souvent mal) plusieurs requêtes en //. SASS propose une solution ! On réparti notre code dans plusieurs fichiers SCSS qu&#8217;on préfixe avec <code>_</code>: ce sont les <em>&#8220;partials&#8221;</em>. C&#8217;est une norme qui permet au moteur de savoir que pour ce fichier il ne faut pas généré de fichier CSS. Ensuite on utilise la directive <code>import</code> pour inclure ces <em>&#8220;partials&#8221;</em>. C&#8217;est un moyen astucieux d&#8217;<a href="https://github.com/imathis/octopress/blob/master/.themes/classic/sass/screen.scss">organisation</a> !</p>
+
+<p>Toutefois je souhaite modérer ce propos parce même si c&#8217;est une amélioration notable, même séparée dans plusieurs fichiers l&#8217;organisation reste compliquée. J&#8217;avoue avoir eut parfois du mal à m&#8217;y retrouver dans la division choisie dans octopress.</p>
+
+<p>Heuresement un <a href="https://addons.mozilla.org/fr/firefox/addon/firesass-for-firebug/">plugin</a> firefox couplé à la variable <code>debug_info</code>, peut nous aider en complétant l&#8217;affichage de <em>&#8220;firebug&#8221;</em> avec les fichiers SASS concernés. #OUF</p>
+
+<p>Evidemment on peut chercher manuellement le fichier concerné! J&#8217;ai pris l&#8217;habitude d&#8217;utiliser <a href="http://beyondgrep.com/">ack</a> qui est un outil de commodité très intéressant. Malheuresement il m&#8217;a donné du fil à retordre parceque par défaut il exclut justement les fichiers de SASS. Donc impossible de s&#8217;y retrouver. Il suffit de modifier son fichier <code>.ackrc</code> et d&#8217;y ajouter par exemple:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>--type-add
+</span><span class='line'>scss=.sass,.scss</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p><img src="http://mlnstd.io/images/ack-scss.png" title="ack" alt="ack_sass" /></p>
+
+<h2>Commentaires</h2>
+
+<p>Les commentaires sont toujours une bonne pratique d&#8217;organisation. Malheureusement dans une feuille de style publique, ils ne servent à rien si ce n&#8217;est gêner les performances puisqu&#8217;ils alourdissent le fichier. SASS en tant que préprocesseur est un outils idéal pour résoudre ce problème: on peut commenter autant qu&#8217;on le souhaite sans que ces commentaires n&#8217;apparaissent dans le fichiers CSS produit. #WIN</p>
+
+<p>SCSS</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='scss'><span class='line'><span class="c1">// Commentaire SASS</span>
+</span><span class='line'><span class="cm">/* Commentaire HTML */</span>
+</span><span class='line'><span class="nv">$rouge</span><span class="o">:</span> <span class="mh">#FF0000</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">alerte</span> <span class="p">{</span>
+</span><span class='line'>    <span class="na">font-color</span><span class="o">:</span> <span class="nv">$rouge</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>CSS</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="c">/* Commentaire HTML */</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">alerte</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">font</span><span class="o">-</span><span class="k">color</span><span class="o">:</span> <span class="m">#FF0000</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Variables/Opérateurs</h2>
+
+<p>Généralement plusieurs caractéristiques sont redondantes dans les définitions d&#8217;une même feuille de style: les couleurs, les polices, etc. SASS met à disposition le moyen de rendre ces définitions plus dynamiques avec les variables. On attribue une variable à tous les elements qui ont un attribut en comun et le modifier devient très simple. Les variables ont aussi la possibilité de supporter des opérations ! Exemple :</p>
+
+<p>SCSS</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='scss'><span class='line'><span class="nv">$largeur</span><span class="o">:</span> <span class="mi">400</span><span class="kt">px</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">grand</span> <span class="p">{</span>
+</span><span class='line'>    <span class="na">width</span><span class="o">:</span> <span class="nv">$largeur</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">petit</span> <span class="p">{</span>
+</span><span class='line'>    <span class="na">width</span><span class="o">:</span> <span class="nv">$largeur</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>CSS</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nt">droite</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">width</span><span class="o">:</span> <span class="m">400px</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">gauche</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">width</span><span class="o">:</span> <span class="m">200px</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>minification</h2>
+
+<p>La taille de votre CSS <a href="http://browserdiet.com/fr/#minify-css">compte</a>. Compass met à disposition la possibilité de minifier facilement votre feuille de style dans votre projet. Et c&#8217;est très pratique.</p>
+
+<p><code>output_style = :compressed</code></p>
+
+<p>Bien sûr Compass est un outils qui permet des usages beaucoup plus sophistiqués que les fonctions basiques que j&#8217;ai cité (mixin, génération automatique de sprites, etc).</p>
+
+<h2>BONUS</h2>
+
+<p> Je suis tombé sur cette <a href="http://davidwalsh.name/street-fighter">démo</a> intéressante. J&#8217;ai trouvé que c&#8217;etait une bonne illustration du concept de <em>&#8220;mixin&#8221;</em>. Je l&#8217;ai simplement reproduit avec &#8220;Krusty&#8221;. J&#8217;ai bricolé les deux sprites suivants:</p>
+
+<p><img src="http://mlnstd.io/images/krusty/sprites_krusty.png" title="sprites" alt="sprites_krusty" /></p>
+
+<p>Rien de sensationnel mais voici le résultat:</p>
+
+<p data-height="348" data-theme-id="0" data-slug-hash="ELhdf" data-user="smknstd" data-default-tab="result" class='codepen'>See the Pen <a href='http://codepen.io/smknstd/pen/ELhdf'>Krusty&#8217;s fun CSS</a> by smokin studio (<a href='http://codepen.io/smknstd'>@smknstd</a>) on <a href='http://codepen.io'>CodePen</a></p>
+
+
+<script async src="http://mlnstd.io//codepen.io/assets/embed/ei.js"></script>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[unilignes: l'héritage d'awk dans les langages interprétés modernes]]></title>
@@ -188,10 +427,9 @@
 
 <p>   FFF: The tablespace-relative datafile number of the datafile that contains the row (file AAT in the example).</p>
 
-<p>   BBBBBB: The data block that contains the row (block AAABrX in the example). Block numbers are relative to their datafile, not tablespace. Therefore, two rows with identical block numbers could reside in two different datafiles of the same tablespace.
-   RRR: The row in the block.</p></blockquote>
+<p>   BBBBBB: The data block that contains the row (block AAABrX in the example). Block numbers are relative to their datafile, not tablespace. Therefore, two rows with identical block numbers could reside in two different datafiles of the same tablespace.</p>
 
-<p>En se servant du catalogue système de l&#8217;instance, on essaie de cartographier au mieux la disposition des données dans le &#8220;file system&#8221;. A partir de ces informations, il faut essayer de découper des groupes de blocks pour répartir le plus équitablement possible entre les partitions. Aussi il faut prendre soin en choisissant les bornes des plages de ROWID à n&#8217;exclure aucune données. Dans la pratique les informations nécessaires sont données principalement par les &#8220;Datafiles&#8221;, puis les groupes de &#8220;blocks&#8221; occupés.</p>
+<p>   RRR: The row in the block.</p></blockquote>
 
 <p>On peut lister l&#8217;identifiant de l&#8217;objet de cette manière:</p>
 
@@ -218,8 +456,9 @@
 
 <p>On peut déterminer la taille des blocks de cette manière:</p>
 
-<p><code>SELECT VALUE FROM V$PARAMETER WHERE NAME LIKE 'DB_BLOCK_SIZE'</code>
-Pour moi le plus simple consiste a renseigner la valeur la plus élevée possible. Malheureusement cette valeur théorique n&#8217;est pas bien documentée. Sans pouvoir citer de source, j&#8217;ai utilisé &#8220;H//&#8221;.</p>
+<p><code>SELECT VALUE FROM V$PARAMETER WHERE NAME LIKE 'DB_BLOCK_SIZE'</code></p>
+
+<p>Pour moi le plus simple consiste a renseigner la valeur la plus élevée possible. Malheureusement cette valeur théorique n&#8217;est pas bien documentée. Sans pouvoir citer de source, j&#8217;ai utilisé &#8220;H//&#8221;.</p>
 
 <p>Notons bien, que cette méthode profite de plusieurs opportunités:</p>
 
