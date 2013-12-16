@@ -4,7 +4,7 @@
   <title><![CDATA[smknstd.io]]></title>
   <link href="http://mlnstd.io/atom.xml" rel="self"/>
   <link href="http://mlnstd.io/"/>
-  <updated>2013-12-12T00:41:32+01:00</updated>
+  <updated>2013-12-17T00:24:29+01:00</updated>
   <id>http://mlnstd.io/</id>
   <author>
     <name><![CDATA[smknstd]]></name>
@@ -87,7 +87,7 @@
 </ol>
 
 
-<p><img src="http://mlnstd.io/images/sublimetext2_demo.gif" title="demo text pastry" alt="demosubt2" /></p>
+<p><img src="http://mlnstd.io/images/sublimetext.gif" title="demo text pastry" alt="demosubt2" /></p>
 
 <p>Enfantin ! En comparant avec la méthode VIM, je trouve que cela permet de bien réaliser combien la possibilité de sélectionner plusieurs zones simultanément est puissante, et peut remplacer des procédures compliquées.</p>
 
@@ -108,7 +108,7 @@
     <link href="http://mlnstd.io/2013/11/21/krustycss/"/>
     <updated>2013-11-21T20:03:00+01:00</updated>
     <id>http://mlnstd.io/2013/11/21/krustycss</id>
-    <content type="html"><![CDATA[<p>Je suis sûrement loin d&#8217;être un développeur web très expérimenté, pourtant l&#8217;écriture de ma première feuille de style CSS remonte à plus de 15 ans. Depuis ce temps j&#8217;ai bien eut le temps de comprendre que cet outil pouvait vite montrer ses limites, et réussir à organiser et maintenir une CSS fournie demandait des bons outils et beaucoup de discipline pour dire le moins. En modifiant le thème de base d&#8217;octopress, j&#8217;avais enfin l&#8217;occasion de m&#8217;introduire à SASS et Compass. Je ne souhaite pas alimenter le débat qui fait rage sur l&#8217;utilité de ce dispositif, il est évident qu&#8217;il ne convient pas à toutes les utilisations. Toutefois, même sans en faire une utilisation sophistiquée (j&#8217;ai délibérément réduit ce blog à seulement deux pages plutôt basiques), je pense en avoir cerné les principaux avantages dont voici une synthèse:</p>
+    <content type="html"><![CDATA[<p>Je suis sûrement loin d&#8217;être un développeur web très expérimenté, pourtant l&#8217;écriture de ma première feuille de style CSS remonte à plus de 15 ans. Depuis ce temps j&#8217;ai bien eut le temps de comprendre que cet outil pouvait vite montrer ses limites, et réussir à organiser et maintenir une CSS fournie demandait des bons outils et beaucoup de discipline pour dire le moins. En modifiant le thème de base d&#8217;octopress, j&#8217;avais enfin l&#8217;occasion de m&#8217;introduire à SASS et Compass. Même sans en faire une utilisation sophistiquée (j&#8217;ai délibérément réduit ce blog à seulement deux pages plutôt basiques), je pense en avoir cerné les principaux avantages.</p>
 
 <h2>Partials</h2>
 
@@ -130,17 +130,15 @@
 
 <p>Toutefois je souhaite modérer ce propos parce même si c&#8217;est une amélioration notable, même séparée dans plusieurs fichiers l&#8217;organisation reste compliquée. J&#8217;avoue avoir eut parfois du mal à m&#8217;y retrouver dans la division choisie dans octopress.</p>
 
-<p>Heuresement un <a href="https://addons.mozilla.org/fr/firefox/addon/firesass-for-firebug/">plugin</a> firefox couplé à la variable <code>debug_info</code>, peut nous aider en complétant l&#8217;affichage de <em>&#8220;firebug&#8221;</em> avec les fichiers SASS concernés. #OUF</p>
+<p>Et les outils habituels de developpement tels firebug font désormais face un problème et ne permettent pas mieux s&#8217;y retrouver puisqu&#8217;ils affichent la réréfence au css compilé. Heureusement il existe une solution: la variable <code>debug_info</code>. Bien entendu <em>octopress</em> est un outils de developpeur et a pensé à <a href="https://github.com/imathis/octopress/pull/1120">ça</a>. Malheuresement je n&#8217;ai pas réussi à faire fonctionner le <a href="https://addons.mozilla.org/fr/firefox/addon/firesass-for-firebug/">plugin</a> firefox sensé compléter <em>&#8220;firebug&#8221;</em>. Celui-ci ne semble plus <a href="https://github.com/nex3/firesass">maintenu</a>.</p>
 
-<p>Evidemment on peut chercher manuellement le fichier concerné! J&#8217;ai pris l&#8217;habitude d&#8217;utiliser <a href="http://beyondgrep.com/">ack</a> qui est un outil de commodité très intéressant. Malheuresement il m&#8217;a donné du fil à retordre parceque par défaut il exclut justement les fichiers de SASS. Donc impossible de s&#8217;y retrouver. Il suffit de modifier son fichier <code>.ackrc</code> et d&#8217;y ajouter par exemple:</p>
+<p>On peut aussi chercher manuellement le fichier concerné! J&#8217;ai pris l&#8217;habitude d&#8217;utiliser <a href="http://beyondgrep.com/">ack</a> qui est un outil de commodité très intéressant. Malheuresement il m&#8217;a aussi donné du fil à retordre dans ce cas parceque par défaut il exclut justement les fichiers de SASS. Il suffit de modifier son fichier <code>.ackrc</code> et d&#8217;y ajouter par exemple:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>--type-add
 </span><span class='line'>scss=.sass,.scss</span></code></pre></td></tr></table></div></figure>
 
-
-<p></p>
 
 <p><img src="http://mlnstd.io/images/ack-scss.png" title="ack" alt="ack_sass" /></p>
 
@@ -234,20 +232,24 @@
 
 <p><code>output_style = :compressed</code></p>
 
-<p>Bien sûr Compass est un outils qui permet des usages beaucoup plus sophistiqués que les fonctions basiques que j&#8217;ai cité (mixin, génération automatique de sprites, etc).</p>
+<p>Bien sûr Compass est un outils qui permet des usages beaucoup plus sophistiqués que les fonctions basiques que j&#8217;ai cité (mixin, génération automatique de sprites, etc). Il faut aussi bien se rappeler que SASS à un cout puisqu&#8217;il complique sensiblement le workflow de developpement !</p>
 
 <h2>BONUS</h2>
 
-<p> Je suis tombé sur cette <a href="http://davidwalsh.name/street-fighter">démo</a> intéressante. J&#8217;ai trouvé que c&#8217;etait une bonne illustration du concept de <em>&#8220;mixin&#8221;</em>. Je l&#8217;ai simplement reproduit avec &#8220;Krusty&#8221;. J&#8217;ai bricolé les deux sprites suivants:</p>
-
-<p><img src="http://mlnstd.io/images/krusty/sprites_krusty.png" title="sprites" alt="sprites_krusty" /></p>
-
-<p>Rien de sensationnel mais voici le résultat:</p>
+<p> Je suis tombé sur cette <a href="http://davidwalsh.name/street-fighter">démo</a> intéressante. J&#8217;ai trouvé que c&#8217;etait une bonne illustration du concept de <em>&#8220;mixin&#8221;</em>. Je l&#8217;ai simplement reproduit avec &#8220;Krusty&#8221;. J&#8217;ai rapidement bricolé deux sprites&#8230; Rien de sensationnel mais voici le résultat:</p>
 
 <p data-height="348" data-theme-id="0" data-slug-hash="ELhdf" data-user="smknstd" data-default-tab="result" class='codepen'>See the Pen <a href='http://codepen.io/smknstd/pen/ELhdf'>Krusty&#8217;s fun CSS</a> by smokin studio (<a href='http://codepen.io/smknstd'>@smknstd</a>) on <a href='http://codepen.io'>CodePen</a></p>
 
 
 <script async src="http://mlnstd.io//codepen.io/assets/embed/ei.js"></script>
+
+
+<h3>Ressources</h3>
+
+<ul>
+<li><a href="https://github.com/MarioRicalde/SCSS.tmbundle/tree/SublimeText2">SCSS bundle</a> de coloration syntaxique pour sublime text 2</li>
+<li><a href="http://youtu.be/bqfoYaKCYUI?t=5m30s">extrait du speech</a> de Paul Irish sur le workflow SASS</li>
+</ul>
 
 ]]></content>
   </entry>
@@ -614,15 +616,25 @@
     <link href="http://mlnstd.io/2013/02/10/hello-world/"/>
     <updated>2013-02-10T00:19:00+01:00</updated>
     <id>http://mlnstd.io/2013/02/10/hello-world</id>
-    <content type="html"><![CDATA[<p>Bienvenue sur mon blog. Qui est surtout un prétexte pour essayer “octopress”. Un outil très pratique qui permet de générer des pages statiques. Ce qui a tellement d’avantages que je ne saurai pas tous les citer.</p>
+    <content type="html"><![CDATA[<p><img src="http://mlnstd.io/images/sandler.jpg" title="sandler" alt="sandler" /></p>
 
-<p>J&#8217;aime le <a href="http://jessicahische.is/monkeyingaround">souci</a> du <a href="http://www.creads.org/blog/logos/le-logo-sncf-a-eu-le-droit-a-un-lifting/">détails</a>. J&#8217;ai essayé d&#8217;imaginer mon propre thème mais ne m&#8217;en demandez pas trop non plus! Désolé si vous attendiez un site &#8220;responsive&#8221; ou &#8220;flat design&#8221;, malheureusement, il faudra se contenter d&#8217;une bannière trop large et de quelques utilisations douteuses de CSS. J&#8217;ai peut être préféré me concentrer sur l&#8217;<a href="https://davidlyness.com/post/email-address-obfuscation">utile</a>.</p>
+<p>Bienvenue ! Je dois vous avouer que ce premier post a un peu l&#8217;allure d&#8217;un reveil difficile. Accoucher de ce blog aura été plus long et douloureux que je l&#8217;avais imaginé au départ. J&#8217;ai bien pris la mesure de combien l&#8217;initiative personnelle demande d&#8217;efforts.</p>
 
-<p>J&#8217;aime programmer. J&#8217;aime mon métier. J&#8217;aime utiliser <a href="http://www.sublimetext.com/">les</a> <a href="https://www.hipchat.com/">bons</a> <a href="https://trello.com/">outils</a>. Bien sûr il arrive que les &#8220;rockstars&#8221; de l&#8217;industrie me donnent des complexes, mais pouvoir profiter du génie des <a href="http://en.wikipedia.org/wiki/Standing_on_the_shoulders_of_giants">autres</a> est quelque-chose de très excitant, non ?</p>
+<p>Ce blog est quelquepart un signe de reconnaissance à toute la communauté qui partagent d&#8217;inestimmables ressources. Il a faillit ne pas voir le jour ! D&#8217;abord j&#8217;ai découvert que je portais beaucoup d&#8217;attention au <a href="http://jessicahische.is/monkeyingaround">souci</a> du <a href="http://www.creads.org/blog/logos/le-logo-sncf-a-eu-le-droit-a-un-lifting/">détails</a>. Ensuite j&#8217;avoue être parfois intimidé face aux connaissances et contributions de ceux qui apparaissent pour moi comme des génies. Heuresement pour moi j&#8217;ai appris que même les génies ont <a href="http://en.wikipedia.org/wiki/Ettore_Majorana">leurs</a> propres génies.</p>
 
-<p>Si vous voyez quelque-chose qui ne va pas, n’hésitez pas à m’envoyer un email. Même si je suis <a href="https://twitter.com/LulzSec/status/81115804636155906">un</a> <a href="https://twitter.com/nathanfielder/status/364093225637650433">grand</a> <a href="https://twitter.com/ciaotiga/status/384391149835661312">fan</a> <a href="https://twitter.com/BretEastonEllis/statuses/128369721790840832">du</a> <a href="https://twitter.com/firefox/status/327784629543239681">service</a>, je ne suis malheureusement pas sur twitter :( J’avais bien un compte relié à mon nokia, mais c’était il y a des années, avant l’ère des applications “mobile” quand les messages étaient encore envoyés par <a href="https://www.youtube.com/watch?v=IGcAYSeN7E4">SMS</a>. #140signs</p>
+<blockquote><p>Industry rockstars, are juste regular people</p>
 
-<p>A bientôt.</p>
+<p><cite>Andy Lester</cite></p></blockquote>
+
+<p>Ce blog est aussi surtout un prétexte pour essayer “octopress”. Un outil très pratique qui permet de générer des pages statiques. Ce qui a tellement d’avantages que je ne saurai pas tous les citer. J&#8217;en ai profité pour me familiariser avec des outils géniaux que je n&#8217;ai par ailleurs pas toujours la chance d&#8217;utiliser. #GAGNANTGAGNANT</p>
+
+<p>Si vous voyez quelque-chose qui ne va pas, n’hésitez pas à m’envoyer un email. Bien sûr rien n&#8217;est parfait mais je pense m&#8217;être concentré sur l&#8217;<a href="https://davidlyness.com/post/email-address-obfuscation">utile</a>.</p>
+
+<h2>tl;dr</h2>
+
+<p>var welcome = true;
+var interest  = &#8220;web developpement&#8221;;
+var feeling = function(){ return <a href="https://en.wikipedia.org/wiki/Standing_on_the_shoulders_of_giants">metaphor</a> };</p>
 ]]></content>
   </entry>
   

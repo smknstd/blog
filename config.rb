@@ -16,3 +16,4 @@ line_comments = false
 output_style = :compressed
 
 sass_options = {:debug_info => true}
+Sass::Plugin.options[:debug_info] = true

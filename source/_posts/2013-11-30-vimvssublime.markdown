@@ -58,7 +58,7 @@ Une fois que toutes les occurrences souhaitées sont sélectionnées, il suffit 
 1. `CMD + Alt + n` _pour ouvrir l'invite de commande_
 2. `\i1` _pour générer un numéro de séquence qui démarre à 1_
 
-![demosubt2]({{ root_url }}/images/sublimetext2_demo.gif "demo text pastry")
+![demosubt2]({{ root_url }}/images/sublimetext.gif "demo text pastry")
 
 Enfantin ! En comparant avec la méthode VIM, je trouve que cela permet de bien réaliser combien la possibilité de sélectionner plusieurs zones simultanément est puissante, et peut remplacer des procédures compliquées.
 

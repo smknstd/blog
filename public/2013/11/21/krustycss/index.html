@@ -96,7 +96,7 @@ function show_new() {
   </header>
 
 
-<div class="entry-content"><p>Je suis sûrement loin d&#8217;être un développeur web très expérimenté, pourtant l&#8217;écriture de ma première feuille de style CSS remonte à plus de 15 ans. Depuis ce temps j&#8217;ai bien eut le temps de comprendre que cet outil pouvait vite montrer ses limites, et réussir à organiser et maintenir une CSS fournie demandait des bons outils et beaucoup de discipline pour dire le moins. En modifiant le thème de base d&#8217;octopress, j&#8217;avais enfin l&#8217;occasion de m&#8217;introduire à SASS et Compass. Je ne souhaite pas alimenter le débat qui fait rage sur l&#8217;utilité de ce dispositif, il est évident qu&#8217;il ne convient pas à toutes les utilisations. Toutefois, même sans en faire une utilisation sophistiquée (j&#8217;ai délibérément réduit ce blog à seulement deux pages plutôt basiques), je pense en avoir cerné les principaux avantages dont voici une synthèse:</p>
+<div class="entry-content"><p>Je suis sûrement loin d&#8217;être un développeur web très expérimenté, pourtant l&#8217;écriture de ma première feuille de style CSS remonte à plus de 15 ans. Depuis ce temps j&#8217;ai bien eut le temps de comprendre que cet outil pouvait vite montrer ses limites, et réussir à organiser et maintenir une CSS fournie demandait des bons outils et beaucoup de discipline pour dire le moins. En modifiant le thème de base d&#8217;octopress, j&#8217;avais enfin l&#8217;occasion de m&#8217;introduire à SASS et Compass. Même sans en faire une utilisation sophistiquée (j&#8217;ai délibérément réduit ce blog à seulement deux pages plutôt basiques), je pense en avoir cerné les principaux avantages.</p>
 
 <h2>Partials</h2>
 
@@ -118,17 +118,15 @@ function show_new() {
 
 <p>Toutefois je souhaite modérer ce propos parce même si c&#8217;est une amélioration notable, même séparée dans plusieurs fichiers l&#8217;organisation reste compliquée. J&#8217;avoue avoir eut parfois du mal à m&#8217;y retrouver dans la division choisie dans octopress.</p>
 
-<p>Heuresement un <a href="https://addons.mozilla.org/fr/firefox/addon/firesass-for-firebug/">plugin</a> firefox couplé à la variable <code>debug_info</code>, peut nous aider en complétant l&#8217;affichage de <em>&#8220;firebug&#8221;</em> avec les fichiers SASS concernés. #OUF</p>
+<p>Et les outils habituels de developpement tels firebug font désormais face un problème et ne permettent pas mieux s&#8217;y retrouver puisqu&#8217;ils affichent la réréfence au css compilé. Heureusement il existe une solution: la variable <code>debug_info</code>. Bien entendu <em>octopress</em> est un outils de developpeur et a pensé à <a href="https://github.com/imathis/octopress/pull/1120">ça</a>. Malheuresement je n&#8217;ai pas réussi à faire fonctionner le <a href="https://addons.mozilla.org/fr/firefox/addon/firesass-for-firebug/">plugin</a> firefox sensé compléter <em>&#8220;firebug&#8221;</em>. Celui-ci ne semble plus <a href="https://github.com/nex3/firesass">maintenu</a>.</p>
 
-<p>Evidemment on peut chercher manuellement le fichier concerné! J&#8217;ai pris l&#8217;habitude d&#8217;utiliser <a href="http://beyondgrep.com/">ack</a> qui est un outil de commodité très intéressant. Malheuresement il m&#8217;a donné du fil à retordre parceque par défaut il exclut justement les fichiers de SASS. Donc impossible de s&#8217;y retrouver. Il suffit de modifier son fichier <code>.ackrc</code> et d&#8217;y ajouter par exemple:</p>
+<p>On peut aussi chercher manuellement le fichier concerné! J&#8217;ai pris l&#8217;habitude d&#8217;utiliser <a href="http://beyondgrep.com/">ack</a> qui est un outil de commodité très intéressant. Malheuresement il m&#8217;a aussi donné du fil à retordre dans ce cas parceque par défaut il exclut justement les fichiers de SASS. Il suffit de modifier son fichier <code>.ackrc</code> et d&#8217;y ajouter par exemple:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>--type-add
 </span><span class='line'>scss=.sass,.scss</span></code></pre></td></tr></table></div></figure>
 
-
-<p></p>
 
 <p><img src="/images/ack-scss.png" title="ack" alt="ack_sass" /></p>
 
@@ -222,20 +220,24 @@ function show_new() {
 
 <p><code>output_style = :compressed</code></p>
 
-<p>Bien sûr Compass est un outils qui permet des usages beaucoup plus sophistiqués que les fonctions basiques que j&#8217;ai cité (mixin, génération automatique de sprites, etc).</p>
+<p>Bien sûr Compass est un outils qui permet des usages beaucoup plus sophistiqués que les fonctions basiques que j&#8217;ai cité (mixin, génération automatique de sprites, etc). Il faut aussi bien se rappeler que SASS à un cout puisqu&#8217;il complique sensiblement le workflow de developpement !</p>
 
 <h2>BONUS</h2>
 
-<p> Je suis tombé sur cette <a href="http://davidwalsh.name/street-fighter">démo</a> intéressante. J&#8217;ai trouvé que c&#8217;etait une bonne illustration du concept de <em>&#8220;mixin&#8221;</em>. Je l&#8217;ai simplement reproduit avec &#8220;Krusty&#8221;. J&#8217;ai bricolé les deux sprites suivants:</p>
-
-<p><img src="/images/krusty/sprites_krusty.png" title="sprites" alt="sprites_krusty" /></p>
-
-<p>Rien de sensationnel mais voici le résultat:</p>
+<p> Je suis tombé sur cette <a href="http://davidwalsh.name/street-fighter">démo</a> intéressante. J&#8217;ai trouvé que c&#8217;etait une bonne illustration du concept de <em>&#8220;mixin&#8221;</em>. Je l&#8217;ai simplement reproduit avec &#8220;Krusty&#8221;. J&#8217;ai rapidement bricolé deux sprites&#8230; Rien de sensationnel mais voici le résultat:</p>
 
 <p data-height="348" data-theme-id="0" data-slug-hash="ELhdf" data-user="smknstd" data-default-tab="result" class='codepen'>See the Pen <a href='http://codepen.io/smknstd/pen/ELhdf'>Krusty&#8217;s fun CSS</a> by smokin studio (<a href='http://codepen.io/smknstd'>@smknstd</a>) on <a href='http://codepen.io'>CodePen</a></p>
 
 
 <script async src="//codepen.io/assets/embed/ei.js"></script>
+
+
+<h3>Ressources</h3>
+
+<ul>
+<li><a href="https://github.com/MarioRicalde/SCSS.tmbundle/tree/SublimeText2">SCSS bundle</a> de coloration syntaxique pour sublime text 2</li>
+<li><a href="http://youtu.be/bqfoYaKCYUI?t=5m30s">extrait du speech</a> de Paul Irish sur le workflow SASS</li>
+</ul>
 
 </div>
 
