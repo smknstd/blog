@@ -4,7 +4,7 @@
   <title><![CDATA[smknstd.io]]></title>
   <link href="http://mlnstd.io/atom.xml" rel="self"/>
   <link href="http://mlnstd.io/"/>
-  <updated>2013-12-17T00:27:14+01:00</updated>
+  <updated>2013-12-17T00:37:16+01:00</updated>
   <id>http://mlnstd.io/</id>
   <author>
     <name><![CDATA[smknstd]]></name>
@@ -19,15 +19,15 @@
     <updated>2013-11-30T19:12:00+01:00</updated>
     <id>http://mlnstd.io/2013/11/30/vimvssublime</id>
     <content type="html"><![CDATA[<p>Quand vient la question de choisir son éditeur de texte, la discussion pour un développeur peut vite devenir <a href="https://en.wikipedia.org/wiki/Editor_war">passionnelle</a>
-. Loin de moi l&#8217;idée dans cet article de vouloir convertir quiconque de changer d&#8217;éditeur, par contre si je m&#8217;écoutais j&#8217;en déconseillerais certains. Je souhaite simplement comparer la façon que j&#8217;ai de faire une opération spécifique dans deux éditeurs que j&#8217;ai l&#8217;habitude d&#8217;utiliser: générer une séquence numérique, qui s&#8217;apparente souvent dans mon utilisation à des identifiants uniques.</p>
+. Loin de moi l&#8217;idée dans cet article de vouloir convertir quiconque de changer d&#8217;éditeur, par contre si je m&#8217;écoutais j&#8217;en déconseillerais certains :( Dans cet article je souhaite comparer l&#8217;ajout d&#8217;une séquence dans mes deux éditeurs préférés.</p>
 
 <p>Modifier le formatage ne pose jamais tant de problèmes et je sais facilement ajouter un numéro de séquence en début de ligne, avec une commande uniligne comme: <code>gawk '{ print NR";"$0 }' exemple.csv</code>. Mais pour des besoins plus spécifiques, j&#8217;aime bien utiliser mon éditeur de texte quand c&#8217;est possible.</p>
 
 <h2>vim</h2>
 
-<p>J&#8217;adore <em>vim</em> (et forcement <em>vi</em> aussi). Honnêtement j&#8217;ai appris à l&#8217;utiliser en intervenant sur des serveurs distants. Je suis loin d&#8217;être un expert, mais il ne cesse de me sauver la vie et je ne sais pas m&#8217;en passer. C&#8217;est un outils fascinant, et toutes les ressources disponibles m&#8217;étonneront toujours. Elles sont souvent une bonne leçon d&#8217;humilité aussi car tant d&#8217;ingéniosité force le respect.</p>
+<p>J&#8217;adore <em>vim</em> (et forcement <em>vi</em> aussi). Honnêtement j&#8217;ai appris à l&#8217;utiliser par obligation plus que par choix en intervenant sur des serveurs distants. Maintenant il est impossible m&#8217;en passer. C&#8217;est un outils fascinant, et toutes les ressources disponibles m&#8217;étonneront toujours. Elles sont souvent une bonne leçon d&#8217;humilité.</p>
 
-<p>Je sais qu&#8217;il existe des <a href="http://vim.wikia.com/wiki/Generating_a_column_of_increasing_numbers">scripts</a> sûrement très pratiques, mais malheureusement, quand j&#8217;utilise cet éditeur je n&#8217;ai jamais le luxe de pouvoir ajouter des plugins, puisque c&#8217;est souvent la version brute installée sur un serveur d&#8217;application.  Ma méthode pour ajouter un numéro de séquence repose sur deux fonctionnalités géniales :</p>
+<p>Je sais qu&#8217;il existe des <a href="http://vim.wikia.com/wiki/Generating_a_column_of_increasing_numbers">scripts</a> sûrement très pratiques, mais malheureusement, quand j&#8217;utilise cet éditeur je n&#8217;ai pas toujours le luxe de pouvoir ajouter des plugins. Ma méthode pour ajouter un numéro de séquence repose sur deux fonctionnalités géniales :</p>
 
 <ul>
 <li>les macros</li>
@@ -69,9 +69,9 @@
 
 <h2>Sublime Text</h2>
 
-<p>J&#8217;adore <em>Sublime Text</em>. Je ne saurai même pas quoi lui reprocher. Si vous ne le connaissez pas, vous trouverez facilement des tonnes d&#8217;articles intéressants. Comme je l&#8217;utilise sur mon poste de travail, j&#8217;ai le luxe de pouvoir compter sur les nombreux plugins disponibles. C&#8217;est d&#8217;ailleurs de l&#8217;un d&#8217;eux que j&#8217;aime me servir: <a href="https://github.com/duydao/Text-Pastry">Text Pastry</a>. Souple et puissant, il est aussi incroyablement simple à utiliser.</p>
+<p>J&#8217;adore <em>Sublime Text</em>. Je ne saurai même pas quoi lui reprocher. Si vous ne le connaissez pas, vous trouverez facilement des tonnes d&#8217;articles intéressants à son sujet. Comme je l&#8217;utilise sur mon poste de travail, je profite des nombreux plugins disponibles. C&#8217;est d&#8217;ailleurs de l&#8217;un d&#8217;eux que j&#8217;aime me servir: <a href="https://github.com/duydao/Text-Pastry">Text Pastry</a>. Souple et puissant, il est aussi incroyablement simple à utiliser.</p>
 
-<p><em>Text Pastry</em>, est entièrement basé sur une des possibilités géniale de Sublime Text: la sélection multiple. Bien sûr il n&#8217;est pas toujours évident de sélectionner tout ce qu&#8217;on souhaite, mais il y a toujours un moyen de le faire. Pour moi les deux opérations suivantes suffisent souvent:</p>
+<p><em>Text Pastry</em>, est entièrement basé sur une des possibilités géniale de Sublime Text: la sélection multiple. Bien sûr il n&#8217;est pas toujours évident de sélectionner exactement ce qu&#8217;on souhaite, mais il y a toujours un moyen astucieux de le faire. Pour moi les deux opérations suivantes suffisent souvent:</p>
 
 <ul>
 <li>Add next occurrence of selected text to selection: <code>Ctrl + D</code></li>
