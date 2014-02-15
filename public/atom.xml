@@ -4,7 +4,7 @@
   <title><![CDATA[smknstd.io]]></title>
   <link href="http://mlnstd.io/atom.xml" rel="self"/>
   <link href="http://mlnstd.io/"/>
-  <updated>2014-02-02T21:35:40+01:00</updated>
+  <updated>2014-02-15T16:21:42+01:00</updated>
   <id>http://mlnstd.io/</id>
   <author>
     <name><![CDATA[smknstd]]></name>
@@ -105,9 +105,9 @@
   
   <entry>
     <title type="html"><![CDATA[SASS/Compass pour les nuls]]></title>
-    <link href="http://mlnstd.io/2013/11/21/krustycss/"/>
+    <link href="http://mlnstd.io/2013/11/21/dummy-sass/"/>
     <updated>2013-11-21T20:03:00+01:00</updated>
-    <id>http://mlnstd.io/2013/11/21/krustycss</id>
+    <id>http://mlnstd.io/2013/11/21/dummy-sass</id>
     <content type="html"><![CDATA[<p>Je suis sûrement loin d&#8217;être un développeur web très expérimenté, pourtant l&#8217;écriture de ma première feuille de style CSS remonte à plus de 15 ans. Depuis ce temps j&#8217;ai bien eut le temps de comprendre que cet outil pouvait vite montrer ses limites, et réussir à organiser et maintenir une CSS fournie demandait des bons outils et beaucoup de discipline pour dire le moins. En modifiant le thème de base d&#8217;octopress, j&#8217;avais enfin l&#8217;occasion de m&#8217;introduire à SASS et Compass. Même sans en faire une utilisation sophistiquée (j&#8217;ai délibérément réduit ce blog à seulement deux pages plutôt basiques), je pense en avoir cerné les principaux avantages.</p>
 
 <h2>Partials</h2>
@@ -334,68 +334,80 @@
     <link href="http://mlnstd.io/2013/10/22/non-printing-characters/"/>
     <updated>2013-10-22T23:56:00+02:00</updated>
     <id>http://mlnstd.io/2013/10/22/non-printing-characters</id>
-    <content type="html"><![CDATA[<p>Lorsqu&#8217;on manipule des données, on se heurte bien souvent à des subtilités comme l&#8217;encodage des caractères. Si souvent d&#8217;ailleurs, que s&#8217;en méfier devient un automatisme, voir une seconde nature. Par contre, je n&#8217;ai jamais réussi à m&#8217;habituer aux caractères <a href="http://en.wikipedia.org/wiki/Control_character">non imprimables</a>.</p>
+    <content type="html"><![CDATA[<p>Lorsqu’on manipule des données, on se heurte bien souvent à quelques subtilités. La première qui me vient à l&#8217;esprit est bien sûr l’encodage des caractères. C&#8217;est un très vaste sujet et je ne me sens pas capable de le résumer sur ce blog. Je me contenterai de citer quelques notes utiles dans la partie ressources, et vous rappeler deux ou trois choses qui m&#8217;ont fait perdre beaucoup de temps:</p>
 
-<p>En écrivant des flux d&#8217;<a href="http://en.wikipedia.org/wiki/Data_integration">intégration de données</a>, j&#8217;ai souvent rencontré des erreurs inattendues et des comportements anormaux à leur encontre. Dans l&#8217;investigation d&#8217;un éventuel problème, le plus dur est parfois de simplement les identifier:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&gt;  sqlplus -l -s user/password@INSTANCE @test.sql | cat
-</span><span class='line'>REVISION DES PRIX 2011 coef 1.107138
-</span><span class='line'>reçu le 22/07/2011 mis en application le
-</span><span class='line'>22/08/2011 (retour congé)</span></code></pre></td></tr></table></div></figure>
+<ol>
+<li>l&#8217;onglet <a href="http://tartarus.org/~simon/putty-snapshots/htmldoc/Chapter4.html#config-translation">&#8220;translation&#8221;</a> de putty</li>
+</ol>
 
 
-<p>Heureusement il existe <a href="http://www.thelinuxtips.com/tag/cat-v-command/">plusieurs</a> <a href="http://stackoverflow.com/questions/6943928/show-special-characters-in-unix-while-using-less-command">moyens</a> de les afficher:</p>
+<p><img src="http://mlnstd.io/images/putty.png" title="putty" alt="putty" /></p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&gt;  sqlplus -l -s user/password@INSTANCE @test.sql | cat -v
-</span><span class='line'>REVISION DES PRIX 2011 coef 1.107138^M
-</span><span class='line'>reM-gu le 22/07/2011 mis en application le
-</span><span class='line'>22/08/2011 (retour congM-i)^M</span></code></pre></td></tr></table></div></figure>
+<ol>
+<li><p>que généralement rien n’empêche une chaîne de caractère d’être composée de plusieurs &#8220;jeux de caractères&#8221; différents. Bien que difficile à croire j&#8217;ai vécu ce cauchemard éveillé a plusieurs reprise, dans des fichiers la plupart du temps mais aussi des <a href="http://blog.lunatech.com/2009/02/03/what-every-web-developer-must-know-about-url-encoding">URLs</a>.</p></li>
+<li><p>Détecter l&#8217;encodage d&#8217;un fichier ou d&#8217;une chaîne de caractère sans la connaître peut s&#8217;avérer un vrai casse tête voir impossible. En effet une suite de bits peut avoir un sens dans plusieurs &#8220;charsets&#8221; différents !? Tentez votre chance avec <code>file -i</code> ou lancez vous avec un outils plus sophistiqué basé sur des heuristiques comme <a href="https://github.com/nijel/enca">enca</a>.</p></li>
+</ol>
 
 
-<p>Et pour moi, l&#8217;outil de loin le plus utile s&#8217;appelle: <a href="http://en.wikipedia.org/wiki/Od_%28Unix%29">od</a>. Avec ses options de détails caractère par caractère, il permet non seulement d&#8217;imprimer à l&#8217;écran l&#8217;imprimable, mais il s&#8217;avère aussi utile sur de nombreuses problématiques, notemment pour élucider certaines ambiguités d&#8217;encodage. Le connaissiez-vous ?</p>
+<h2>Détecter les caractères <a href="http://en.wikipedia.org/wiki/Control_character">NON-imprimables</a></h2>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&gt;  sqlplus -l -s user/password@INSTANCE @test.sql | od -bc
-</span><span class='line'>
-</span><span class='line'>0000000 122 105 126 111 123 111 117 116 040 104 105 123 040 120 122 111
-</span><span class='line'>          R   E   V   I   S   I   O   N       D   E   S       P   R   I
-</span><span class='line'>0000020 130 040 062 060 061 061 040 143 157 145 146 040 061 056 061 060
-</span><span class='line'>          X       2   0   1   1       c   o   e   f       1   .   1   0
-</span><span class='line'>0000040 067 061 063 070 015 012 162 145 347 165 040 154 145 040 062 062
-</span><span class='line'>          7   1   3   8  \r  \n   r   e 347   u       l   e       2   2
-</span><span class='line'>0000060 057 060 067 057 062 060 061 061 040 155 151 163 040 145 156 040
-</span><span class='line'>          /   0   7   /   2   0   1   1       m   i   s       e   n
-</span><span class='line'>0000100 141 160 160 154 151 143 141 164 151 157 156 040 154 145 012 062
-</span><span class='line'>          a   p   p   l   i   c   a   t   i   o   n       l   e  \n   2
-</span><span class='line'>0000120 062 057 060 070 057 062 060 061 061 040 050 162 145 164 157 165
-</span><span class='line'>          2   /   0   8   /   2   0   1   1       (   r   e   t   o   u
-</span><span class='line'>0000140 162 040 143 157 156 147 351 051 015 012 012
-</span><span class='line'>          r       c   o   n   g 351   )  \r  \n  \n
-</span><span class='line'>0000153</span></code></pre></td></tr></table></div></figure>
+<p>En tant que <a href="http://en.wikipedia.org/wiki/Digital_native">Digital Native</a>, je n&#8217;ai pas spécialement d’expérience avec les <a href="http://en.wikipedia.org/wiki/Computer_terminal">terminaux</a> et je n’ai jamais réussi à m’habituer aux caractères non imprimables dit &#8220;de contrôle&#8221;. Il existe aussi d&#8217;autres réjouissances dont je ne connais pas l’exhaustivité comme par exemple <a href="http://en.wikipedia.org/wiki/Non-breaking_space">ceux-ci</a>. Heureusement dans le monde moderne #NEWSCHOOL ils se font heureusement extrêmement rares.</p>
+
+<p>Par ailleurs, la problématique peut ressembler à celle des <a href="http://en.wikipedia.org/wiki/Newline">sauts de ligne</a>, mais dans une moindre mesure à mon avis car le problème est souvent plus évident à constater puisque plus remarquable et le sujet est nettement mieux documenté.</p>
+
+<p>En écrivant des flux d&#8217;<a href="http://en.wikipedia.org/wiki/Data_integration">intégration de données</a> entre des systèmes hétérogènes (et parfois exotiques), j&#8217;ai souvent rencontré des erreurs inattendues et des comportements anormaux des applications et programmes à leur encontre. Dans l&#8217;investigation d&#8217;un problème, le plus dur est parfois de simplement identifier ces caractères (de merde):</p>
+
+<pre><code>&gt; sqlplus -l -s user/password@INSTANCE @ctrlchar.sql | cat
+REVISION DES PRIX 2011 coef 1.107138
+reçu le 22/07/2011 mis en application le
+22/08/2011 (retour congé)
+</code></pre>
+
+<h2>Les outils que j&#8217;aurai aimé connaître depuis le début !</h2>
+
+<p>Heureusement il existe <a href="http://stackoverflow.com/questions/6943928/show-special-characters-in-unix-while-using-less-command">plusieurs</a> moyens de s&#8217;en sortir pour les détecter, les afficher et éventuellement les <a href="http://en.wikipedia.org/wiki/Sed">supprimer</a>. Le tout est de les connaître !</p>
+
+<h3><a href="http://www.thelinuxtips.com/tag/cat-v-command/">cat -v</a></h3>
+
+<pre><code>&gt; sqlplus -l -s user/password@INSTANCE @ctrlchar.sql | cat -v
+REVISION DES PRIX 2011 coef 1.107138^M
+reM-gu le 22/07/2011 mis en application le
+22/08/2011 (retour congM-i)^M
+</code></pre>
+
+<h3><a href="http://en.wikipedia.org/wiki/Od_%28Unix%29">od</a>, le magnifique</h3>
+
+<p>Quelle bénédiction le jour ou j&#8217;ai découvert cet outils. Il m&#8217;a définitivement sauvé la vie. Il permet non seulement d&#8217;imprimer à l&#8217;écran l&#8217;<em>in-imprimable</em>, mais il peut s’avérer aussi utile sur de nombreuses autres problématiques comme l&#8217;encodage évoqué précédemment. Selon moi sa grande force est de pouvoir confronter au travers d&#8217;un double affichage (octal/interprétation) et caractère par caractère !</p>
+
+<pre><code>&gt; sqlplus -l -s user/password@INSTANCE @ctrlchar.sql | od -bc
+
+0000000 122 105 126 111 123 111 117 116 040 104 105 123 040 120 122 111
+          R   E   V   I   S   I   O   N       D   E   S       P   R   I
+0000020 130 040 062 060 061 061 040 143 157 145 146 040 061 056 061 060
+          X       2   0   1   1       c   o   e   f       1   .   1   0
+0000040 067 061 063 070 015 012 162 145 347 165 040 154 145 040 062 062
+          7   1   3   8  \r  \n   r   e 347   u       l   e       2   2
+0000060 057 060 067 057 062 060 061 061 040 155 151 163 040 145 156 040
+          /   0   7   /   2   0   1   1       m   i   s       e   n
+0000100 141 160 160 154 151 143 141 164 151 157 156 040 154 145 012 062
+          a   p   p   l   i   c   a   t   i   o   n       l   e  \n   2
+0000120 062 057 060 070 057 062 060 061 061 040 050 162 145 164 157 165
+          2   /   0   8   /   2   0   1   1       (   r   e   t   o   u
+0000140 162 040 143 157 156 147 351 051 015 012 012
+          r       c   o   n   g 351   )  \r  \n  \n
+0000153
+</code></pre>
+
+<h3><a href="http://en.wikipedia.org/wiki/Hex_dump">xxd</a> ou &#8220;Hex dump&#8221;</h3>
+
+<p>Outil très similaire à OD. Je le connais moins bien. Il a peut être des possibilités légèrement différentes.</p>
+
+<h2>Ressources</h2>
+
+<ul>
+<li>quelques passages de ce livre en rapport avec le sujet: <a href="http://www.amazon.com/Bad-Data-Handbook-Cleaning-Back/dp/1449321887">bad data</a></li>
+<li>si l&#8217;aspect historique de l&#8217;encodage vous intéresse, il y a <a href="http://www.tbray.org/ongoing/When/200x/2003/04/26/UTF">beaucoup</a> à <a href="http://www.cl.cam.ac.uk/~mgk25/unicode.html">dire</a></li>
+</ul>
 
 ]]></content>
   </entry>
@@ -496,9 +508,9 @@
   
   <entry>
     <title type="html"><![CDATA[Votre mot de passe est-il trop simple ?]]></title>
-    <link href="http://mlnstd.io/2013/05/19/hiding-yourself/"/>
+    <link href="http://mlnstd.io/2013/05/19/protect-ya-neck/"/>
     <updated>2013-05-19T14:59:00+02:00</updated>
-    <id>http://mlnstd.io/2013/05/19/hiding-yourself</id>
+    <id>http://mlnstd.io/2013/05/19/protect-ya-neck</id>
     <content type="html"><![CDATA[<p>Utilisez vous le même mot de passe plusieurs fois ? Qui n&#8217;a pas été victime de la <a href="http://en.wikipedia.org/wiki/Password_fatigue">&#8220;fatigue des mots de passe&#8221;</a> ? Je sais bien que les <a href="http://en.wikipedia.org/wiki/Password_manager">Gestionnaires</a> présentent des avantages mais je n&#8217;ai jamais pu me faire à leur defauts. Sans aucune prétention, je vais vous décrire ma facon d&#8217;en retenir un facilement qui soit unique et complexe pour chaque service que j&#8217;utilise sur internet avec une seule règle &#8230; et d&#8217;éviter l&#8217;<a href="http://www.codinghorror.com/blog/2009/05/i-just-logged-in-as-you.html">effroyable</a>!</p>
 
 <p>Mon astuce n&#8217;est qu&#8217;une variante très simple du <a href="http://en.wikipedia.org/wiki/Caesar_cipher">chiffrement par décalage</a>, que j&#8217;ai imaginé en regardant un épisode de  <a href="http://en.wikipedia.org/wiki/The_Wire">&#8220;sur écoute&#8221;</a>. Dans la série, les hommes de main de <a href="http://en.wikipedia.org/wiki/Stringer_Bell">Stringer Bell</a> s&#8217;échangent des numéros de téléphone  par <a href="http://en.wikipedia.org/wiki/Pager">pagers</a>. Ces numéros sont échangés de manière codée, ainsi si le message est intercepté par la police, il ne menera à rien. Dans un souci de commodité, les opérations de cryptage et de décryptage ont été simplifiées: elle se font sans algorithme mathématique mais simplement par une sorte de <a href="http://en.wikipedia.org/wiki/Point_reflection">symétrie</a> appliquée à la disposition d&#8217;un clavier de numérotation téléphonique, et donc très facile à appliquer et à retenir. <em>#NOBRAINER</em></p>
@@ -538,10 +550,10 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Astuces pour une commande 'prompt' utile]]></title>
-    <link href="http://mlnstd.io/2013/04/29/hello-world3/"/>
+    <title type="html"><![CDATA[Astuces pour un 'prompt' utile]]></title>
+    <link href="http://mlnstd.io/2013/04/29/prompt/"/>
     <updated>2013-04-29T08:46:00+02:00</updated>
-    <id>http://mlnstd.io/2013/04/29/hello-world3</id>
+    <id>http://mlnstd.io/2013/04/29/prompt</id>
     <content type="html"><![CDATA[<p>Vous aimez votre terminal ? Moi aussi. Vous y passez beaucoup trop de temps ? Moi aussi. Qui n&#8217;a pas personnalisé l’affichage de sa commande &#8220;prompt&#8221; ? Dernièrement, j&#8217;ai découvert quelques astuces bien utiles. J&#8217;aurai aimé vous renvoyer vers les articles originaux, pour rendre à Caesar ce qui est à Caesar, mais <a href="http://blog.chron.com/techblog/files/2013/03/googlereaderrip_thumb.jpg">désormais</a> je ne sais plus rechercher correctement dans mes fils rss et j&#8217;ai été incapable de retrouver mes sources.</p>
 
 <h2>Votre terminal supporte l&#8217;unicode</h2>

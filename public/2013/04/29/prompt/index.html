@@ -1,0 +1,228 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Astuces pour un 'prompt' utile - smknstd.io</title>
+  <meta name="author" content="smknstd">
+
+  
+  <meta name="description" content="Vous aimez votre terminal ? Moi aussi. Vous y passez beaucoup trop de temps ? Moi aussi. Qui n&#8217;a pas personnalisé l’affichage de sa commande &# &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://mlnstd.io/2013/04/29/prompt/">
+  <link href="/images/favicon.ico" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feedpress.me/smknstd" rel="alternate" title="smknstd.io" type="application/atom+xml">
+  <script type="text/javascript" src="//use.typekit.net/oqc4yak.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<script type="text/javascript">
+function show_new() {
+	var j=0;
+    var chila = document.getElementById("blog-archives").children;
+	for(var i = 0; i < chila.length; i++) {
+			var ch = chila[i].getElementsByTagName('h1')[0];
+		    var lien = ch.getElementsByTagName('a')[0].getAttribute("href");
+		    mytab = lien.split("/");
+		    var parsedDate = new Date(parseInt(mytab[1]), parseInt(mytab[2])-1, parseInt(mytab[3]), 0, 0, 0, 0);
+		    var today = new Date();
+		    var diffDays = Math.floor((today - parsedDate)/(1000*60*60*24));
+		    if(diffDays<45){
+		    	j++;
+		        ch.innerHTML=chila[i].getElementsByTagName('h1')[0].innerHTML+"<div id='new'>NEW</div>";
+		    }else{
+		    	// comme les articles sont ordonnées chronologiquement on peut s'arreter de chercher au premier article de plus de 45 jours trouvé 
+		    	break;
+		    }
+
+	}
+	console.log("[function show_new] " + j +" articles de moins de 45 jours (rajout de l'etiquette NEW)");
+}
+</script>
+
+  
+
+</head>
+
+<body onload="show_new()"   >
+  <header role="banner">  <div id="logo"><a href="/"><img src="/images/logo.png" alt="logo" /></a></div>
+  <div id="legend">{type: "web log", localhost: "Paris", about: "trapped all day, got my cheese and an indexed key"}</div>
+
+</header>
+  <nav role="navigation">
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    <div id="archive_header">
+    
+      <h2 class="entry-title">Astuces Pour Un 'Prompt' Utile</h2>
+    
+    </div>
+  </header>
+  <header>
+    <div id="archive_header">
+    
+      <h3 class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-29T08:46:00+02:00" pubdate data-updated="true">Apr 29<span>th</span>, 2013</time>
+      </h3>
+    
+    </div>
+  </header>
+
+
+<div class="entry-content"><p>Vous aimez votre terminal ? Moi aussi. Vous y passez beaucoup trop de temps ? Moi aussi. Qui n&#8217;a pas personnalisé l’affichage de sa commande &#8220;prompt&#8221; ? Dernièrement, j&#8217;ai découvert quelques astuces bien utiles. J&#8217;aurai aimé vous renvoyer vers les articles originaux, pour rendre à Caesar ce qui est à Caesar, mais <a href="http://blog.chron.com/techblog/files/2013/03/googlereaderrip_thumb.jpg">désormais</a> je ne sais plus rechercher correctement dans mes fils rss et j&#8217;ai été incapable de retrouver mes sources.</p>
+
+<h2>Votre terminal supporte l&#8217;unicode</h2>
+
+<p>Et cela peut être très utile pour personnaliser l&#8217;invite et retranscrire des informations complexes avec des pictogrammes. Le rappel de modification dans git décrit plus bas est un bon exemple, mais je suis persuadé qu&#8217;il y a bien d&#8217;autres cas d’utilisation possible parmi le <a href="http://goetter.fr/unicode/">panel</a> disponible.</p>
+
+<h2>Alerte rouge</h2>
+
+<p>Quand on a fini d’exécuter une commande ou un programme, on peut bien sûr interroger son code retour. Mais comme on ne le fait pas systématiquement et surtout lorsqu&#8217;on ne s&#8217;y attend pas, on peut passer à coté et perdre beaucoup de temps. Il est tellement plus simple de récupérer automatiquement cette information et l&#8217;afficher avec un code couleur. #EFFICACE</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">COLOR_RED</span><span class="o">=</span><span class="s2">&quot;\[\e[0;31m\]&quot;</span>
+</span><span class='line'><span class="nv">COLOR_NONE</span><span class="o">=</span><span class="s2">&quot;\[\e[0m\]&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if </span><span class="nb">test</span> <span class="nv">$?</span> -eq 0
+</span><span class='line'><span class="k">then</span>
+</span><span class='line'><span class="k">    </span><span class="nv">PS1</span><span class="o">=</span><span class="s2">&quot;${prompt}➔ &quot;</span>
+</span><span class='line'><span class="k">else</span>
+</span><span class='line'><span class="k">    </span><span class="nv">PS1</span><span class="o">=</span><span class="s2">&quot;${prompt}${COLOR_RED}➔${COLOR_NONE} &quot;</span>
+</span><span class='line'><span class="k">fi</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Afficher la branche courante</h2>
+
+<p>J&#8217;aime GIT. Lorsqu&#8217;on explore une arborescence, savoir qu&#8217;on est dans un &#8220;repository&#8221; peut être très utile. Même quand on le sait, afficher le nom de la branche courante peut éviter bien des ambiguïtés et des erreurs.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">prompt</span><span class="o">=</span><span class="s2">&quot;\w$(__git_ps1)&quot;</span><span class="err">&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>N&#8217;oubliez plus de commiter</h2>
+
+<p>Avez vous déjà quitté un &#8220;repository&#8221; avec des modifications en cours sans finir par un &#8220;commit&#8221; ? Moi oui ! En tous cas voici un moyen de ne plus le faire. Il suffit d&#8217;interroger le &#8220;status&#8221; git et d&#8217;afficher un rappel lorsque c&#8217;est nécessaire. Mieux que la couleur, un pictogramme unicode est parfaitement désigné pour cette tâche.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git status 2&gt; /dev/null | grep -c : | awk <span class="s1">&#39;{if ($1 &gt; 0) print &quot;⚡&quot;}&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Retourner à la racine du repository courant</h2>
+
+<p>Toutes les projets n&#8217;ont pas des arborescences interminables, mais desfois il peut être utile de savoir ou commence un &#8220;repository&#8221;. Ce petit raccourci peut être utile, j&#8217;en suis sûr.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">alias </span>git-root<span class="o">=</span><span class="s1">&#39;cd $(git rev-parse --show-toplevel)&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Liens utiles</h4>
+
+<ul>
+<li>probablement une des <a href="http://mywiki.wooledge.org/BashPitfalls">pages</a> concernant bash les plus utiles de tout l&#8217;internet</li>
+<li>une <a href="http://www.computerworld.com.au/article/222764/a-z_programming_languages_bash_bourne-again_shell/">interview</a> plutôt intéressante</li>
+<li><a href="http://stackoverflow.com/questions/957928/is-there-a-way-to-get-to-the-git-root-directory-in-one-command">stackoverflow</a> a toujours raison</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">smknstd</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-29T08:46:00+02:00" pubdate data-updated="true">Apr 29<span>th</span>, 2013</time>
+      
+
+
+    </p>
+    <div id="archive_header2">
+      <div id="archive_header3">
+      
+        <a class="basic-alignment left" href="/2013/02/10/hello-world/" title="Previous Post: hello world">&laquo; hello world</a>
+      
+      
+        <a class="basic-alignment right" href="/2013/05/19/protect-ya-neck/" title="Next Post: Votre mot de passe est-il trop simple ?">Votre mot de passe est-il trop simple ? &raquo;</a>
+      
+      </div>
+    </div>
+  </footer>
+</article>
+</div>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  2014 - smknstd -
+  <span class="credit">designed with <a href="http://octopress.org">Octopress</a> and hosted by <a href="http://heroku.com">Heroku</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

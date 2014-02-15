@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Votre mot de passe est-il trop simple ? - smknstd.io</title>
+  <meta name="author" content="smknstd">
+
+  
+  <meta name="description" content="Utilisez vous le même mot de passe plusieurs fois ? Qui n&#8217;a pas été victime de la &#8220;fatigue des mots de passe&#8221; ? Je sais bien que &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://mlnstd.io/2013/05/19/protect-ya-neck/">
+  <link href="/images/favicon.ico" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feedpress.me/smknstd" rel="alternate" title="smknstd.io" type="application/atom+xml">
+  <script type="text/javascript" src="//use.typekit.net/oqc4yak.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<script type="text/javascript">
+function show_new() {
+	var j=0;
+    var chila = document.getElementById("blog-archives").children;
+	for(var i = 0; i < chila.length; i++) {
+			var ch = chila[i].getElementsByTagName('h1')[0];
+		    var lien = ch.getElementsByTagName('a')[0].getAttribute("href");
+		    mytab = lien.split("/");
+		    var parsedDate = new Date(parseInt(mytab[1]), parseInt(mytab[2])-1, parseInt(mytab[3]), 0, 0, 0, 0);
+		    var today = new Date();
+		    var diffDays = Math.floor((today - parsedDate)/(1000*60*60*24));
+		    if(diffDays<45){
+		    	j++;
+		        ch.innerHTML=chila[i].getElementsByTagName('h1')[0].innerHTML+"<div id='new'>NEW</div>";
+		    }else{
+		    	// comme les articles sont ordonnées chronologiquement on peut s'arreter de chercher au premier article de plus de 45 jours trouvé 
+		    	break;
+		    }
+
+	}
+	console.log("[function show_new] " + j +" articles de moins de 45 jours (rajout de l'etiquette NEW)");
+}
+</script>
+
+  
+
+</head>
+
+<body onload="show_new()"   >
+  <header role="banner">  <div id="logo"><a href="/"><img src="/images/logo.png" alt="logo" /></a></div>
+  <div id="legend">{type: "web log", localhost: "Paris", about: "trapped all day, got my cheese and an indexed key"}</div>
+
+</header>
+  <nav role="navigation">
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    <div id="archive_header">
+    
+      <h2 class="entry-title">Votre Mot De Passe Est-il Trop Simple ?</h2>
+    
+    </div>
+  </header>
+  <header>
+    <div id="archive_header">
+    
+      <h3 class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-19T14:59:00+02:00" pubdate data-updated="true">May 19<span>th</span>, 2013</time>
+      </h3>
+    
+    </div>
+  </header>
+
+
+<div class="entry-content"><p>Utilisez vous le même mot de passe plusieurs fois ? Qui n&#8217;a pas été victime de la <a href="http://en.wikipedia.org/wiki/Password_fatigue">&#8220;fatigue des mots de passe&#8221;</a> ? Je sais bien que les <a href="http://en.wikipedia.org/wiki/Password_manager">Gestionnaires</a> présentent des avantages mais je n&#8217;ai jamais pu me faire à leur defauts. Sans aucune prétention, je vais vous décrire ma facon d&#8217;en retenir un facilement qui soit unique et complexe pour chaque service que j&#8217;utilise sur internet avec une seule règle &#8230; et d&#8217;éviter l&#8217;<a href="http://www.codinghorror.com/blog/2009/05/i-just-logged-in-as-you.html">effroyable</a>!</p>
+
+<p>Mon astuce n&#8217;est qu&#8217;une variante très simple du <a href="http://en.wikipedia.org/wiki/Caesar_cipher">chiffrement par décalage</a>, que j&#8217;ai imaginé en regardant un épisode de  <a href="http://en.wikipedia.org/wiki/The_Wire">&#8220;sur écoute&#8221;</a>. Dans la série, les hommes de main de <a href="http://en.wikipedia.org/wiki/Stringer_Bell">Stringer Bell</a> s&#8217;échangent des numéros de téléphone  par <a href="http://en.wikipedia.org/wiki/Pager">pagers</a>. Ces numéros sont échangés de manière codée, ainsi si le message est intercepté par la police, il ne menera à rien. Dans un souci de commodité, les opérations de cryptage et de décryptage ont été simplifiées: elle se font sans algorithme mathématique mais simplement par une sorte de <a href="http://en.wikipedia.org/wiki/Point_reflection">symétrie</a> appliquée à la disposition d&#8217;un clavier de numérotation téléphonique, et donc très facile à appliquer et à retenir. <em>#NOBRAINER</em></p>
+
+<p>&#8220;if it was a code that involves math, algebra or whatever, these littles yos in the project wouldn&#8217;t be able to follow along. Ain&#8217;t no math to it. It&#8217;s just&#8230; how the phone looks when you look at it.&#8221;</p>
+
+<p><img src="/images/thewire.png" title="Avon Barksdale's hint on hinding himself" alt="the wire screencap" /></p>
+
+<p>Pour être capable de mémoriser mes mots de passes, j&#8217;ai librement adapté cette idée aux claviers <a href="http://en.wikipedia.org/wiki/AZERTY">AZERTY</a> que j&#8217;utilise la plupart du temps. Evidemment pour que le mot de passe de chaque service soit unique, il faut intégrer un élément propre: le nom du service evidemment ! Ainsi je transpose chaque lettre du nom d&#8217;un service, et elle devient la lettre suivante selon le sens des 3 lignes du clavier (en minuscule). <code>A</code> devient <code>Z</code>, <code>Z</code> devient <code>E</code>, <code>P</code> devient <code>Q</code>, <code>N</code> devient <code>A</code>, etc. Eventuellement il est possible de faire pareil avec les chiffres: <code>1</code> devient <code>2</code>, <code>2</code> devient <code>3</code>, <code>0</code> devient <code>1</code>, etc. Cette façon de faire est facile à mémoriser et à appliquer. #WIN</p>
+
+<p>Aussi pour rendre plus robuste chacun des mots de passe (longeur, majuscules, caracteres spéciaux, etc), je rajoute un &#8220;radical&#8221; commun à tous les mots de passes. Finalement en n&#8217;ayant besoin de retenir que celui-ci, j&#8217;obtiens sans effort, des mots de passe uniques (suffisamment longs et complexes) pour chaque service et surtout dont la reversibilité n&#8217;est pas triviale.</p>
+
+<p>Par exemple si mon radical était <code>!m0nR4d_Cal</code>, cela donnerait:</p>
+
+<ul>
+<li><code>!m0nR4d_Caldyzvlpbrtgmpx</code> pour me connecter à stackoverflow.com</li>
+<li><code>!m0nR4d_Calyxoyyrt</code> pour me connecter à twitter.com</li>
+</ul>
+
+
+<p><em>J&#8217;ai bien pris soin de finir mon radical par des lettres en minuscule, ainsi l&#8217;analogie entre le nom du service et une partie du mot de passe est plus difficile à faire que quelquechose comme <code>MONRADICALyxoyyrt</code>)</em></p>
+
+<p>Cette méthode n&#8217;est pas parfaite et n&#8217;est qu&#8217;un compromis, d&#8217;ailleurs dans l&#8217;épisode de la série dont je me suis inspiré, <a href="http://en.wikipedia.org/wiki/Roland_Pryzbylewski">&#8220;Prezbo&#8221;</a> déjoue assez facilement le stratagème, probablement parcequ&#8217;il a pu récupérer plusieurs numéros différents et procéder par <a href="http://en.wikipedia.org/wiki/Analogy">analogie</a>. Evidemment je considère que la probabilité que quelqu&#8217;un récupère plusieurs de mes mots de passe (et se donne la peine de retrouver ma facon de faire) est assez faible pour continuer à utiliser cette technique. Aussi par prudence, je l&#8217;exclus pour les services dont j&#8217;éstime la sécurité critique (compte mail, paypal, dropbox etc).</p>
+
+<h4>Ressources</h4>
+
+<ul>
+<li><a href="http://www.wired.com/politics/security/commentary/securitymatters/2006/12/72300?currentPage=all">article de 2006</a> dans lequel Bruce Schneier révèle qu&#8217;un des mots de passe les plus courants sur myspace était &#8220;Blink182&#8221;</li>
+<li><a href="http://www.amazon.fr/Perfect-Password-Selection-Protection-Authentication/dp/1597490415">182 pages</a> sur le sujet !?</li>
+<li><a href="http://www.passwordmeter.com/">password strength meter</a></li>
+<li><a href="https://www.grc.com/haystack.htm">how big is your haystack</a></li>
+<li><a href="http://stackoverflow.com/questions/98768/should-i-impose-a-maximum-length-on-passwords">WTF</a> !?</li>
+<li><a href="http://en.wikipedia.org/wiki/Three_Days_of_the_Condor">un film</a> que j&#8217;aime beaucoup :)</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">smknstd</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-19T14:59:00+02:00" pubdate data-updated="true">May 19<span>th</span>, 2013</time>
+      
+
+
+    </p>
+    <div id="archive_header2">
+      <div id="archive_header3">
+      
+        <a class="basic-alignment left" href="/2013/04/29/prompt/" title="Previous Post: Astuces pour un 'prompt' utile">&laquo; Astuces pour un 'prompt' utile</a>
+      
+      
+        <a class="basic-alignment right" href="/2013/09/12/oracle-partitionned-read/" title="Next Post: Extraction Oracle massive en //: la méthode de lecture partitionnée">Extraction Oracle massive en //: la méthode de lecture partitionnée &raquo;</a>
+      
+      </div>
+    </div>
+  </footer>
+</article>
+</div>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  2014 - smknstd -
+  <span class="credit">designed with <a href="http://octopress.org">Octopress</a> and hosted by <a href="http://heroku.com">Heroku</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
