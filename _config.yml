@@ -2,12 +2,12 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://mlnstd.io
+url: http://www.smknstd.io
 title: smknstd.io
 subtitle: 
 author: smknstd
 simple_search: http://google.com/search
-description:
+description: A passionnate developer's weblog (named smokin studio)
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in

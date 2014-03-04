@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[smknstd.io]]></title>
-  <link href="http://mlnstd.io/atom.xml" rel="self"/>
-  <link href="http://mlnstd.io/"/>
-  <updated>2014-02-15T17:04:30+01:00</updated>
-  <id>http://mlnstd.io/</id>
+  <link href="http://www.smknstd.io/atom.xml" rel="self"/>
+  <link href="http://www.smknstd.io/"/>
+  <updated>2014-03-04T23:16:43+01:00</updated>
+  <id>http://www.smknstd.io/</id>
   <author>
     <name><![CDATA[smknstd]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[vim VS Sublime Text: ajout d'un numéro de séquence]]></title>
-    <link href="http://mlnstd.io/2013/11/30/vimvssublime/"/>
+    <link href="http://www.smknstd.io/2013/11/30/vimvssublime/"/>
     <updated>2013-11-30T19:12:00+01:00</updated>
-    <id>http://mlnstd.io/2013/11/30/vimvssublime</id>
+    <id>http://www.smknstd.io/2013/11/30/vimvssublime</id>
     <content type="html"><![CDATA[<p>Quand vient la question de choisir son éditeur de texte, la discussion pour un développeur peut vite devenir <a href="https://en.wikipedia.org/wiki/Editor_war">passionnelle</a>
 . Loin de moi l&#8217;idée dans cet article de vouloir convertir quiconque de changer d&#8217;éditeur, par contre si je m&#8217;écoutais j&#8217;en déconseillerais certains :( Dans cet article je souhaite comparer l&#8217;ajout d&#8217;une séquence dans mes deux éditeurs préférés.</p>
 
@@ -87,7 +87,7 @@
 </ol>
 
 
-<p><img src="http://mlnstd.io/images/sublimetext.gif" title="demo text pastry" alt="demosubt2" /></p>
+<p><img src="http://www.smknstd.io/images/sublimetext.gif" title="demo text pastry" alt="demosubt2" /></p>
 
 <p>Enfantin ! En comparant avec la méthode VIM, je trouve que cela permet de bien réaliser combien la possibilité de sélectionner plusieurs zones simultanément est puissante, et peut remplacer des procédures compliquées.</p>
 
@@ -105,9 +105,9 @@
   
   <entry>
     <title type="html"><![CDATA[SASS/Compass pour les nuls]]></title>
-    <link href="http://mlnstd.io/2013/11/21/dummy-sass/"/>
+    <link href="http://www.smknstd.io/2013/11/21/dummy-sass/"/>
     <updated>2013-11-21T20:03:00+01:00</updated>
-    <id>http://mlnstd.io/2013/11/21/dummy-sass</id>
+    <id>http://www.smknstd.io/2013/11/21/dummy-sass</id>
     <content type="html"><![CDATA[<p>Je suis sûrement loin d&#8217;être un développeur web très expérimenté, pourtant l&#8217;écriture de ma première feuille de style CSS remonte à plus de 15 ans. Depuis ce temps j&#8217;ai bien eut le temps de comprendre que cet outil pouvait vite montrer ses limites, et réussir à organiser et maintenir une CSS fournie demandait des bons outils et beaucoup de discipline pour dire le moins. En modifiant le thème de base d&#8217;octopress, j&#8217;avais enfin l&#8217;occasion de m&#8217;introduire à SASS et Compass. Même sans en faire une utilisation sophistiquée (j&#8217;ai délibérément réduit ce blog à seulement deux pages plutôt basiques), je pense en avoir cerné les principaux avantages.</p>
 
 <h2>Partials</h2>
@@ -140,7 +140,7 @@
 </span><span class='line'>scss=.sass,.scss</span></code></pre></td></tr></table></div></figure>
 
 
-<p><img src="http://mlnstd.io/images/ack-scss.png" title="ack" alt="ack_sass" /></p>
+<p><img src="http://www.smknstd.io/images/ack-scss.png" title="ack" alt="ack_sass" /></p>
 
 <h2>Commentaires</h2>
 
@@ -241,7 +241,7 @@
 <p data-height="348" data-theme-id="0" data-slug-hash="ELhdf" data-user="smknstd" data-default-tab="result" class='codepen'>See the Pen <a href='http://codepen.io/smknstd/pen/ELhdf'>Krusty&#8217;s fun CSS</a> by smokin studio (<a href='http://codepen.io/smknstd'>@smknstd</a>) on <a href='http://codepen.io'>CodePen</a></p>
 
 
-<script async src="http://mlnstd.io//codepen.io/assets/embed/ei.js"></script>
+<script async src="http://www.smknstd.io//codepen.io/assets/embed/ei.js"></script>
 
 
 <h3>Ressources</h3>
@@ -256,9 +256,9 @@
   
   <entry>
     <title type="html"><![CDATA[unilignes: l'héritage d'awk dans les langages interprétés modernes]]></title>
-    <link href="http://mlnstd.io/2013/11/11/oneliners/"/>
+    <link href="http://www.smknstd.io/2013/11/11/oneliners/"/>
     <updated>2013-11-11T19:37:00+01:00</updated>
-    <id>http://mlnstd.io/2013/11/11/oneliners</id>
+    <id>http://www.smknstd.io/2013/11/11/oneliners</id>
     <content type="html"><![CDATA[<p>Il y a seulement quelques années, lorsque j&#8217;ai commencé à utiliser la commande shell, j&#8217;ai très vite pu apprécié la puissance et l&#8217;ingéniosité de certains outils surtout dans la manipulation courante des données. A ce stade, je savais écrire un programme en C ou en java, mais Xavier, un programmeur expérimenté de 25 ans mon aîné que j&#8217;avais désigné comme mon mentor, a particulièrement attiré mon attention sur cet étrange outil dont j&#8217;ignorais tout: awk.</p>
 
 <p>J&#8217;ai rapidement compris que malgré son apparence rebutante, il allait me devenir indispensable! Associé au <a href="http://doc.cat-v.org/unix/pipes/">&#8220;pipe&#8221;</a>, il est capable de résoudre de véritables casse-têtes en une commande d&#8217;une seule ligne. Bien sûr le prix d&#8217;une ligne c&#8217;est qu&#8217;elle est souvent à rallonge, mais pour de nombreuses opérations elle évite d&#8217;écrire un script. Au moins deux spécificités sont particulièrement appréciées dans Awk:</p>
@@ -331,9 +331,9 @@
   
   <entry>
     <title type="html"><![CDATA[Survivre aux caractères non-imprimables]]></title>
-    <link href="http://mlnstd.io/2013/10/22/non-printing-characters/"/>
+    <link href="http://www.smknstd.io/2013/10/22/non-printing-characters/"/>
     <updated>2013-10-22T23:56:00+02:00</updated>
-    <id>http://mlnstd.io/2013/10/22/non-printing-characters</id>
+    <id>http://www.smknstd.io/2013/10/22/non-printing-characters</id>
     <content type="html"><![CDATA[<p>Lorsqu’on manipule des données, on se heurte bien souvent à quelques subtilités. La première qui me vient à l&#8217;esprit est bien sûr l’encodage des caractères. C&#8217;est un très vaste sujet et je ne me sens pas capable de le résumer sur ce blog. Je me contenterai de citer quelques notes utiles dans la partie ressources, et vous rappeler deux ou trois choses qui m&#8217;ont fait perdre beaucoup de temps:</p>
 
 <ol>
@@ -341,7 +341,7 @@
 </ol>
 
 
-<p><img src="http://mlnstd.io/images/putty.png" title="putty" alt="putty" /></p>
+<p><img src="http://www.smknstd.io/images/putty.png" title="putty" alt="putty" /></p>
 
 <ol>
 <li><p>que généralement rien n’empêche une chaîne de caractère d’être composée de plusieurs &#8220;jeux de caractères&#8221; différents. Bien que difficile à croire j&#8217;ai vécu ce cauchemard éveillé a plusieurs reprise, dans des fichiers la plupart du temps mais aussi des <a href="http://blog.lunatech.com/2009/02/03/what-every-web-developer-must-know-about-url-encoding">URLs</a>.</p></li>
@@ -414,9 +414,9 @@ reM-gu le 22/07/2011 mis en application le
   
   <entry>
     <title type="html"><![CDATA[Extraction Oracle massive en //: la méthode de lecture partitionnée]]></title>
-    <link href="http://mlnstd.io/2013/09/12/oracle-partitionned-read/"/>
+    <link href="http://www.smknstd.io/2013/09/12/oracle-partitionned-read/"/>
     <updated>2013-09-12T23:58:00+02:00</updated>
-    <id>http://mlnstd.io/2013/09/12/oracle-partitionned-read</id>
+    <id>http://www.smknstd.io/2013/09/12/oracle-partitionned-read</id>
     <content type="html"><![CDATA[<p>En tant que défenseur des logiciels libres, il est parfois dur de travailler avec des logiciels propriétaires. Oracle est <a href="http://www.reuters.com/article/2013/02/27/us-ellison-airline-idUSBRE91Q11R20130227">surement</a> le pire éditeur qu&#8217;on puisse imaginer, mais il faut avouer que son SGBD est un outil malgré tout <a href="http://www.xaprb.com/blog/2009/03/13/50-things-to-know-before-migrating-oracle-to-mysql/">sophistiqué</a>.</p>
 
 <p>Lorsqu&#8217;on souhaite exécuter des taches en parallèle, plusieurs outils <a href="http://docs.oracle.com/cd/E11882_01/server.112/e25523/parallel002.htm">plus</a> ou <a href="http://docs.oracle.com/cd/E11882_01/appdev.112/e25788/d_parallel_ex.htm">moins</a> indispensables sont mis à disposition. Toutefois certains besoins peuvent sortir des cas d&#8217;utilisation prévus. J&#8217;ai souhaité traiter massivement les données d&#8217;une table, pour les traiter en lots indépendants sur plusieurs machines différentes. L&#8217;opération d&#8217;extraction des données au travers d&#8217;une seule connexion peut représenter une goulot d’étranglement. J&#8217;ai alors imaginé la méthode décrite ici pour essayer d’accélérer le processus d&#8217;extraction vers un cluster de machines.</p>
@@ -427,7 +427,7 @@ reM-gu le 22/07/2011 mis en application le
 
 <p>Voici une représentation schématique du contexte dans lequel j&#8217;ai pu appliquer ce principe avec succès: le traitement de données s&#8217;effectue dans un cluster de 4 machines.</p>
 
-<p><img src="http://mlnstd.io/images/oracle_avant_apres.png" title="schema" alt="photo_blocnote" /></p>
+<p><img src="http://www.smknstd.io/images/oracle_avant_apres.png" title="schema" alt="photo_blocnote" /></p>
 
 <h2>La construction des requêtes</h2>
 
@@ -508,16 +508,16 @@ reM-gu le 22/07/2011 mis en application le
   
   <entry>
     <title type="html"><![CDATA[Votre mot de passe est-il trop simple ?]]></title>
-    <link href="http://mlnstd.io/2013/05/19/protect-ya-neck/"/>
+    <link href="http://www.smknstd.io/2013/05/19/protect-ya-neck/"/>
     <updated>2013-05-19T14:59:00+02:00</updated>
-    <id>http://mlnstd.io/2013/05/19/protect-ya-neck</id>
+    <id>http://www.smknstd.io/2013/05/19/protect-ya-neck</id>
     <content type="html"><![CDATA[<p>Utilisez vous le même mot de passe plusieurs fois ? Qui n&#8217;a pas été victime de la <a href="http://en.wikipedia.org/wiki/Password_fatigue">&#8220;fatigue des mots de passe&#8221;</a> ? Je sais bien que les <a href="http://en.wikipedia.org/wiki/Password_manager">Gestionnaires</a> présentent des avantages mais je n&#8217;ai jamais pu me faire à leur defauts. Sans aucune prétention, je vais vous décrire ma facon d&#8217;en retenir un facilement qui soit unique et complexe pour chaque service que j&#8217;utilise sur internet avec une seule règle &#8230; et d&#8217;éviter l&#8217;<a href="http://www.codinghorror.com/blog/2009/05/i-just-logged-in-as-you.html">effroyable</a>!</p>
 
 <p>Mon astuce n&#8217;est qu&#8217;une variante très simple du <a href="http://en.wikipedia.org/wiki/Caesar_cipher">chiffrement par décalage</a>, que j&#8217;ai imaginé en regardant un épisode de  <a href="http://en.wikipedia.org/wiki/The_Wire">&#8220;sur écoute&#8221;</a>. Dans la série, les hommes de main de <a href="http://en.wikipedia.org/wiki/Stringer_Bell">Stringer Bell</a> s&#8217;échangent des numéros de téléphone  par <a href="http://en.wikipedia.org/wiki/Pager">pagers</a>. Ces numéros sont échangés de manière codée, ainsi si le message est intercepté par la police, il ne menera à rien. Dans un souci de commodité, les opérations de cryptage et de décryptage ont été simplifiées: elle se font sans algorithme mathématique mais simplement par une sorte de <a href="http://en.wikipedia.org/wiki/Point_reflection">symétrie</a> appliquée à la disposition d&#8217;un clavier de numérotation téléphonique, et donc très facile à appliquer et à retenir. <em>#NOBRAINER</em></p>
 
 <p>&#8220;if it was a code that involves math, algebra or whatever, these littles yos in the project wouldn&#8217;t be able to follow along. Ain&#8217;t no math to it. It&#8217;s just&#8230; how the phone looks when you look at it.&#8221;</p>
 
-<p><img src="http://mlnstd.io/images/thewire.png" title="Avon Barksdale's hint on hinding himself" alt="the wire screencap" /></p>
+<p><img src="http://www.smknstd.io/images/thewire.png" title="Avon Barksdale's hint on hinding himself" alt="the wire screencap" /></p>
 
 <p>Pour être capable de mémoriser mes mots de passes, j&#8217;ai librement adapté cette idée aux claviers <a href="http://en.wikipedia.org/wiki/AZERTY">AZERTY</a> que j&#8217;utilise la plupart du temps. Evidemment pour que le mot de passe de chaque service soit unique, il faut intégrer un élément propre: le nom du service evidemment ! Ainsi je transpose chaque lettre du nom d&#8217;un service, et elle devient la lettre suivante selon le sens des 3 lignes du clavier (en minuscule). <code>A</code> devient <code>Z</code>, <code>Z</code> devient <code>E</code>, <code>P</code> devient <code>Q</code>, <code>N</code> devient <code>A</code>, etc. Eventuellement il est possible de faire pareil avec les chiffres: <code>1</code> devient <code>2</code>, <code>2</code> devient <code>3</code>, <code>0</code> devient <code>1</code>, etc. Cette façon de faire est facile à mémoriser et à appliquer. #WIN</p>
 
@@ -551,9 +551,9 @@ reM-gu le 22/07/2011 mis en application le
   
   <entry>
     <title type="html"><![CDATA[Astuces pour un 'prompt' utile]]></title>
-    <link href="http://mlnstd.io/2013/04/29/prompt/"/>
+    <link href="http://www.smknstd.io/2013/04/29/prompt/"/>
     <updated>2013-04-29T08:46:00+02:00</updated>
-    <id>http://mlnstd.io/2013/04/29/prompt</id>
+    <id>http://www.smknstd.io/2013/04/29/prompt</id>
     <content type="html"><![CDATA[<p>Vous aimez votre terminal ? Moi aussi. Vous y passez beaucoup trop de temps ? Moi aussi. Qui n&#8217;a pas personnalisé l’affichage de sa commande &#8220;prompt&#8221; ? Dernièrement, j&#8217;ai découvert quelques astuces bien utiles. J&#8217;aurai aimé vous renvoyer vers les articles originaux, pour rendre à Caesar ce qui est à Caesar, mais <a href="http://blog.chron.com/techblog/files/2013/03/googlereaderrip_thumb.jpg">désormais</a> je ne sais plus rechercher correctement dans mes fils rss et j&#8217;ai été incapable de retrouver mes sources.</p>
 
 <h2>Votre terminal supporte l&#8217;unicode</h2>
@@ -625,10 +625,10 @@ reM-gu le 22/07/2011 mis en application le
   
   <entry>
     <title type="html"><![CDATA[hello world]]></title>
-    <link href="http://mlnstd.io/2013/02/10/hello-world/"/>
+    <link href="http://www.smknstd.io/2013/02/10/hello-world/"/>
     <updated>2013-02-10T00:19:00+01:00</updated>
-    <id>http://mlnstd.io/2013/02/10/hello-world</id>
-    <content type="html"><![CDATA[<p><img src="http://mlnstd.io/images/sandler.jpg" title="sandler" alt="sandler" /></p>
+    <id>http://www.smknstd.io/2013/02/10/hello-world</id>
+    <content type="html"><![CDATA[<p><img src="http://www.smknstd.io/images/sandler.jpg" title="sandler" alt="sandler" /></p>
 
 <p>Bienvenue sur mon blog ! Je dois vous avouer que ce premier post a un peu l’allure d’un réveil difficile. Accoucher de ce blog aura été plus long et douloureux que je l’avais imaginé au départ. J’ai bien pris la mesure de combien l’initiative personnelle peut parfois demander d’efforts. J’ai découvert que je portais beaucoup d’attention <a href="http://littlebigdetails.com/">au souci</a> <a href="http://jessicahische.is/monkeyingaround">du</a> <a href="http://www.creads.org/blog/logos/le-logo-sncf-a-eu-le-droit-a-un-lifting/">détails</a> et pour tout vous dire je crois qu&#8217;il n&#8217;a faillit ne pas voir le jour !</p>
 

@@ -1,43 +1,43 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
-        <loc>http://mlnstd.io/2013/02/10/hello-world/</loc>
+        <loc>http://www.smknstd.io/2013/02/10/hello-world/</loc>
         <lastmod>2014-02-15T17:04:30+01:00</lastmod>
     </url>
     <url>
-        <loc>http://mlnstd.io/2013/04/29/prompt/</loc>
+        <loc>http://www.smknstd.io/2013/04/29/prompt/</loc>
         <lastmod>2014-02-15T15:23:08+01:00</lastmod>
     </url>
     <url>
-        <loc>http://mlnstd.io/2013/05/19/protect-ya-neck/</loc>
+        <loc>http://www.smknstd.io/2013/05/19/protect-ya-neck/</loc>
         <lastmod>2013-11-11T22:59:08+01:00</lastmod>
     </url>
     <url>
-        <loc>http://mlnstd.io/2013/09/12/oracle-partitionned-read/</loc>
+        <loc>http://www.smknstd.io/2013/09/12/oracle-partitionned-read/</loc>
         <lastmod>2013-11-30T19:53:23+01:00</lastmod>
     </url>
     <url>
-        <loc>http://mlnstd.io/2013/10/22/non-printing-characters/</loc>
+        <loc>http://www.smknstd.io/2013/10/22/non-printing-characters/</loc>
         <lastmod>2014-02-15T16:21:35+01:00</lastmod>
     </url>
     <url>
-        <loc>http://mlnstd.io/2013/11/11/oneliners/</loc>
+        <loc>http://www.smknstd.io/2013/11/11/oneliners/</loc>
         <lastmod>2013-11-11T22:51:21+01:00</lastmod>
     </url>
     <url>
-        <loc>http://mlnstd.io/2013/11/21/dummy-sass/</loc>
+        <loc>http://www.smknstd.io/2013/11/21/dummy-sass/</loc>
         <lastmod>2013-12-16T23:34:48+01:00</lastmod>
     </url>
     <url>
-        <loc>http://mlnstd.io/2013/11/30/vimvssublime/</loc>
+        <loc>http://www.smknstd.io/2013/11/30/vimvssublime/</loc>
         <lastmod>2013-12-17T00:35:55+01:00</lastmod>
     </url>
     <url>
-        <loc>http://mlnstd.io/</loc>
+        <loc>http://www.smknstd.io/</loc>
         <lastmod>2014-02-15T17:04:30+01:00</lastmod>
     </url>
     <url>
-        <loc>http://mlnstd.io/index.html.old</loc>
+        <loc>http://www.smknstd.io/index.html.old</loc>
         <lastmod>2013-10-13T14:10:26+02:00</lastmod>
     </url>
 </urlset>
