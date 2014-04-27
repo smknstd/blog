@@ -4,7 +4,7 @@
   <title><![CDATA[smknstd.io]]></title>
   <link href="http://www.smknstd.io/atom.xml" rel="self"/>
   <link href="http://www.smknstd.io/"/>
-  <updated>2014-03-04T23:16:43+01:00</updated>
+  <updated>2014-04-27T20:26:09+02:00</updated>
   <id>http://www.smknstd.io/</id>
   <author>
     <name><![CDATA[smknstd]]></name>
@@ -12,6 +12,118 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Mes outils en ligne de commande préférés]]></title>
+    <link href="http://www.smknstd.io/2014/04/27/command-lines-percy/"/>
+    <updated>2014-04-27T16:21:00+02:00</updated>
+    <id>http://www.smknstd.io/2014/04/27/command-lines-percy</id>
+    <content type="html"><![CDATA[<p>J&#8217;aime travailler dans le terminal, j&#8217;y édite même ce blog. C&#8217;est un endroit familier ou chacun a ses petites habitudes, ses petites astuces. Dans cet article j&#8217;ai souhaité humblement partager quelques outils en ligne de commande plus ou moins méconnues et indispensables que j&#8217;ai découvert avec le temps et qui complètent les outils habituels que tout le monde connaît. Parfois, on peut contourner un problème pendant longtemps avant de se rendre compte qu&#8217;il existe une solution très simple pour y remédier. c&#8217;est sûrement pourquoi j&#8217;aime particulièrement ces outils peu conventionnels mais qui ont le mérite d&#8217;exister. Voici une compilation de mes favoris:</p>
+
+<h2><a href="http://beyondgrep.com/">ack</a></h2>
+
+<p>Pour chercher une chaine de caractère dans plusieurs fichier avec grep, ce n&#8217;est pas très pratique. On peut utiliser l&#8217;opérateur * ou un assemblage d&#8217;options qui peut vite se compliquer avec l&#8217;option -exec de find et avoir recours à <a href="http://en.wikipedia.org/wiki/Xargs">xargs</a>. Heureusement quand on cherche dans un code source, <code>ack-grep</code> propose une solution très intéressante. Pour ceux qui ne le connaissent pas encore, cet outils est vraiment très pratique. Les fonctions appréciées permettent par exemple de filtrer très facilement le type de fichier dans lesquels chercher ou d&#8217;en ignorer certains ou encore coloriser le résultat. Comme souvent dans la communauté les débats sont très vite passionnés, et estimer quel outil est &#8220;mieux&#8221; qu&#8217;un autre semble être un besoin primaire. Même si cela m&#8217;amuse beaucoup, j’espère qu&#8217;à l&#8217;image de l&#8217;url du site officielle qui est passée de &#8220;betterthangrep&#8221; à &#8220;beyondgrep&#8221; les esprits sauront s’apaiser et <a href="http://betterthanack.com/">nuancer</a> leur propos.</p>
+
+<h2><a href="http://linuxtidbits.wordpress.com/2008/02/22/command-line-to-clipboard/">xclip</a></h2>
+
+<p>Copier/coller est un outil fondamental. Malheureusement en mode console, cela passe souvent par l&#8217;utilisation de la souris ou un fichier intermédiaire superflu. <code>xclip</code> est un outils simple et pratique pour récupérer dans le <a href="http://en.wikipedia.org/wiki/Clipboard_%28computing%29">presse-papier</a> le contenu d&#8217;un fichier et surtout la sortie standard d&#8217;une ligne de commande grâce au pipe.</p>
+
+<h2><a href="http://en.wikipedia.org/wiki/Watch_%28Unix%29">watch</a></h2>
+
+<p>Lorsqu&#8217;on scrute le résultat d&#8217;un programme, en attendant de voir un résultat, on a tendance a répéter inlassablement certaines opérations. En travaillant avec des fichiers de logs, j&#8217;ai gagné beaucoup de temps grâce à <code>watch</code>, qui permet d’exécuter une commande à intervalles réguliers en rafraîchissant l&#8217;affichage. J’imagine qu&#8217;il doit sûrement y avoir des tonnes d&#8217;usages.</p>
+
+<h2><a href="http://en.wikipedia.org/wiki/Tac_%28Unix%29">tac</a></h2>
+
+<p>Bon évidemment dans cet article toutes mes trucs et astuces ne sont pas totalement essentielles ou indispensables. Je ne pense pas avoir eut besoin de <code>tac</code> très souvent mais j&#8217;aime vraiment beaucoup l&#8217;esprit de cette commande.</p>
+
+<h2><a href="http://en.wikipedia.org/wiki/Yes_%28Unix%29">yes</a></h2>
+
+<p><code>yes</code> est une commande historique répondant à un besoin qui n&#8217;existe plus et que je n&#8217;ai d&#8217;ailleurs jamais rencontré. Mais j&#8217;aime sa logique et on peut facilement le détourner de son usage original: pour moi il remplace quelquefois une boucle et me permet de créer facilement un fichier de test ou d&#8217;alimenter une entrée standard et c&#8217;est déjà pas mal, non ?</p>
+
+<h2>complétion</h2>
+
+<p>On s&#8217;éloigne du concept initial de l&#8217;article, car la complétion est bien plus qu&#8217;une commande, mais c&#8217;est un outils de la console forcément lié et indispensable. Je souhaite en parler car il est facile d&#8217;oublier sa puissance et j&#8217;ai au moins deux exemples pour l&#8217;illustrer. Comme tous les utilisateurs de BASH, je me sers beaucoup de l&#8217;historique. Pour l&#8217;utiliser correctement il est essentiel de le <a href="http://blog.sanctum.geek.nz/better-bash-history/">configurer</a> mais pour y naviguer correctement il existe une complétion. En tapant les premières lettres de la commande souhaitée, <code>ctrl + r</code>et <code>ctrl + s</code> permettent de naviguer uniquement dans les commandes qui ont la même racine. C&#8217;est tellement pratique qu&#8217;il est intéressant d&#8217;en faire des <a href="http://lkdjiin.github.io/blog/2014/02/20/astuce-bash-ameliorer-lhistorique/">raccourcis</a>.</p>
+
+<p>La complétion existe sur les commandes disponibles ou les fichiers je ne vous apprends rien, mais pour certains programme on peut disposer d&#8217;une complétion sur les options. Si comme moi vous utilisez bash et vous allez fouiller dans <code>/etc/bash_completion.d</code>, vous serez surpris du nombre de programme pour lesquels cette fonctionnalité est déjà installé ! C&#8217;est par exemple le cas pour <a href="http://git-scm.com/book/fr/Les-bases-de-Git-Trucs-et-astuces#Auto-Compl%C3%A9tion">GIT</a> et je dois vous avouer que j&#8217;ai découvert en affichant la liste complète de ses options que je n&#8217;avais aucune idée de l’existence de bons nombres d&#8217;entre elles ;-)</p>
+
+<p><img src="http://www.smknstd.io/images/git-completion.png" title="completion" alt="completion" /></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[count() ain't nothing but a number]]></title>
+    <link href="http://www.smknstd.io/2014/03/18/counting/"/>
+    <updated>2014-03-18T22:31:00+01:00</updated>
+    <id>http://www.smknstd.io/2014/03/18/counting</id>
+    <content type="html"><![CDATA[<p>Compter des données ou en estimer la cardinalité est une opération dont les applications sont très variées. Tellement variées que tout le monde ou presque a besoin de le faire à un moment ou à un autre. Au fil de mes expériences, j&#8217;ai pu observer de nombreux moyens de le faire dans des contextes et avec des outils variés. Pas tout le monde n&#8217;a l&#8217;ambition de se revendique &#8220;Data scientist&#8221;, mais j&#8217;ai vu des gens faire preuve de créativité avec les moyens mis à leur disposition et surtout leur niveau de connaissance. Bien sûr le volume de données reste un enjeu majeur. Cet article est une sorte de réflexion générale.</p>
+
+<h1>SQL</h1>
+
+<p>Lorsque les données sont bien sagement rangées dans un SGBDR (en état de marche), les possibilités et surtout l&#8217;accessibilité du langage SQL n&#8217;échappent à personne. Count(*), clause Where, Group By, rien de plus simple à mettre en œuvre. Quand les choses se compliquent, la palette d&#8217;outils des principaux systèmes répond aux cas d&#8217;utilisation les plus tordus (DISTINCT, EXISTS, HAVING, etc).</p>
+
+<p><img src="http://www.smknstd.io/images/mysql-count.png" title="mysql count() group by" alt="mysql" /></p>
+
+<p>Avec beaucoup de données, viennent les problèmes. Un des outils intéressant concernant le comptage et la cardinalité et parfois méconnu est l&#8217;index <a href="http://en.wikipedia.org/wiki/Bitmap_index">bitmap</a>. Si vous ne le connaissez pas, je vous encourage à étudier son principe de fonctionnement. Ci dessous un <a href="http://en.wikipedia.org/wiki/Query_plan">plan d&#8217;execution</a> mettant à contribution un index bitmap sous Oracle 11g:</p>
+
+<p><img src="http://www.smknstd.io/images/bitmap.png" title="bitmap plan" alt="bitmap" /></p>
+
+<p>Dans la famille des systèmes relationnels, une autre approche prometteuse souhaite répondre à la problématique du volume de données: les <a href="http://en.wikipedia.org/wiki/Vectorwise"> bases vectorielles</a>. Basé sur une orientation <a href="http://en.wikipedia.org/wiki/Column-oriented_DBMS">colonne</a> tout en gardant la commodité de l&#8217;interrogation d&#8217;un modèle relationnel, cette base promet des performances incroyables. Gardons à l&#8217;esprit que le gain se fait bien sûr au détriment de quelques sacrifices comme les contraintes ou le principe de transaction. Privé de polyvalence, elles sont exclues de nombreux domaines d&#8217;applications opérationnels.</p>
+
+<h1>Non-hacker</h1>
+
+<p>Selon mon expérience, le problème est souvent résolu tant bien que mal avec un tableur directement sur une station de travail. Personnellement, j&#8217;appelle ça du bricolage, mais j&#8217;avoue être parfois impressionné par la créativité mise en œuvre. Dans le meilleur des cas on a recours à un <a href="http://en.wikipedia.org/wiki/Pivot_table">tableau croisé dynamique</a>. La mise en forme des données nécessite souvent un travail d’orfèvre. Heureusement, il existe au moins un <a href="http://stackoverflow.com/questions/526921/why-is-there-still-a-row-limit-in-microsoft-excel">frein</a> à l&#8217;utilisation parfois désastreuse de ce genre d&#8217;utilisations quand les besoins deviennent récurrents.</p>
+
+<h1>Hacker</h1>
+
+<p>Comme souvent, UNIX a une réponse simple, efficace et robuste à la question. Pourquoi perdre du temps avec de nouveaux outils quand ceux qu&#8217;on a déjà conviennent ? La puissance du modèle UNIX fournit beaucoup de souplesse et permet d&#8217;effectuer de nombreuses opérations en cumulant successivement plusieurs fonctionnalités grâce à l&#8217;utilisation du <a href="http://doc.cat-v.org/unix/pipes/">pipe</a>. Pour ne citer que quelques-uns de ces indispensables outils:</p>
+
+<ul>
+<li>sort</li>
+<li>uniq</li>
+<li>grep</li>
+<li>wc</li>
+<li>join</li>
+<li>awk</li>
+<li>cut</li>
+</ul>
+
+
+<p>En plus d&#8217;être bien documentés, open source et faciles à utiliser, ces outils sont généralement <a href="http://lists.freebsd.org/pipermail/freebsd-current/2010-August/019310.html">très</a> <a href="http://en.wikipedia.org/wiki/Merge_sort">efficients</a>.</p>
+
+<p>Une fois qu&#8217;on s&#8217;y est habitué, il est difficile de s&#8217;en passer. J&#8217;ai découvert que même lorsqu&#8217;on ne disposait que d&#8217;un environnement Windows, il est possible de profiter de quelques-uns de ces outils grâce à certaines solutions comme <a href="http://en.wikipedia.org/wiki/MKS_Toolkit">MKStoolkit</a> ou <a href="http://en.wikipedia.org/wiki/Cygwin">cygwin</a>. Précisons que c&#8217;est une utilisation dégradée par rapport aux outils originaux, car selon mon expérience la qualité du portage et de l&#8217;implémentation laissent largement à désirer.</p>
+
+<p><img src="http://www.smknstd.io/images/mkstoolkit.png" title="nutcracker" alt="mkstoolkit" /></p>
+
+<p>Ci-dessous, vous trouverez un exemple d&#8217;implémentation d&#8217;une opération habituelle de manipulation et de comptage sur des fichiers avec un outil traditionnel d&#8217;<a href="http://en.wikipedia.org/wiki/Extract,_transform,_load">ETL</a>. On peut constater que la logique d&#8217;élaboration d&#8217;un flux de données au travers de l&#8217;interface graphique dite &#8220;conviviale&#8221;, s&#8217;inspire largement du modèle Unix. Les données sont traitées successivement dans des opérations spécifiques, et on peut facilement assimiler les liens entre ces fonctions au &#8220;pipe&#8221;.</p>
+
+<p><img src="http://www.smknstd.io/images/datastage.png" title="datastage" alt="datastage" /></p>
+
+<p>Pour des besoins bien spécifiques, il existe des librairies dédiées dans la plupart des langages de programmation courants. On peut citer, <a href="http://pandas.pydata.org/">panda</a>, un framework de traitement en mémoire facile à mettre en œuvre même sur une station de travail et qui fait beaucoup parler de lui.</p>
+
+<h1>BIG DATA</h1>
+
+<p>Quand les volumes dépassent ce que savant faire les solutions décrient plus haut, pour faire simple: vous êtes êtes mal barré.</p>
+
+<p>Concernant notre problématique de comptage et de cardinalité et la hype NOSQL, je n&#8217;ai malheureusement pas grand chose à dire à ce sujet car je ne le connais pas bien. Toutefois deux outils ont attiré mon attention:</p>
+
+<ul>
+<li>l’implémentation des <a href="http://blog.getspool.com/2011/11/29/fast-easy-realtime-metrics-using-redis-bitmaps/">&#8220;bitsets&#8221;</a> dans Redis.</li>
+<li>Bloom filters/Hyper log log/count min : une famille d’algorithme qui semble avoir trouvé beaucoup d’écho dans la communauté scientifique, au vue des nombreux papiers de recherche qui peuplent les résultats des moteurs de recherche.</li>
+</ul>
+
+
+<p>Même si je ne me sens pas bien concerné par leur utilisation, j&#8217;avoue que leur philosophie parait extrêmement intéressante et s&#8217;annoncent comme des outils prometteurs et utiles dans de nombreux domaines d&#8217;application. Notez bien qu&#8217;on peut facilement tester ces outils grâces à la mise à disposition de librairies. J&#8217;ai pour ma part fait quelques essais très facilement avec une implémentation en <a href="https://github.com/addthis/stream-lib">java</a>.</p>
+
+<p><img src="http://www.smknstd.io/images/count-bundesliga.png" title="count unixVSbloom" alt="count" /></p>
+
+<h3>Ressources</h3>
+
+<ul>
+<li><a href="http://www.football-data.co.uk/germanym.php">données</a> du championnat de football allemand que j&#8217;ai utilisé</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[vim VS Sublime Text: ajout d'un numéro de séquence]]></title>

@@ -1,0 +1,62 @@
+---
+layout: post
+title: "count() ain't nothing but a number"
+date: 2014-03-18 22:31
+comments: false
+categories: 
+---
+Compter des données ou en estimer la cardinalité est une opération dont les applications sont très variées. Tellement variées que tout le monde ou presque a besoin de le faire à un moment ou à un autre. Au fil de mes expériences, j'ai pu observer de nombreux moyens de le faire dans des contextes et avec des outils variés. Pas tout le monde n'a l'ambition de se revendique "Data scientist", mais j'ai vu des gens faire preuve de créativité avec les moyens mis à leur disposition et surtout leur niveau de connaissance. Bien sûr le volume de données reste un enjeu majeur. Cet article est une sorte de réflexion générale.
+
+#SQL
+Lorsque les données sont bien sagement rangées dans un SGBDR (en état de marche), les possibilités et surtout l'accessibilité du langage SQL n'échappent à personne. Count(*), clause Where, Group By, rien de plus simple à mettre en œuvre. Quand les choses se compliquent, la palette d'outils des principaux systèmes répond aux cas d'utilisation les plus tordus (DISTINCT, EXISTS, HAVING, etc).
+
+![mysql]({{ root_url }}/images/mysql-count.png "mysql count() group by")
+
+Avec beaucoup de données, viennent les problèmes. Un des outils intéressant concernant le comptage et la cardinalité et parfois méconnu est l'index [bitmap](http://en.wikipedia.org/wiki/Bitmap_index). Si vous ne le connaissez pas, je vous encourage à étudier son principe de fonctionnement. Ci dessous un [plan d'execution](http://en.wikipedia.org/wiki/Query_plan) mettant à contribution un index bitmap sous Oracle 11g:
+
+![bitmap]({{ root_url }}/images/bitmap.png "bitmap plan")
+
+Dans la famille des systèmes relationnels, une autre approche prometteuse souhaite répondre à la problématique du volume de données: les [ bases vectorielles](http://en.wikipedia.org/wiki/Vectorwise). Basé sur une orientation [colonne](http://en.wikipedia.org/wiki/Column-oriented_DBMS) tout en gardant la commodité de l'interrogation d'un modèle relationnel, cette base promet des performances incroyables. Gardons à l'esprit que le gain se fait bien sûr au détriment de quelques sacrifices comme les contraintes ou le principe de transaction. Privé de polyvalence, elles sont exclues de nombreux domaines d'applications opérationnels.
+
+#Non-hacker
+Selon mon expérience, le problème est souvent résolu tant bien que mal avec un tableur directement sur une station de travail. Personnellement, j'appelle ça du bricolage, mais j'avoue être parfois impressionné par la créativité mise en œuvre. Dans le meilleur des cas on a recours à un [tableau croisé dynamique](http://en.wikipedia.org/wiki/Pivot_table). La mise en forme des données nécessite souvent un travail d’orfèvre. Heureusement, il existe au moins un [frein](http://stackoverflow.com/questions/526921/why-is-there-still-a-row-limit-in-microsoft-excel) à l'utilisation parfois désastreuse de ce genre d'utilisations quand les besoins deviennent récurrents.
+
+#Hacker
+Comme souvent, UNIX a une réponse simple, efficace et robuste à la question. Pourquoi perdre du temps avec de nouveaux outils quand ceux qu'on a déjà conviennent ? La puissance du modèle UNIX fournit beaucoup de souplesse et permet d'effectuer de nombreuses opérations en cumulant successivement plusieurs fonctionnalités grâce à l'utilisation du [pipe](http://doc.cat-v.org/unix/pipes/). Pour ne citer que quelques-uns de ces indispensables outils:
+
+- sort
+- uniq
+- grep
+- wc
+- join
+- awk
+- cut
+
+En plus d'être bien documentés, open source et faciles à utiliser, ces outils sont généralement [très](http://lists.freebsd.org/pipermail/freebsd-current/2010-August/019310.html) [efficients](http://en.wikipedia.org/wiki/Merge_sort).
+
+Une fois qu'on s'y est habitué, il est difficile de s'en passer. J'ai découvert que même lorsqu'on ne disposait que d'un environnement Windows, il est possible de profiter de quelques-uns de ces outils grâce à certaines solutions comme [MKStoolkit](http://en.wikipedia.org/wiki/MKS_Toolkit) ou [cygwin](http://en.wikipedia.org/wiki/Cygwin). Précisons que c'est une utilisation dégradée par rapport aux outils originaux, car selon mon expérience la qualité du portage et de l'implémentation laissent largement à désirer.
+
+![mkstoolkit]({{ root_url }}/images/mkstoolkit.png "nutcracker")
+
+Ci-dessous, vous trouverez un exemple d'implémentation d'une opération habituelle de manipulation et de comptage sur des fichiers avec un outil traditionnel d'[ETL](http://en.wikipedia.org/wiki/Extract,_transform,_load). On peut constater que la logique d'élaboration d'un flux de données au travers de l'interface graphique dite "conviviale", s'inspire largement du modèle Unix. Les données sont traitées successivement dans des opérations spécifiques, et on peut facilement assimiler les liens entre ces fonctions au "pipe".
+
+![datastage]({{ root_url }}/images/datastage.png "datastage")
+
+Pour des besoins bien spécifiques, il existe des librairies dédiées dans la plupart des langages de programmation courants. On peut citer, [panda](http://pandas.pydata.org/), un framework de traitement en mémoire facile à mettre en œuvre même sur une station de travail et qui fait beaucoup parler de lui.
+
+#BIG DATA
+Quand les volumes dépassent ce que savant faire les solutions décrient plus haut, pour faire simple: vous êtes êtes mal barré.  
+
+Concernant notre problématique de comptage et de cardinalité et la hype NOSQL, je n'ai malheureusement pas grand chose à dire à ce sujet car je ne le connais pas bien. Toutefois deux outils ont attiré mon attention:
+
+- l’implémentation des ["bitsets"](http://blog.getspool.com/2011/11/29/fast-easy-realtime-metrics-using-redis-bitmaps/) dans Redis. 
+- Bloom filters/Hyper log log/count min : une famille d’algorithme qui semble avoir trouvé beaucoup d’écho dans la communauté scientifique, au vue des nombreux papiers de recherche qui peuplent les résultats des moteurs de recherche.
+
+Même si je ne me sens pas bien concerné par leur utilisation, j'avoue que leur philosophie parait extrêmement intéressante et s'annoncent comme des outils prometteurs et utiles dans de nombreux domaines d'application. Notez bien qu'on peut facilement tester ces outils grâces à la mise à disposition de librairies. J'ai pour ma part fait quelques essais très facilement avec une implémentation en [java](https://github.com/addthis/stream-lib).
+
+![count]({{ root_url }}/images/count-bundesliga.png "count unixVSbloom")
+
+
+### Ressources
+
+- [données](http://www.football-data.co.uk/germanym.php) du championnat de football allemand que j'ai utilisé

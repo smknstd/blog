@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Mes outils en ligne de commande préférés - smknstd.io</title>
+  <meta name="author" content="smknstd">
+
+  
+  <meta name="description" content="J&#8217;aime travailler dans le terminal, j&#8217;y édite même ce blog. C&#8217;est un endroit familier ou chacun a ses petites habitudes, ses &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.smknstd.io/2014/04/27/command-lines-percy/">
+  <link href="/images/favicon.ico" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feedpress.me/smknstd" rel="alternate" title="smknstd.io" type="application/atom+xml">
+  <script type="text/javascript" src="//use.typekit.net/oqc4yak.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<script type="text/javascript">
+function show_new() {
+	var j=0;
+    var chila = document.getElementById("blog-archives").children;
+	for(var i = 0; i < chila.length; i++) {
+			var ch = chila[i].getElementsByTagName('h1')[0];
+		    var lien = ch.getElementsByTagName('a')[0].getAttribute("href");
+		    mytab = lien.split("/");
+		    var parsedDate = new Date(parseInt(mytab[1]), parseInt(mytab[2])-1, parseInt(mytab[3]), 0, 0, 0, 0);
+		    var today = new Date();
+		    var diffDays = Math.floor((today - parsedDate)/(1000*60*60*24));
+		    if(diffDays<45){
+		    	j++;
+		        ch.innerHTML=chila[i].getElementsByTagName('h1')[0].innerHTML+"<div id='new'>NEW</div>";
+		    }else{
+		    	// comme les articles sont ordonnées chronologiquement on peut s'arreter de chercher au premier article de plus de 45 jours trouvé 
+		    	break;
+		    }
+
+	}
+	console.log("[function show_new] " + j +" articles de moins de 45 jours (rajout de l'etiquette NEW)");
+}
+</script>
+
+  
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5215670-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+
+
+</head>
+
+<body onload="show_new()"   >
+  <header role="banner">  <div id="logo"><a href="/"><img src="/images/logo.png" alt="logo" /></a></div>
+  <div id="legend">{type: "web log", localhost: "Paris", about: "trapped all day, got my cheese and an indexed key"}</div>
+
+</header>
+  <nav role="navigation">
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    <div id="archive_header">
+    
+      <h2 class="entry-title">Mes Outils en Ligne De Commande Préférés</h2>
+    
+    </div>
+  </header>
+  <header>
+    <div id="archive_header">
+    
+      <h3 class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-27T16:21:00+02:00" pubdate data-updated="true">Apr 27<span>th</span>, 2014</time>
+      </h3>
+    
+    </div>
+  </header>
+
+
+<div class="entry-content"><p>J&#8217;aime travailler dans le terminal, j&#8217;y édite même ce blog. C&#8217;est un endroit familier ou chacun a ses petites habitudes, ses petites astuces. Dans cet article j&#8217;ai souhaité humblement partager quelques outils en ligne de commande plus ou moins méconnues et indispensables que j&#8217;ai découvert avec le temps et qui complètent les outils habituels que tout le monde connaît. Parfois, on peut contourner un problème pendant longtemps avant de se rendre compte qu&#8217;il existe une solution très simple pour y remédier. c&#8217;est sûrement pourquoi j&#8217;aime particulièrement ces outils peu conventionnels mais qui ont le mérite d&#8217;exister. Voici une compilation de mes favoris:</p>
+
+<h2><a href="http://beyondgrep.com/">ack</a></h2>
+
+<p>Pour chercher une chaine de caractère dans plusieurs fichier avec grep, ce n&#8217;est pas très pratique. On peut utiliser l&#8217;opérateur * ou un assemblage d&#8217;options qui peut vite se compliquer avec l&#8217;option -exec de find et avoir recours à <a href="http://en.wikipedia.org/wiki/Xargs">xargs</a>. Heureusement quand on cherche dans un code source, <code>ack-grep</code> propose une solution très intéressante. Pour ceux qui ne le connaissent pas encore, cet outils est vraiment très pratique. Les fonctions appréciées permettent par exemple de filtrer très facilement le type de fichier dans lesquels chercher ou d&#8217;en ignorer certains ou encore coloriser le résultat. Comme souvent dans la communauté les débats sont très vite passionnés, et estimer quel outil est &#8220;mieux&#8221; qu&#8217;un autre semble être un besoin primaire. Même si cela m&#8217;amuse beaucoup, j’espère qu&#8217;à l&#8217;image de l&#8217;url du site officielle qui est passée de &#8220;betterthangrep&#8221; à &#8220;beyondgrep&#8221; les esprits sauront s’apaiser et <a href="http://betterthanack.com/">nuancer</a> leur propos.</p>
+
+<h2><a href="http://linuxtidbits.wordpress.com/2008/02/22/command-line-to-clipboard/">xclip</a></h2>
+
+<p>Copier/coller est un outil fondamental. Malheureusement en mode console, cela passe souvent par l&#8217;utilisation de la souris ou un fichier intermédiaire superflu. <code>xclip</code> est un outils simple et pratique pour récupérer dans le <a href="http://en.wikipedia.org/wiki/Clipboard_%28computing%29">presse-papier</a> le contenu d&#8217;un fichier et surtout la sortie standard d&#8217;une ligne de commande grâce au pipe.</p>
+
+<h2><a href="http://en.wikipedia.org/wiki/Watch_%28Unix%29">watch</a></h2>
+
+<p>Lorsqu&#8217;on scrute le résultat d&#8217;un programme, en attendant de voir un résultat, on a tendance a répéter inlassablement certaines opérations. En travaillant avec des fichiers de logs, j&#8217;ai gagné beaucoup de temps grâce à <code>watch</code>, qui permet d’exécuter une commande à intervalles réguliers en rafraîchissant l&#8217;affichage. J’imagine qu&#8217;il doit sûrement y avoir des tonnes d&#8217;usages.</p>
+
+<h2><a href="http://en.wikipedia.org/wiki/Tac_%28Unix%29">tac</a></h2>
+
+<p>Bon évidemment dans cet article toutes mes trucs et astuces ne sont pas totalement essentielles ou indispensables. Je ne pense pas avoir eut besoin de <code>tac</code> très souvent mais j&#8217;aime vraiment beaucoup l&#8217;esprit de cette commande.</p>
+
+<h2><a href="http://en.wikipedia.org/wiki/Yes_%28Unix%29">yes</a></h2>
+
+<p><code>yes</code> est une commande historique répondant à un besoin qui n&#8217;existe plus et que je n&#8217;ai d&#8217;ailleurs jamais rencontré. Mais j&#8217;aime sa logique et on peut facilement le détourner de son usage original: pour moi il remplace quelquefois une boucle et me permet de créer facilement un fichier de test ou d&#8217;alimenter une entrée standard et c&#8217;est déjà pas mal, non ?</p>
+
+<h2>complétion</h2>
+
+<p>On s&#8217;éloigne du concept initial de l&#8217;article, car la complétion est bien plus qu&#8217;une commande, mais c&#8217;est un outils de la console forcément lié et indispensable. Je souhaite en parler car il est facile d&#8217;oublier sa puissance et j&#8217;ai au moins deux exemples pour l&#8217;illustrer. Comme tous les utilisateurs de BASH, je me sers beaucoup de l&#8217;historique. Pour l&#8217;utiliser correctement il est essentiel de le <a href="http://blog.sanctum.geek.nz/better-bash-history/">configurer</a> mais pour y naviguer correctement il existe une complétion. En tapant les premières lettres de la commande souhaitée, <code>ctrl + r</code>et <code>ctrl + s</code> permettent de naviguer uniquement dans les commandes qui ont la même racine. C&#8217;est tellement pratique qu&#8217;il est intéressant d&#8217;en faire des <a href="http://lkdjiin.github.io/blog/2014/02/20/astuce-bash-ameliorer-lhistorique/">raccourcis</a>.</p>
+
+<p>La complétion existe sur les commandes disponibles ou les fichiers je ne vous apprends rien, mais pour certains programme on peut disposer d&#8217;une complétion sur les options. Si comme moi vous utilisez bash et vous allez fouiller dans <code>/etc/bash_completion.d</code>, vous serez surpris du nombre de programme pour lesquels cette fonctionnalité est déjà installé ! C&#8217;est par exemple le cas pour <a href="http://git-scm.com/book/fr/Les-bases-de-Git-Trucs-et-astuces#Auto-Compl%C3%A9tion">GIT</a> et je dois vous avouer que j&#8217;ai découvert en affichant la liste complète de ses options que je n&#8217;avais aucune idée de l’existence de bons nombres d&#8217;entre elles ;-)</p>
+
+<p><img src="/images/git-completion.png" title="completion" alt="completion" /></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">smknstd</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-27T16:21:00+02:00" pubdate data-updated="true">Apr 27<span>th</span>, 2014</time>
+      
+
+
+    </p>
+    <div id="archive_header2">
+      <div id="archive_header3">
+      
+        <a class="basic-alignment left" href="/2014/03/18/counting/" title="Previous Post: count() ain't nothing but a number">&laquo; count() ain't nothing but a number</a>
+      
+      
+      </div>
+    </div>
+  </footer>
+</article>
+</div>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  2014 - smknstd -
+  <span class="credit">designed with <a href="http://octopress.org">Octopress</a> and hosted by <a href="http://heroku.com">Heroku</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
