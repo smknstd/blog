@@ -11,9 +11,9 @@ Lorsqu’on manipule des données, on se heurte bien souvent à quelques subtili
 
 1. l'onglet ["translation"](http://tartarus.org/~simon/putty-snapshots/htmldoc/Chapter4.html#config-translation) de putty
 
-![putty]({{ root_url }}/images/putty.png "putty")
+  ![putty]({{ root_url }}/images/putty.png "putty")
 
-2. que généralement rien n’empêche une chaîne de caractère d’être composée de plusieurs "jeux de caractères" différents. Bien que difficile à croire j'ai vécu ce cauchemard éveillé a plusieurs reprise, dans des fichiers la plupart du temps mais aussi des [URLs](http://blog.lunatech.com/2009/02/03/what-every-web-developer-must-know-about-url-encoding).
+2. que généralement rien n’empêche une chaîne d’être composée de plusieurs "jeux de caractères" différents. Bien que difficile à croire j'ai vécu ce cauchemard éveillé à plusieurs reprises, dans des fichiers la plupart du temps mais aussi des [URLs](http://blog.lunatech.com/2009/02/03/what-every-web-developer-must-know-about-url-encoding).
 
 3. Détecter l'encodage d'un fichier ou d'une chaîne de caractère sans la connaître peut s'avérer un vrai casse tête voir impossible. En effet une suite de bits peut avoir un sens dans plusieurs "charsets" différents !? Tentez votre chance avec `file -i` ou lancez vous avec un outils plus sophistiqué basé sur des heuristiques comme [enca](https://github.com/nijel/enca).
 

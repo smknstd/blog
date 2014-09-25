@@ -1,0 +1,338 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Regrouper et compter: Mongo (partie 2/5) - smknstd.io</title>
+  <meta name="author" content="smknstd">
+
+  
+  <meta name="description" content="Pour continuer cette série d&#8217;articles de présentation sur la thématique du regroupement et du comptage, j&#8217;ai souhaité aborder la base &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.smknstd.io/2014/06/28/counting-part2/">
+  <link href="/images/favicon.ico" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feedpress.me/smknstd" rel="alternate" title="smknstd.io" type="application/atom+xml">
+  <script type="text/javascript" src="//use.typekit.net/oqc4yak.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<script type="text/javascript">
+function show_new() {
+	var j=0;
+    var chila = document.getElementById("blog-archives").children;
+	for(var i = 0; i < chila.length; i++) {
+			var ch = chila[i].getElementsByTagName('h1')[0];
+		    var lien = ch.getElementsByTagName('a')[0].getAttribute("href");
+		    mytab = lien.split("/");
+		    var parsedDate = new Date(parseInt(mytab[1]), parseInt(mytab[2])-1, parseInt(mytab[3]), 0, 0, 0, 0);
+		    var today = new Date();
+		    var diffDays = Math.floor((today - parsedDate)/(1000*60*60*24));
+		    if(diffDays<45){
+		    	j++;
+		        ch.innerHTML=chila[i].getElementsByTagName('h1')[0].innerHTML+"<div id='new'>NEW</div>";
+		    }else{
+		    	// comme les articles sont ordonnées chronologiquement on peut s'arreter de chercher au premier article de plus de 45 jours trouvé 
+		    	break;
+		    }
+
+	}
+	console.log("[function show_new] " + j +" articles de moins de 45 jours (rajout de l'etiquette NEW)");
+}
+</script>
+
+  
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5215670-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+
+
+</head>
+
+<body onload="show_new()"   >
+  <header role="banner">  <div id="logo"><a href="/"><img src="/images/logo.png" alt="logo" /></a></div>
+  <div id="legend">{type: "web log", localhost: "Paris", about: "trapped all day, got my cheese and an indexed key"}</div>
+
+</header>
+  <nav role="navigation">
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    <div id="archive_header">
+    
+      <h2 class="entry-title">Regrouper Et Compter: Mongo (Partie 2/5)</h2>
+    
+    </div>
+  </header>
+  <header>
+    <div id="archive_header">
+    
+      <h3 class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-28T11:12:00+02:00" pubdate data-updated="true">Jun 28<span>th</span>, 2014</time>
+      </h3>
+    
+    </div>
+  </header>
+
+
+<div class="entry-content"><p>Pour continuer cette série d&#8217;articles de présentation sur la thématique du regroupement et du comptage, j&#8217;ai souhaité aborder la base orientée documents <a href="http://en.wikipedia.org/wiki/MongoDB">Mongo</a>. L&#8217;explication est simple car parmi les bases de données non-relationnelles qui ont tendance à se démocratiser ces dernières années, c&#8217;est celle que je connais le mieux ;)</p>
+
+<p>D&#8217;abord je souhaite rappeler que Mongo est un outil qui dans le paysage des outils de gestion de base de données est relativement jeune (2009). Bien que Mongo ait rencontré un succès massif en répondant à de nombreux besoins notamment de flexibilité et de performance, la manipulation des données ne me semble pas avoir été au cœur des préoccupations dès le début. Les capacités du système à répondre aux besoins d&#8217;analyse des données ont amené certains utilisateurs à de sérieuses déconvenues. En effet, en plus de ne mettre à disposition que des outils d&#8217;interrogation <a href="http://docs.mongodb.org/manual/tutorial/map-reduce-examples/">&#8220;sommaires&#8221;</a> pour dire le moins, la performance de ceux-ci est grandement affecté par des choix souvent subtiles lors de la modélisation !</p>
+
+<h3>Aggregation framework</h3>
+
+<p>Heureusement, le système évolue vite et des <a href="https://jira.mongodb.org/browse/SERVER-1752">améliorations</a> sont sans cesse apportées. Une évolution majeure a été l&#8217;apparition du &#8220;framework d&#8217;aggregation&#8221; dans la version 2.2 (circa Aout 2012) qui apporte une bouffée d’oxygène pour quiconque souhaite manipuler une collection. Sans pour autant résoudre les problématiques de performance qui dépendent toujours notamment des choix de modélisation des données.</p>
+
+<h3>Indexs</h3>
+
+<p>L&#8217;utilisation d&#8217;indexs est essentiel au fonctionnement de Mongo. Leur mise en place et leur maintenance nécessite un travail important. Malgré une amélioration des outils essentiels permettant d&#8217;analyser leur utilisation comme <code>.explain()</code> ou <code>.hint()</code>, cette tâche reste difficile et selon mon expérience quelquefois obscure malheureusement. Voici un plan d’exécution d&#8217;une interrogation simple utilisant une &#8220;projection&#8221; sur une collection qui montre qu&#8217;on ne peut solliciter que l&#8217;index quand c&#8217;est possible (<code>index_only: true</code>). Dans ce cas on économise l&#8217;accès à la collection ce qui évidemment améliore le temps de réponse de l&#8217;interrogation:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; db.wines.find({proprietaire : "Arnold"},{proprietaire: 1, _id: 0}).explain()
+</span><span class='line'>{
+</span><span class='line'>  "cursor" : "BtreeCursor proprietaire_1",
+</span><span class='line'>  "isMultiKey" : false,
+</span><span class='line'>  "n" : 3,
+</span><span class='line'>  "nscannedObjects" : 0,
+</span><span class='line'>  "nscanned" : 3,
+</span><span class='line'>  "nscannedObjectsAllPlans" : 0,
+</span><span class='line'>  "nscannedAllPlans" : 3,
+</span><span class='line'>  "scanAndOrder" : false,
+</span><span class='line'>  "indexOnly" : true,
+</span><span class='line'>  "nYields" : 1,
+</span><span class='line'>  "nChunkSkips" : 0,
+</span><span class='line'>  "millis" : 26,
+</span><span class='line'>  "indexBounds" : {
+</span><span class='line'>      "proprietaire" : [
+</span><span class='line'>          [
+</span><span class='line'>              "Arnold",
+</span><span class='line'>              "Arnold"
+</span><span class='line'>          ]
+</span><span class='line'>      ]
+</span><span class='line'>  },
+</span><span class='line'>  "server" : "xxxxxx.mongolab.com:xxxxxx",
+</span><span class='line'>  "filterSet" : false
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Pour revenir à notre sujet du comptage du nombre d&#8217;éléments uniques, ce n&#8217;est toujours pas un des points fort de Mongo. Consulter le plan d’exécution de la fonction &#8220;.aggregate()&#8221; du framework d&#8217;aggregation n&#8217;est disponible que depuis la version 2.6 (début 2014). Malgré cela, selon mon expérience, il reste difficile d&#8217;analyser le comportement des requêtes de ce type et pire il toujours presque impossible d&#8217;<a href="https://jira.mongodb.org/browse/SERVER-7944">influer</a> sur le comportement !? Par exemple, dans cette requête de regroupement et de comptage je ne peux que constater que l’accès se fait par un curseur &#8220;basique&#8221; (comprenez <code>FullScan</code>) qui semble ignorer l&#8217;index que j&#8217;ai pourtant réussi à utiliser précédemment et qui contient bien l&#8217;information dont on a besoin :(</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; db.wines.aggregate(    [      { $group : { _id : "$proprietaire", books: { $sum : 1 } } }    ] )
+</span><span class='line'>{ "_id" : "Arnold", "books" : 3 }
+</span><span class='line'>{ "_id" : "Regis", "books" : ...
+</span><span class='line'>
+</span><span class='line'>&gt; db.wines.aggregate(    [      { $group : { _id : "$proprietaire", books: { $sum : 1 } } }    ],   {     explain:true   } )
+</span><span class='line'>{
+</span><span class='line'>  "stages" : [
+</span><span class='line'>      {
+</span><span class='line'>          "$cursor" : {
+</span><span class='line'>              "query" : {
+</span><span class='line'>                  
+</span><span class='line'>              },
+</span><span class='line'>              "fields" : {
+</span><span class='line'>                  "proprietaire" : 1,
+</span><span class='line'>                  "_id" : 0
+</span><span class='line'>              },
+</span><span class='line'>              "plan" : {
+</span><span class='line'>                  "cursor" : "BasicCursor",
+</span><span class='line'>                  "isMultiKey" : false,
+</span><span class='line'>                  "scanAndOrder" : false,
+</span><span class='line'>                  "allPlans" : [
+</span><span class='line'>                      {
+</span><span class='line'>                          "cursor" : "BasicCursor",
+</span><span class='line'>                          "isMultiKey" : false,
+</span><span class='line'>                          "scanAndOrder" : false
+</span><span class='line'>                      }
+</span><span class='line'>                  ]
+</span><span class='line'>              }
+</span><span class='line'>          }
+</span><span class='line'>      },
+</span><span class='line'>      {
+</span><span class='line'>          "$group" : {
+</span><span class='line'>              "_id" : "$proprietaire",
+</span><span class='line'>              "books" : {
+</span><span class='line'>                  "$sum" : {
+</span><span class='line'>                      "$const" : 1
+</span><span class='line'>                  }
+</span><span class='line'>              }
+</span><span class='line'>          }
+</span><span class='line'>      }
+</span><span class='line'>  ],
+</span><span class='line'>  "ok" : 1
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Ressources</h3>
+
+<ul>
+<li>un <a href="http://web.archive.org/web/20100128030005/http://kylebanker.com/blog/2009/11/mongodb-count-group">article</a> précurseur sur le comptage</li>
+<li>un <a href="http://fiestacc.tumblr.com/post/11319522700/walkthrough-mongodb-data-modeling">article</a> fondateur sur les subtilités d&#8217;utilisation et de modélisation</li>
+<li>une <a href="http://highlyscalable.wordpress.com/2012/03/01/nosql-data-modeling-techniques/">synthèse</a> sur les différentes techniques de modélisation adaptées aux systèmes dits &#8220;NOSQL&#8221;</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">smknstd</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-28T11:12:00+02:00" pubdate data-updated="true">Jun 28<span>th</span>, 2014</time>
+      
+
+
+    </p>
+    <div id="archive_header2">
+      <div id="archive_header3">
+      
+        <a class="basic-alignment left" href="/2014/05/23/counting-part1/" title="Previous Post: Regrouper et compter: SQL (partie 1/5)">&laquo; Regrouper et compter: SQL (partie 1/5)</a>
+      
+      
+        <a class="basic-alignment right" href="/2014/07/04/counting-part3/" title="Next Post: Regrouper et compter: Unix (partie 3/5)">Regrouper et compter: Unix (partie 3/5) &raquo;</a>
+      
+      </div>
+    </div>
+  </footer>
+</article>
+</div>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  2014 - smknstd -
+  <span class="credit">designed with <a href="http://octopress.org">Octopress</a> and hosted by <a href="http://heroku.com">Heroku</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

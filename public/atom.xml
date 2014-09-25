@@ -4,7 +4,7 @@
   <title><![CDATA[smknstd.io]]></title>
   <link href="http://www.smknstd.io/atom.xml" rel="self"/>
   <link href="http://www.smknstd.io/"/>
-  <updated>2014-04-27T20:26:09+02:00</updated>
+  <updated>2014-09-25T14:13:48+02:00</updated>
   <id>http://www.smknstd.io/</id>
   <author>
     <name><![CDATA[smknstd]]></name>
@@ -12,6 +12,346 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Regrouper et compter: Hadoop (partie 4/5)]]></title>
+    <link href="http://www.smknstd.io/2014/07/14/counting-part4/"/>
+    <updated>2014-07-14T16:00:00+02:00</updated>
+    <id>http://www.smknstd.io/2014/07/14/counting-part4</id>
+    <content type="html"><![CDATA[<p>Pour ce quatrième article de cette série sur le comptage et le regroupement, j&#8217;ai souhaité aborder Hadoop que je n&#8217;ai eut l&#8217;occasion de manipuler que brièvement comparé à d&#8217;autres <a href="http://en.wikipedia.org/wiki/Oracle_Grid_Engine">technologies</a> vaguement similaires. Comme les autres articles de cette série ne vous attendez pas à rentrer en profondeur car je me contenterai d&#8217;aborder rapidement la seule problématique du comptage.</p>
+
+<h3>TL;DR</h3>
+
+<p>Hadoop, qui s&#8217;appuie notamment sur HDFS, est un framework Java qui permet de faire du traitement distribué sur des fichiers volumineux en mode batch. Le buzz autour du &#8220;bigdata&#8221; a probablement vendu beaucoup de <a href="http://service-architecture.blogspot.fr/2014/01/six-reasons-your-big-data-hadoop.html">rêve</a> et je ne suis pas convaincu que cette technologie soit adapté à tant de problématiques qu&#8217;on aimerait le croire. Surtout avec ses nombreux coins sombres (jointures, debbug, pig, etc) il reste définitivement un outil de spécialistes difficile à mettre en oeuvre.</p>
+
+<h3>Regrouper et compter !</h3>
+
+<p>Heureusement pour nous, aborder la question de la cardinalité va nous permettre de bien comprendre le principe de fonctionnement du paradigme <a href="http://en.wikipedia.org/wiki/MapReduce">map/reduce</a>. TL;DR: issu de la programmation fonctionnelle, le principe consiste a décomposer une tâche pour opérations paralelisables. Pour effectuer le comptage sur un ensemble, hadoop divise l&#8217;opération en plusieurs comptages sur des sous ensembles et agrège le résultat.</p>
+
+<p><img src="http://www.smknstd.io/images/mapreduce_sum.png" title="mapreduce1" alt="map_reduce" /></p>
+
+<p>&#8220;regrouper&#8221; des données sur une clef est une fonction qui est donc au cœur du framework. Il est donc plutôt simple à implémenter puisqu&#8217;on se sert principalement du comportement déjà existant. Schématiquement: toutes les valeurs de clefs sont regroupées et rassemblées dans le &#8220;reducer&#8221;. Il suffit de sélectionner les champs sur lesquels on souhaite faire un regroupement dans le &#8220;mapper&#8221;, le regroupement en lui même est entièrement pris en charge par le framework !</p>
+
+<p>Voici les quelques lignes de java qui suffisent à implémenter un comptage de cardinalité dans le &#8220;reducer&#8221;:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">CountReducer</span> <span class="kd">extends</span> <span class="n">Reducer</span><span class="o">&lt;</span><span class="n">Text</span><span class="o">,</span> <span class="n">MinMaxCountTuple</span><span class="o">,</span> <span class="n">Text</span><span class="o">,</span> <span class="n">MinMaxCountTuple</span><span class="o">&gt;</span> <span class="o">{</span>
+</span><span class='line'>  <span class="c1">// Our output value Writable</span>
+</span><span class='line'>  <span class="kd">private</span> <span class="n">CountTuple</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CountTuple</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">reduce</span><span class="o">(</span><span class="n">Text</span> <span class="n">key</span><span class="o">,</span> <span class="n">Iterable</span><span class="o">&lt;</span><span class="n">CountTuple</span><span class="o">&gt;</span> <span class="n">values</span><span class="o">,</span><span class="n">Context</span> <span class="n">context</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">InterruptedException</span> <span class="o">{</span>
+</span><span class='line'>      <span class="c1">// Initialize our result</span>
+</span><span class='line'>      <span class="n">result</span><span class="o">.</span><span class="na">setCount</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+</span><span class='line'>      <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// Iterate through all input values for this key</span>
+</span><span class='line'>      <span class="k">for</span> <span class="o">(</span><span class="n">CountTuple</span> <span class="n">val</span> <span class="o">:</span> <span class="n">values</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="c1">// Add to our sum the count for value</span>
+</span><span class='line'>          <span class="n">sum</span> <span class="o">+=</span> <span class="n">val</span><span class="o">.</span><span class="na">getCount</span><span class="o">();</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>      <span class="c1">// Set our count to the number of input values</span>
+</span><span class='line'>      <span class="n">result</span><span class="o">.</span><span class="na">setCount</span><span class="o">(</span><span class="n">sum</span><span class="o">);</span>
+</span><span class='line'>      <span class="n">context</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Regardez comme ça à l&#8217;air simple sur cet exemple d&#8217;illustration (que j&#8217;ai volé qqpart ;).</p>
+
+<p><img src="http://www.smknstd.io/images/mapreduce_combine.png" title="mapreduce2" alt="map_reduce" /></p>
+
+<p>That&#8217;s all, Folks !</p>
+
+<h3>Ressources</h3>
+
+<ul>
+<li>un <a href="http://www.amazon.com/MapReduce-Design-Patterns-Effective-Algorithms/dp/1449327176">ouvrage</a> de référence sur le framework Map/Reduce</li>
+<li>une <a href="https://www.youtube.com/watch?v=oIkhgagvrjI">vidéo</a> amusante d&#8217;explications sur un des compteurs les plus célèbres de notre époque</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Regrouper et compter: Unix (partie 3/5)]]></title>
+    <link href="http://www.smknstd.io/2014/07/04/counting-part3/"/>
+    <updated>2014-07-04T18:00:00+02:00</updated>
+    <id>http://www.smknstd.io/2014/07/04/counting-part3</id>
+    <content type="html"><![CDATA[<p>Pour continuer cette série d’articles de présentation sur la thématique du regroupement et du comptage, j&#8217;ai souhaité aborder ce qui pour moi reste souvent mon premier choix et un automatisme : les outils en ligne de commande d&#8217;UNIX ! Lorsque vous utilisez un de ces systèmes, vous héritez d&#8217;innombrables programmes simples, efficaces et robustes. Pourquoi perdre du temps avec de nouveaux outils quand ceux qu&#8217;on a déjà conviennent ?</p>
+
+<p>Lorsqu&#8217;on souhiate compter le nombre d&#8217;éléments uniques on peut s&#8217;en sortir très simplement avec seulement deux d&#8217;entre eux:</p>
+
+<ul>
+<li>sort</li>
+<li><a href="http://en.wikipedia.org/wiki/Uniq">uniq</a> et son option <code>-c</code></li>
+</ul>
+
+
+<p>La puissance du modèle UNIX fournit beaucoup de souplesse et permet d&#8217;effectuer de nombreuses opérations en cumulant successivement plusieurs fonctionnalités grâce à l&#8217;utilisation du <a href="http://doc.cat-v.org/unix/pipes/">pipe</a>. Pour ne citer que quelques-autres de ces indispensables outils:</p>
+
+<ul>
+<li>grep</li>
+<li>wc</li>
+<li>join</li>
+<li>cut</li>
+</ul>
+
+
+<p>En plus d&#8217;être bien documentés, open source et faciles à utiliser, ces outils sont généralement <a href="http://lists.freebsd.org/pipermail/freebsd-current/2010-August/019310.html">très</a> <a href="http://en.wikipedia.org/wiki/Merge_sort">efficients</a>.</p>
+
+<p>Une fois qu&#8217;on s&#8217;y est habitué, il est difficile de s&#8217;en passer. J&#8217;ai découvert que même lorsqu&#8217;on ne disposait que d&#8217;un environnement Windows, il est possible de profiter de quelques-uns de ces outils grâce à certaines solutions comme <a href="http://en.wikipedia.org/wiki/MKS_Toolkit">MKStoolkit</a> ou <a href="http://en.wikipedia.org/wiki/Cygwin">cygwin</a>. Précisons que c&#8217;est une utilisation dégradée par rapport aux outils originaux, car selon mon expérience la qualité du portage et de l&#8217;implémentation laissent largement à désirer.</p>
+
+<p><img src="http://www.smknstd.io/images/mkstoolkit.png" title="nutcracker" alt="mkstoolkit" /></p>
+
+<h3>Big Data</h3>
+
+<p>Quand la taille des datasets augmente, l&#8217;approche stricte des algorithmes classiques se montre souvent trop gourmande en ressources. La consommation de mémoire et le temps d’exécution notamment peuvent devenir problématiques. Certaines techniques proposent une approche probabiliste pour améliorer les performances. Citons &#8220;Hyperloglog&#8221; basé sur les travaux du malheureusement défunt chercheur français <a href="http://inria-alumni.fr/index.php/fr/page/article/id/202">Philippe Flajolet</a>, qui permet de compter les éléments uniques dans une collection au prix d&#8217;une faible approximation (faux positifs). Mais d&#8217;autres algorithmes qui partagent l&#8217;approche comme &#8221;<a href="http://en.wikipedia.org/wiki/Bloom_filter">Bloomfilter</a>&#8221; existent. Ils sont implémentés par les géants du web (cassandra, hadoop, google, etc) depuis plusieurs années. Les ressources notamment issues de la recherche abondent, si vous souhaitez tenter de comprendre comment ces algorithmes fonctionnent ;)</p>
+
+<p>Il est évident que ces outils représentent une petite révolution et que leur utilisation va tendre à se démocratiser. La page wikipedia de &#8221;<a href="http://en.wikipedia.org/wiki/HyperLogLog">hyperloglog</a>&#8221; n&#8217;a été créée qu&#8217;en mars 2014 !? Le célèbre système de gestion de &#8220;clé/valeur&#8221; <code>redis</code>, en a déjà fait une <a href="http://antirez.com/news/75">implémentation</a> (disponible depuis avril 2014 avec la version 2.8.9) que j&#8217;aimerai d&#8217;ailleurs décrire dans un prochain article :) J&#8217;ai pour ma part fait quelques essais très concluents avec une implémentation en java que je ne saurai trop vous conseiller: <a href="https://github.com/addthis/stream-lib">stream-lib</a></p>
+
+<p><img src="http://www.smknstd.io/images/count-bundesliga.png" title="count unixVSbloom" alt="count" /></p>
+
+<h3>Ressources</h3>
+
+<ul>
+<li>un <a href="http://www.gregreda.com/2013/07/15/unix-commands-for-data-science/">article</a> sur les outils d&#8217;UNIX en lignes de commande</li>
+<li>quelques <a href="http://lists.freebsd.org/pipermail/freebsd-current/2010-August/019310.html">explications</a> du dev de GNU grep</li>
+<li>un <a href="http://highscalability.com/blog/2012/4/5/big-data-counting-how-to-count-a-billion-distinct-objects-us.html">article</a> générique sur la cardinalité plein à craquer de buzzwords</li>
+<li>un <a href="http://research.neustar.biz/2012/10/25/sketch-of-the-day-hyperloglog-cornerstone-of-a-big-data-infrastructure/">article</a> sur hyperloglog</li>
+<li>un <a href="http://spyced.blogspot.fr/2009/01/all-you-ever-wanted-to-know-about.html">article de 2009</a> sur les bloomfilters</li>
+<li>un autre <a href="http://billmill.org/bloomfilter-tutorial/">article</a> sur les bloomfilters avec de nombreuses références</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Regrouper et compter: Mongo (partie 2/5)]]></title>
+    <link href="http://www.smknstd.io/2014/06/28/counting-part2/"/>
+    <updated>2014-06-28T11:12:00+02:00</updated>
+    <id>http://www.smknstd.io/2014/06/28/counting-part2</id>
+    <content type="html"><![CDATA[<p>Pour continuer cette série d&#8217;articles de présentation sur la thématique du regroupement et du comptage, j&#8217;ai souhaité aborder la base orientée documents <a href="http://en.wikipedia.org/wiki/MongoDB">Mongo</a>. L&#8217;explication est simple car parmi les bases de données non-relationnelles qui ont tendance à se démocratiser ces dernières années, c&#8217;est celle que je connais le mieux ;)</p>
+
+<p>D&#8217;abord je souhaite rappeler que Mongo est un outil qui dans le paysage des outils de gestion de base de données est relativement jeune (2009). Bien que Mongo ait rencontré un succès massif en répondant à de nombreux besoins notamment de flexibilité et de performance, la manipulation des données ne me semble pas avoir été au cœur des préoccupations dès le début. Les capacités du système à répondre aux besoins d&#8217;analyse des données ont amené certains utilisateurs à de sérieuses déconvenues. En effet, en plus de ne mettre à disposition que des outils d&#8217;interrogation <a href="http://docs.mongodb.org/manual/tutorial/map-reduce-examples/">&#8220;sommaires&#8221;</a> pour dire le moins, la performance de ceux-ci est grandement affecté par des choix souvent subtiles lors de la modélisation !</p>
+
+<h3>Aggregation framework</h3>
+
+<p>Heureusement, le système évolue vite et des <a href="https://jira.mongodb.org/browse/SERVER-1752">améliorations</a> sont sans cesse apportées. Une évolution majeure a été l&#8217;apparition du &#8220;framework d&#8217;aggregation&#8221; dans la version 2.2 (circa Aout 2012) qui apporte une bouffée d’oxygène pour quiconque souhaite manipuler une collection. Sans pour autant résoudre les problématiques de performance qui dépendent toujours notamment des choix de modélisation des données.</p>
+
+<h3>Indexs</h3>
+
+<p>L&#8217;utilisation d&#8217;indexs est essentiel au fonctionnement de Mongo. Leur mise en place et leur maintenance nécessite un travail important. Malgré une amélioration des outils essentiels permettant d&#8217;analyser leur utilisation comme <code>.explain()</code> ou <code>.hint()</code>, cette tâche reste difficile et selon mon expérience quelquefois obscure malheureusement. Voici un plan d’exécution d&#8217;une interrogation simple utilisant une &#8220;projection&#8221; sur une collection qui montre qu&#8217;on ne peut solliciter que l&#8217;index quand c&#8217;est possible (<code>index_only: true</code>). Dans ce cas on économise l&#8217;accès à la collection ce qui évidemment améliore le temps de réponse de l&#8217;interrogation:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; db.wines.find({proprietaire : "Arnold"},{proprietaire: 1, _id: 0}).explain()
+</span><span class='line'>{
+</span><span class='line'>  "cursor" : "BtreeCursor proprietaire_1",
+</span><span class='line'>  "isMultiKey" : false,
+</span><span class='line'>  "n" : 3,
+</span><span class='line'>  "nscannedObjects" : 0,
+</span><span class='line'>  "nscanned" : 3,
+</span><span class='line'>  "nscannedObjectsAllPlans" : 0,
+</span><span class='line'>  "nscannedAllPlans" : 3,
+</span><span class='line'>  "scanAndOrder" : false,
+</span><span class='line'>  "indexOnly" : true,
+</span><span class='line'>  "nYields" : 1,
+</span><span class='line'>  "nChunkSkips" : 0,
+</span><span class='line'>  "millis" : 26,
+</span><span class='line'>  "indexBounds" : {
+</span><span class='line'>      "proprietaire" : [
+</span><span class='line'>          [
+</span><span class='line'>              "Arnold",
+</span><span class='line'>              "Arnold"
+</span><span class='line'>          ]
+</span><span class='line'>      ]
+</span><span class='line'>  },
+</span><span class='line'>  "server" : "xxxxxx.mongolab.com:xxxxxx",
+</span><span class='line'>  "filterSet" : false
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Pour revenir à notre sujet du comptage du nombre d&#8217;éléments uniques, ce n&#8217;est toujours pas un des points fort de Mongo. Consulter le plan d’exécution de la fonction &#8220;.aggregate()&#8221; du framework d&#8217;aggregation n&#8217;est disponible que depuis la version 2.6 (début 2014). Malgré cela, selon mon expérience, il reste difficile d&#8217;analyser le comportement des requêtes de ce type et pire il toujours presque impossible d&#8217;<a href="https://jira.mongodb.org/browse/SERVER-7944">influer</a> sur le comportement !? Par exemple, dans cette requête de regroupement et de comptage je ne peux que constater que l’accès se fait par un curseur &#8220;basique&#8221; (comprenez <code>FullScan</code>) qui semble ignorer l&#8217;index que j&#8217;ai pourtant réussi à utiliser précédemment et qui contient bien l&#8217;information dont on a besoin :(</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; db.wines.aggregate(    [      { $group : { _id : "$proprietaire", books: { $sum : 1 } } }    ] )
+</span><span class='line'>{ "_id" : "Arnold", "books" : 3 }
+</span><span class='line'>{ "_id" : "Regis", "books" : ...
+</span><span class='line'>
+</span><span class='line'>&gt; db.wines.aggregate(    [      { $group : { _id : "$proprietaire", books: { $sum : 1 } } }    ],   {     explain:true   } )
+</span><span class='line'>{
+</span><span class='line'>  "stages" : [
+</span><span class='line'>      {
+</span><span class='line'>          "$cursor" : {
+</span><span class='line'>              "query" : {
+</span><span class='line'>                  
+</span><span class='line'>              },
+</span><span class='line'>              "fields" : {
+</span><span class='line'>                  "proprietaire" : 1,
+</span><span class='line'>                  "_id" : 0
+</span><span class='line'>              },
+</span><span class='line'>              "plan" : {
+</span><span class='line'>                  "cursor" : "BasicCursor",
+</span><span class='line'>                  "isMultiKey" : false,
+</span><span class='line'>                  "scanAndOrder" : false,
+</span><span class='line'>                  "allPlans" : [
+</span><span class='line'>                      {
+</span><span class='line'>                          "cursor" : "BasicCursor",
+</span><span class='line'>                          "isMultiKey" : false,
+</span><span class='line'>                          "scanAndOrder" : false
+</span><span class='line'>                      }
+</span><span class='line'>                  ]
+</span><span class='line'>              }
+</span><span class='line'>          }
+</span><span class='line'>      },
+</span><span class='line'>      {
+</span><span class='line'>          "$group" : {
+</span><span class='line'>              "_id" : "$proprietaire",
+</span><span class='line'>              "books" : {
+</span><span class='line'>                  "$sum" : {
+</span><span class='line'>                      "$const" : 1
+</span><span class='line'>                  }
+</span><span class='line'>              }
+</span><span class='line'>          }
+</span><span class='line'>      }
+</span><span class='line'>  ],
+</span><span class='line'>  "ok" : 1
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Ressources</h3>
+
+<ul>
+<li>un <a href="http://web.archive.org/web/20100128030005/http://kylebanker.com/blog/2009/11/mongodb-count-group">article</a> précurseur sur le comptage</li>
+<li>un <a href="http://fiestacc.tumblr.com/post/11319522700/walkthrough-mongodb-data-modeling">article</a> fondateur sur les subtilités d&#8217;utilisation et de modélisation</li>
+<li>une <a href="http://highlyscalable.wordpress.com/2012/03/01/nosql-data-modeling-techniques/">synthèse</a> sur les différentes techniques de modélisation adaptées aux systèmes dits &#8220;NOSQL&#8221;</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Regrouper et compter: SQL (partie 1/5)]]></title>
+    <link href="http://www.smknstd.io/2014/05/23/counting-part1/"/>
+    <updated>2014-05-23T19:23:00+02:00</updated>
+    <id>http://www.smknstd.io/2014/05/23/counting-part1</id>
+    <content type="html"><![CDATA[<p>Compter des données ou en estimer la cardinalité est une opération dont les applications sont très variées mais surtout tellement utiles et courantes que tout le monde ou presque a besoin de le faire. Au fil de mes expériences, j&#8217;ai pu observer de nombreux moyens de le faire en fonction des contextes et de la grande variété des outils utilisés. Bien que ce soit une opération basique, sa mise en œuvre révèle souvent des subtilités. Cette série d&#8217;articles se veut être une brève présentation non-exhaustive et surtout un peu naïve des opérations de comptage sous différentes technologies. Je vais essayer d&#8217;aborder à certains moments quelques aspects liés aux performances, toutefois sans rentrer dans beaucoup de détails malheureusement.</p>
+
+<p>Il m&#8217;a semblé naturel de commencer par les SGBDR, car c&#8217;est probablement l&#8217;outil le plus rependu (après le bricolage dans Microsoft Excel et ses <a href="http://en.wikipedia.org/wiki/Pivot_table">tableaux croisés dynamiques</a> ;). Lorsque les données sont correctement rangées dans un SGBDR en état de marche, la facilité d&#8217;utilisation et la puissance du langage SQL est évidente. Même s&#8217;il est à la mode de remettre en cause la pertinence de cet outil pour certains besoins, se priver de ses possibilités reste souvent douloureux ! Sous son abstraction et son apparente simplicité, on oublie souvent que ce langage d’interrogation est issu d&#8217;un héritage théorique complexe.</p>
+
+<h3>SQL</h3>
+
+<p><code>COUNT</code> et <code>GROUP BY</code> sont les protagonistes principaux du comptage du nombre d&#8217;éléments uniques. Quand les besoins se compliquent, la palette d&#8217;outils généralement proposés par les principaux systèmes répond aux cas d&#8217;utilisation les plus complexes: <code>WHERE</code>, <code>DISTINCT</code> , <code>EXISTS</code> , <code>HAVING</code> , etc.</p>
+
+<p><img src="http://www.smknstd.io/images/mysql-count.png" title="mysql count() group by" alt="mysql" /></p>
+
+<p>Le volume de données traité reste un enjeu majeur de l&#8217;usage des SGBDR et le niveau d&#8217;exigence requis en dépend la plupart du temps. Les contraintes liés à la performance des différents systèmes ont historiquement souvent posés des problèmes à la patience des utilisateurs notamment lors de la consultation de rapports d&#8217;analyses. Il est courant d&#8217;avoir recours à des <a href="http://en.wikipedia.org/wiki/Aggregate_%28data_warehouse%29">pré-calcul</a> pour résoudre ce problème mais cela mériterait un autre article pour être développé.</p>
+
+<h3>Index Bitmap</h3>
+
+<p>Un des outils intéressant pour améliorer les performances des SGBDR est l&#8217;index. Il en existe de plusieurs types et l&#8217;un deux, reste assez méconnu : c&#8217;est l&#8217;index <a href="http://en.wikipedia.org/wiki/Bitmap_index">bitmap</a>. Si vous ne le connaissez pas, je vous encourage à étudier son principe de fonctionnement. Il peut avoir des usages variés comme aider aux jointures mais nécessite de nombreuses précautions et un niveau de connaissance avancé. Par exemple, ces indexs ne doivent porter que sur une seule colonne, ce qui n’empêche bien sûr pas de cumuler leurs utilisations. Concernant notre calcul, cet index peut se révéler en théorie très efficace puisqu&#8217;il contient à lui seul toute l&#8217;information dont nous avons besoin et dans certains cas même déjà calculée!</p>
+
+<p>Ci dessous un <a href="http://en.wikipedia.org/wiki/Query_plan">plan exécution</a> d&#8217;un comptage mettant à contribution un index bitmap sous Oracle 11g:</p>
+
+<p><img src="http://www.smknstd.io/images/bitmap.png" title="bitmap plan" alt="bitmap" /></p>
+
+<h3>Bases vectorielles</h3>
+
+<p>Dans la famille des systèmes relationnels, une autre approche prometteuse souhaite répondre à la problématique du volume de données: les <a href="http://en.wikipedia.org/wiki/Vectorwise">bases vectorielles</a>. Basé sur une orientation <a href="http://en.wikipedia.org/wiki/Column-oriented_DBMS">colonne</a> tout en gardant la commodité de l&#8217;interrogation d&#8217;un modèle relationnel, cette base promet des performances incroyables. Gardons à l&#8217;esprit que le gain se fait bien sûr au détriment de quelques sacrifices comme les contraintes ou le principe de transaction. Privé de polyvalence, elles sont exclues de nombreux domaines d&#8217;applications opérationnels.</p>
+
+<h3>Ressources</h3>
+
+<ul>
+<li>les <a href="http://www.football-data.co.uk/germanym.php">données</a> du championnat de football allemand que j&#8217;ai utilisé pour certains exemples</li>
+<li>un <a href="http://web.archive.org/web/20130113080935/http://backstage.soundcloud.com/2011/07/mysql-stats-old-faithful/">exemple détaillé</a> pas si vieux que j&#8217;aime beaucoup sur les problèmes de performance de regroupements et comptage et des subtilités du moteur de mysql avec de grosses volumétries</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Mes outils en ligne de commande préférés]]></title>
@@ -22,7 +362,7 @@
 
 <h2><a href="http://beyondgrep.com/">ack</a></h2>
 
-<p>Pour chercher une chaine de caractère dans plusieurs fichier avec grep, ce n&#8217;est pas très pratique. On peut utiliser l&#8217;opérateur * ou un assemblage d&#8217;options qui peut vite se compliquer avec l&#8217;option -exec de find et avoir recours à <a href="http://en.wikipedia.org/wiki/Xargs">xargs</a>. Heureusement quand on cherche dans un code source, <code>ack-grep</code> propose une solution très intéressante. Pour ceux qui ne le connaissent pas encore, cet outils est vraiment très pratique. Les fonctions appréciées permettent par exemple de filtrer très facilement le type de fichier dans lesquels chercher ou d&#8217;en ignorer certains ou encore coloriser le résultat. Comme souvent dans la communauté les débats sont très vite passionnés, et estimer quel outil est &#8220;mieux&#8221; qu&#8217;un autre semble être un besoin primaire. Même si cela m&#8217;amuse beaucoup, j’espère qu&#8217;à l&#8217;image de l&#8217;url du site officielle qui est passée de &#8220;betterthangrep&#8221; à &#8220;beyondgrep&#8221; les esprits sauront s’apaiser et <a href="http://betterthanack.com/">nuancer</a> leur propos.</p>
+<p>Pour chercher une chaine de caractère dans plusieurs fichiers avec grep, ce n&#8217;est pas très pratique. On peut utiliser l&#8217;opérateur * ou un assemblage d&#8217;options qui peut vite se compliquer avec l&#8217;option -exec de find et avoir recours à <a href="http://en.wikipedia.org/wiki/Xargs">xargs</a>. Heureusement quand on cherche dans un code source, <code>ack-grep</code> propose une solution très intéressante. Pour ceux qui ne le connaissent pas encore, cet outils est vraiment très pratique. Les fonctions appréciées permettent par exemple de filtrer très facilement le type de fichier dans lesquels chercher ou d&#8217;en ignorer certains ou encore coloriser le résultat. Comme souvent dans la communauté les débats sont très vite passionnés, et estimer quel outil est &#8220;mieux&#8221; qu&#8217;un autre semble être un besoin primaire. Même si cela m&#8217;amuse beaucoup, j’espère qu&#8217;à l&#8217;image de l&#8217;url du site officielle qui est passée de &#8220;betterthangrep&#8221; à &#8220;beyondgrep&#8221; les esprits sauront s’apaiser et <a href="http://betterthanack.com/">nuancer</a> leur propos.</p>
 
 <h2><a href="http://linuxtidbits.wordpress.com/2008/02/22/command-line-to-clipboard/">xclip</a></h2>
 
@@ -44,7 +384,7 @@
 
 <p>On s&#8217;éloigne du concept initial de l&#8217;article, car la complétion est bien plus qu&#8217;une commande, mais c&#8217;est un outils de la console forcément lié et indispensable. Je souhaite en parler car il est facile d&#8217;oublier sa puissance et j&#8217;ai au moins deux exemples pour l&#8217;illustrer. Comme tous les utilisateurs de BASH, je me sers beaucoup de l&#8217;historique. Pour l&#8217;utiliser correctement il est essentiel de le <a href="http://blog.sanctum.geek.nz/better-bash-history/">configurer</a> mais pour y naviguer correctement il existe une complétion. En tapant les premières lettres de la commande souhaitée, <code>ctrl + r</code>et <code>ctrl + s</code> permettent de naviguer uniquement dans les commandes qui ont la même racine. C&#8217;est tellement pratique qu&#8217;il est intéressant d&#8217;en faire des <a href="http://lkdjiin.github.io/blog/2014/02/20/astuce-bash-ameliorer-lhistorique/">raccourcis</a>.</p>
 
-<p>La complétion existe sur les commandes disponibles ou les fichiers je ne vous apprends rien, mais pour certains programme on peut disposer d&#8217;une complétion sur les options. Si comme moi vous utilisez bash et vous allez fouiller dans <code>/etc/bash_completion.d</code>, vous serez surpris du nombre de programme pour lesquels cette fonctionnalité est déjà installé ! C&#8217;est par exemple le cas pour <a href="http://git-scm.com/book/fr/Les-bases-de-Git-Trucs-et-astuces#Auto-Compl%C3%A9tion">GIT</a> et je dois vous avouer que j&#8217;ai découvert en affichant la liste complète de ses options que je n&#8217;avais aucune idée de l’existence de bons nombres d&#8217;entre elles ;-)</p>
+<p>La complétion existe sur les commandes disponibles ou les fichiers je ne vous apprends rien, mais pour certains programmes on peut disposer d&#8217;une complétion sur les options. Si comme moi vous utilisez bash et vous allez fouiller dans <code>/etc/bash_completion.d</code>, vous serez surpris du nombre de programmes pour lesquels cette fonctionnalité est déjà installé ! C&#8217;est par exemple le cas pour <a href="http://git-scm.com/book/fr/Les-bases-de-Git-Trucs-et-astuces#Auto-Compl%C3%A9tion">GIT</a> et je dois vous avouer que j&#8217;ai découvert en affichant la liste complète de ses options que je n&#8217;avais aucune idée de l’existence d&#8217;un bon nombre d&#8217;entre elles ;-)</p>
 
 <p><img src="http://www.smknstd.io/images/git-completion.png" title="completion" alt="completion" /></p>
 ]]></content>
@@ -55,11 +395,11 @@
     <link href="http://www.smknstd.io/2014/03/18/counting/"/>
     <updated>2014-03-18T22:31:00+01:00</updated>
     <id>http://www.smknstd.io/2014/03/18/counting</id>
-    <content type="html"><![CDATA[<p>Compter des données ou en estimer la cardinalité est une opération dont les applications sont très variées. Tellement variées que tout le monde ou presque a besoin de le faire à un moment ou à un autre. Au fil de mes expériences, j&#8217;ai pu observer de nombreux moyens de le faire dans des contextes et avec des outils variés. Pas tout le monde n&#8217;a l&#8217;ambition de se revendique &#8220;Data scientist&#8221;, mais j&#8217;ai vu des gens faire preuve de créativité avec les moyens mis à leur disposition et surtout leur niveau de connaissance. Bien sûr le volume de données reste un enjeu majeur. Cet article est une sorte de réflexion générale.</p>
+    <content type="html"><![CDATA[<p>Compter des données ou en estimer la cardinalité est une opération dont les applications sont très variées mais surtout tellement utiles que tout le monde ou presque a besoin de le faire à un moment ou à un autre. Au fil de mes expériences, j&#8217;ai pu observer de nombreux moyens de le faire en fonction des contextes et de la grande variété des outils utilisés. Pas tout le monde n&#8217;a l&#8217;ambition de se revendiquer &#8220;Data scientist&#8221;, mais j&#8217;ai vu des gens faire preuve de créativité avec les moyens du bord et surtout leur propre niveau de connaissance. Bien sûr le volume de données traité reste un enjeu majeur de la question et le niveau d&#8217;exigence requis en dépend la plupart du temps. Les contraintes liés à la performance des différents systèmes ont historiquement souvent posés des problèmes à la patience des utilisateurs lors de la consultation de rapport d&#8217;analyses. Il est courant d&#8217;avoir recours à des <a href="http://en.wikipedia.org/wiki/Aggregate_%28data_warehouse%29">pré-calcul</a> pour résoudre ce problème mais cela mériterait un autre article pour être développé. Cet article un peu bizarre, au lieu de se concentrer sur une technologie ou un contexte particulier, se veut être une sorte de réflexion générale de mon expérience et surtout un tour d&#8217;horizon.</p>
 
 <h1>SQL</h1>
 
-<p>Lorsque les données sont bien sagement rangées dans un SGBDR (en état de marche), les possibilités et surtout l&#8217;accessibilité du langage SQL n&#8217;échappent à personne. Count(*), clause Where, Group By, rien de plus simple à mettre en œuvre. Quand les choses se compliquent, la palette d&#8217;outils des principaux systèmes répond aux cas d&#8217;utilisation les plus tordus (DISTINCT, EXISTS, HAVING, etc).</p>
+<p>Lorsque les données sont bien rangées dans un SGBDR (en état de marche), les possibilités et surtout l&#8217;accessibilité du langage SQL n&#8217;échappent à personne. Count, clause Where, Group By, sont simple à mettre en œuvre grâce aux commodités du langage SQL. Quand les choses se compliquent, la palette d&#8217;outils des principaux systèmes répond aux cas d&#8217;utilisation les plus tordus (DISTINCT, EXISTS, HAVING, etc).</p>
 
 <p><img src="http://www.smknstd.io/images/mysql-count.png" title="mysql count() group by" alt="mysql" /></p>
 
@@ -71,7 +411,7 @@
 
 <h1>Non-hacker</h1>
 
-<p>Selon mon expérience, le problème est souvent résolu tant bien que mal avec un tableur directement sur une station de travail. Personnellement, j&#8217;appelle ça du bricolage, mais j&#8217;avoue être parfois impressionné par la créativité mise en œuvre. Dans le meilleur des cas on a recours à un <a href="http://en.wikipedia.org/wiki/Pivot_table">tableau croisé dynamique</a>. La mise en forme des données nécessite souvent un travail d’orfèvre. Heureusement, il existe au moins un <a href="http://stackoverflow.com/questions/526921/why-is-there-still-a-row-limit-in-microsoft-excel">frein</a> à l&#8217;utilisation parfois désastreuse de ce genre d&#8217;utilisations quand les besoins deviennent récurrents.</p>
+<p>Dans ce monde (et j&#8217;y inclus des professionnels de l&#8217;informatique), les tâches courantes de comptage sont souvent laborieuses quand elles ne sont carrément pas ignorées. Selon mon expérience, le problème est souvent résolu tant bien que mal avec un tableur directement sur une station de travail. Personnellement, j&#8217;appelle ça du bricolage, mais j&#8217;avoue être parfois impressionné par la créativité mise en œuvre. Dans le meilleur des cas on a recours à un <a href="http://en.wikipedia.org/wiki/Pivot_table">tableau croisé dynamique</a>. La mise en forme des données nécessite souvent un travail d’orfèvre. Heureusement, il existe au moins un <a href="http://stackoverflow.com/questions/526921/why-is-there-still-a-row-limit-in-microsoft-excel">frein</a> à l&#8217;utilisation parfois désastreuse de ce genre d&#8217;utilisations quand les besoins deviennent récurrents.</p>
 
 <h1>Hacker</h1>
 
@@ -94,32 +434,90 @@
 
 <p><img src="http://www.smknstd.io/images/mkstoolkit.png" title="nutcracker" alt="mkstoolkit" /></p>
 
-<p>Ci-dessous, vous trouverez un exemple d&#8217;implémentation d&#8217;une opération habituelle de manipulation et de comptage sur des fichiers avec un outil traditionnel d&#8217;<a href="http://en.wikipedia.org/wiki/Extract,_transform,_load">ETL</a>. On peut constater que la logique d&#8217;élaboration d&#8217;un flux de données au travers de l&#8217;interface graphique dite &#8220;conviviale&#8221;, s&#8217;inspire largement du modèle Unix. Les données sont traitées successivement dans des opérations spécifiques, et on peut facilement assimiler les liens entre ces fonctions au &#8220;pipe&#8221;.</p>
+<p>Dans le monde de l&#8217;entreprise, les progiciels d&#8217;<a href="http://en.wikipedia.org/wiki/Extract,_transform,_load">ETL</a> sont démocratisés et peuvent réaliser des opérations de comptage. Ci-dessous, vous trouverez un exemple d&#8217;implémentation d&#8217;une opération sur des fichiers. On peut constater que la logique d&#8217;élaboration d&#8217;un flux de données au travers de l&#8217;interface graphique dite &#8220;conviviale&#8221;, s&#8217;inspire largement du modèle Unix cité précédemment. Les données sont traitées successivement dans des modules spécifiques, et on peut facilement assimiler les liens entre ces fonctions au &#8220;pipe&#8221;.</p>
 
 <p><img src="http://www.smknstd.io/images/datastage.png" title="datastage" alt="datastage" /></p>
 
-<p>Pour des besoins bien spécifiques, il existe des librairies dédiées dans la plupart des langages de programmation courants. On peut citer, <a href="http://pandas.pydata.org/">panda</a>, un framework de traitement en mémoire facile à mettre en œuvre même sur une station de travail et qui fait beaucoup parler de lui.</p>
+<p>Pour des besoins bien spécifiques, il existe des librairies dédiées dans la plupart des langages de programmation courants. On peut notamment citer, <a href="http://pandas.pydata.org/">panda</a>, un framework de traitement en mémoire qui fait beaucoup parler de lui parcequ&#8217;il est facile à mettre en œuvre même sur une station de travail et surtout qu&#8217;il est très performant.</p>
+
+<p>Parmi les bases de données non relationnels qui ont tendances à se démocratiser, comme les bases orientées documents, la manipulation des données n&#8217;est généralement pas au cœur des préoccupations et les outils disponibles ont souvent sommaires pour dire le moins. Citons le framework d&#8217;aggregation de MongoDB apparu seulement dans la version 2.4 qui apporte une bouffée d’oxygène pour quiconque souhaite manipuler une collection malgré des performances souvent décevantes. L&#8217;optimisation des performances des requêtes d&#8217;analyses sur ce genre de système est véritablement un art. La modélisation des données en est d&#8217;ailleurs un enjeu souvent plus subtile qu&#8217;on ne le pense. L&#8217;utilisation des indexes malgré une amélioration des outils comme &#8220;.explain()&#8221; ou &#8220;.hint()&#8221;, reste difficile et selon mon expérience quelquefois obscure malheureusement. Pour illustrer ces propos voici un exemple basique de comptage sur une collection comportant un index. Le plan d’exécution d&#8217;une interrogation simple sur la collection montre qu&#8217;on ne sollicite que l&#8217;index (index_only: true):</p>
+
+<p>Ce type d&#8217;accès pourrait en théorie profiter au comptage de cardinalité, malheureusement en consultant le plan d’exécution de la fonction &#8220;.aggregate()&#8221; (disponible depuis la version 2.6 du mongoshell) que l&#8217;on souhaite utiliser et on peut constater que l’accès se fait par un curseur &#8220;basique&#8221; qui semble ignorer l&#8217;index :(</p>
 
 <h1>BIG DATA</h1>
 
-<p>Quand les volumes dépassent ce que savant faire les solutions décrient plus haut, pour faire simple: vous êtes êtes mal barré.</p>
+<p>Quand les volumes dépassent ce que savent faire les solutions décrient plus haut, on entre dans la haute voltige (et les buzzwords) surtout quand en plus on souhaite se rapprocher du traitement en <a href="https://developers.soundcloud.com/blog/real-time-counts-with-stitch">temps réél</a>.</p>
 
-<p>Concernant notre problématique de comptage et de cardinalité et la hype NOSQL, je n&#8217;ai malheureusement pas grand chose à dire à ce sujet car je ne le connais pas bien. Toutefois deux outils ont attiré mon attention:</p>
+<p>A mon avis, il n&#8217;y a pas autant de domaines concernés qu&#8217;on aimerait nous le faire croire. Toutefois si l&#8217;envie de faire des comptages massivement parallèles sur des fichiers de logs en mode batch vous prend, vous serez sûrement amené à utiliser l&#8217;usine à gaz Hadoop et son HDFS. Heureusement pour vous, &#8220;regrouper&#8221; des données sur une clef est une fonction qui est au cœur du paradigme map/reduce !</p>
 
-<ul>
-<li>l’implémentation des <a href="http://blog.getspool.com/2011/11/29/fast-easy-realtime-metrics-using-redis-bitmaps/">&#8220;bitsets&#8221;</a> dans Redis.</li>
-<li>Bloom filters/Hyper log log/count min : une famille d’algorithme qui semble avoir trouvé beaucoup d’écho dans la communauté scientifique, au vue des nombreux papiers de recherche qui peuplent les résultats des moteurs de recherche.</li>
-</ul>
+<p>En effet le comptage de cardinalité est plutôt simple à implémenter puisqu&#8217;on se sert principalement du comportement déjà existant du framework. Basiquement: toutes les valeurs de clefs sont regroupées et rassemblées dans le &#8220;reducer&#8221;. Il suffit de sélectionner les champs sur lesquels on souhaite faire un regroupement dans le &#8220;mapper&#8221;, le regroupement en lui même est entièrement pris en charge par le framework !</p>
+
+<p><img src="http://www.smknstd.io/images/mapreduce_sum.png" title="mapreduce1" alt="map_reduce" /></p>
+
+<p>Voici les quelques lignes de java qui suffisent à implémenter un comptage de cardinalité dans le &#8220;reducer&#8221;:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">CountReducer</span> <span class="kd">extends</span> <span class="n">Reducer</span><span class="o">&lt;</span><span class="n">Text</span><span class="o">,</span> <span class="n">MinMaxCountTuple</span><span class="o">,</span> <span class="n">Text</span><span class="o">,</span> <span class="n">MinMaxCountTuple</span><span class="o">&gt;</span> <span class="o">{</span>
+</span><span class='line'>  <span class="c1">// Our output value Writable</span>
+</span><span class='line'>  <span class="kd">private</span> <span class="n">CountTuple</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CountTuple</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">reduce</span><span class="o">(</span><span class="n">Text</span> <span class="n">key</span><span class="o">,</span> <span class="n">Iterable</span><span class="o">&lt;</span><span class="n">CountTuple</span><span class="o">&gt;</span> <span class="n">values</span><span class="o">,</span><span class="n">Context</span> <span class="n">context</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">InterruptedException</span> <span class="o">{</span>
+</span><span class='line'>      <span class="c1">// Initialize our result</span>
+</span><span class='line'>      <span class="n">result</span><span class="o">.</span><span class="na">setCount</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+</span><span class='line'>      <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// Iterate through all input values for this key</span>
+</span><span class='line'>      <span class="k">for</span> <span class="o">(</span><span class="n">CountTuple</span> <span class="n">val</span> <span class="o">:</span> <span class="n">values</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="c1">// Add to our sum the count for value</span>
+</span><span class='line'>          <span class="n">sum</span> <span class="o">+=</span> <span class="n">val</span><span class="o">.</span><span class="na">getCount</span><span class="o">();</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>      <span class="c1">// Set our count to the number of input values</span>
+</span><span class='line'>      <span class="n">result</span><span class="o">.</span><span class="na">setCount</span><span class="o">(</span><span class="n">sum</span><span class="o">);</span>
+</span><span class='line'>      <span class="n">context</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>Même si je ne me sens pas bien concerné par leur utilisation, j&#8217;avoue que leur philosophie parait extrêmement intéressante et s&#8217;annoncent comme des outils prometteurs et utiles dans de nombreux domaines d&#8217;application. Notez bien qu&#8217;on peut facilement tester ces outils grâces à la mise à disposition de librairies. J&#8217;ai pour ma part fait quelques essais très facilement avec une implémentation en <a href="https://github.com/addthis/stream-lib">java</a>.</p>
+<p><img src="http://www.smknstd.io/images/mapreduce_combine.png" title="mapreduce2" alt="map_reduce" /></p>
+
+<p>Attendez, il y a aussi autre chose qui devrait vous plaire. Plutôt que de parcourir intégralement d&#8217;immenses quantités d&#8217;information au prix d&#8217;une lourde consommation de mémoire, que pensez vous d&#8217;en faire une estimation ? Basé sur les travaux du défunt chercheur français <a href="http://inria-alumni.fr/index.php/fr/page/article/id/202">Philippe Flajolet</a>, une famille d&#8217;algorithme proprement révolutionnaire promet de compter les éléments uniques dans une collection (Hyperloglog) au prix d&#8217;une très faible approximation (faux positifs) ou de s&#8217;assurer de la présence d&#8217;une clef (Bloomfilter) avec très peu de consommation de mémoire. Je crois qu&#8217;il est normal de penser que c&#8217;est impossible et pourtant&#8230; de nombreuses applications peuvent profiter de ces outils. Un cas célèbre d&#8217;utilisation a été documenté par &#8220;google&#8221;, évidemment pionnier en la matière, qui évite de parcourir un fichier si la clef recherché n&#8217;y figure pas.</p>
+
+<p>Notez bien qu&#8217;on peut désormais tester et utiliser ces outils grâces à la mise à disposition de librairies faciles à mettre en oeuvre. J&#8217;ai pour ma part fait quelques essais avec une implémentation en <a href="https://github.com/addthis/stream-lib">java</a> que je ne saurai trop vous conseiller car elle est excellente.</p>
 
 <p><img src="http://www.smknstd.io/images/count-bundesliga.png" title="count unixVSbloom" alt="count" /></p>
+
+<p>Avant de finir, j&#8217;aimerais évoquer Redis, qui est sûrement un des outils les plus prometteurs dont j&#8217;ai entendu parlé. Il propose notamment l’implémentation d&#8217;outils très performants pour le comptage de la cardinalité comme les <a href="http://blog.getspool.com/2011/11/29/fast-easy-realtime-metrics-using-redis-bitmaps/">&#8220;bitsets&#8221;</a>.</p>
 
 <h3>Ressources</h3>
 
 <ul>
-<li><a href="http://www.football-data.co.uk/germanym.php">données</a> du championnat de football allemand que j&#8217;ai utilisé</li>
+<li>les <a href="http://www.football-data.co.uk/germanym.php">données</a> du championnat de football allemand que j&#8217;ai utilisé pour certains exemples</li>
+<li>un <a href="http://web.archive.org/web/20130113080935/http://backstage.soundcloud.com/2011/07/mysql-stats-old-faithful/">exemple détaillé</a> de problèmes de performance avec mysql et de grosses volumétries</li>
+<li>un <a href="http://www.gregreda.com/2013/07/15/unix-commands-for-data-science/">article</a> sur les outils d&#8217;UNIX en lignes de commande</li>
+<li>un rare <a href="http://sametmax.com/le-pandas-cest-bon-mangez-en/">tutoriel</a> sur l&#8217;utilisation de panda en français</li>
+<li><a href="http://web.archive.org/web/20100128030005/http://kylebanker.com/blog/2009/11/mongodb-count-group">quelques</a> <a href="http://fiestacc.tumblr.com/post/11319522700/walkthrough-mongodb-data-modeling">articles</a> fondateurs sur les subtilités d&#8217;utilisation de MongoDB</li>
+<li>un <a href="http://highlyscalable.wordpress.com/2012/03/01/nosql-data-modeling-techniques/">article complet</a> sur les différentes techniques de modélisation &#8220;NOSQL&#8221;</li>
+<li>un <a href="http://www.amazon.com/MapReduce-Design-Patterns-Effective-Algorithms/dp/1449327176">ouvrage</a> de référence sur le framework Map/Reduce</li>
+<li>une <a href="https://www.youtube.com/watch?v=oIkhgagvrjI">vidéo</a> amusante d&#8217;explications sur un des compteurs les plus célèbres de notre époque</li>
 </ul>
 
 ]]></content>
@@ -371,7 +769,7 @@
     <link href="http://www.smknstd.io/2013/11/11/oneliners/"/>
     <updated>2013-11-11T19:37:00+01:00</updated>
     <id>http://www.smknstd.io/2013/11/11/oneliners</id>
-    <content type="html"><![CDATA[<p>Il y a seulement quelques années, lorsque j&#8217;ai commencé à utiliser la commande shell, j&#8217;ai très vite pu apprécié la puissance et l&#8217;ingéniosité de certains outils surtout dans la manipulation courante des données. A ce stade, je savais écrire un programme en C ou en java, mais Xavier, un programmeur expérimenté de 25 ans mon aîné que j&#8217;avais désigné comme mon mentor, a particulièrement attiré mon attention sur cet étrange outil dont j&#8217;ignorais tout: awk.</p>
+    <content type="html"><![CDATA[<p>Il y a seulement quelques années, lorsque j&#8217;ai commencé à utiliser la commande shell, j&#8217;ai très vite pu apprécier la puissance et l&#8217;ingéniosité de certains outils surtout dans la manipulation courante des données. A ce stade, je savais écrire un programme en C ou en java, mais Xavier, un programmeur expérimenté de 25 ans mon aîné que j&#8217;avais désigné comme mon mentor, a particulièrement attiré mon attention sur cet étrange outil dont j&#8217;ignorais tout: awk.</p>
 
 <p>J&#8217;ai rapidement compris que malgré son apparence rebutante, il allait me devenir indispensable! Associé au <a href="http://doc.cat-v.org/unix/pipes/">&#8220;pipe&#8221;</a>, il est capable de résoudre de véritables casse-têtes en une commande d&#8217;une seule ligne. Bien sûr le prix d&#8217;une ligne c&#8217;est qu&#8217;elle est souvent à rallonge, mais pour de nombreuses opérations elle évite d&#8217;écrire un script. Au moins deux spécificités sont particulièrement appréciées dans Awk:</p>
 
@@ -435,7 +833,7 @@
 <li><a href="http://web.archive.org/web/20090602215912/http://sial.org/howto/perl/one-liner/">inestimable ressource sur les &#8220;one-liners&#8221; en PERL</a> (merci à la bonne âme qui l&#8217;a archivée)</li>
 <li><a href="http://articles.mongueurs.net/magazines/linuxmag50.html">très bon tutoriel PERL</a> en français</li>
 <li><a href="http://tomayko.com/writings/awkward-ruby">article magistrale sur l&#8217;héritage d&#8217;awk dans ruby</a></li>
-<li>unilignes <a href="https://twitter.com/rubyoneliner">socials</a> ?!</li>
+<li>unilignes <a href="https://twitter.com/rubyoneliner">sociaux</a> ?!</li>
 </ul>
 
 ]]></content>
@@ -453,10 +851,10 @@
 </ol>
 
 
-<p><img src="http://www.smknstd.io/images/putty.png" title="putty" alt="putty" /></p>
+<p>  <img src="http://www.smknstd.io/images/putty.png" title="putty" alt="putty" /></p>
 
 <ol>
-<li><p>que généralement rien n’empêche une chaîne de caractère d’être composée de plusieurs &#8220;jeux de caractères&#8221; différents. Bien que difficile à croire j&#8217;ai vécu ce cauchemard éveillé a plusieurs reprise, dans des fichiers la plupart du temps mais aussi des <a href="http://blog.lunatech.com/2009/02/03/what-every-web-developer-must-know-about-url-encoding">URLs</a>.</p></li>
+<li><p>que généralement rien n’empêche une chaîne d’être composée de plusieurs &#8220;jeux de caractères&#8221; différents. Bien que difficile à croire j&#8217;ai vécu ce cauchemard éveillé à plusieurs reprises, dans des fichiers la plupart du temps mais aussi des <a href="http://blog.lunatech.com/2009/02/03/what-every-web-developer-must-know-about-url-encoding">URLs</a>.</p></li>
 <li><p>Détecter l&#8217;encodage d&#8217;un fichier ou d&#8217;une chaîne de caractère sans la connaître peut s&#8217;avérer un vrai casse tête voir impossible. En effet une suite de bits peut avoir un sens dans plusieurs &#8220;charsets&#8221; différents !? Tentez votre chance avec <code>file -i</code> ou lancez vous avec un outils plus sophistiqué basé sur des heuristiques comme <a href="https://github.com/nijel/enca">enca</a>.</p></li>
 </ol>
 
@@ -623,17 +1021,21 @@ reM-gu le 22/07/2011 mis en application le
     <link href="http://www.smknstd.io/2013/05/19/protect-ya-neck/"/>
     <updated>2013-05-19T14:59:00+02:00</updated>
     <id>http://www.smknstd.io/2013/05/19/protect-ya-neck</id>
-    <content type="html"><![CDATA[<p>Utilisez vous le même mot de passe plusieurs fois ? Qui n&#8217;a pas été victime de la <a href="http://en.wikipedia.org/wiki/Password_fatigue">&#8220;fatigue des mots de passe&#8221;</a> ? Je sais bien que les <a href="http://en.wikipedia.org/wiki/Password_manager">Gestionnaires</a> présentent des avantages mais je n&#8217;ai jamais pu me faire à leur defauts. Sans aucune prétention, je vais vous décrire ma facon d&#8217;en retenir un facilement qui soit unique et complexe pour chaque service que j&#8217;utilise sur internet avec une seule règle &#8230; et d&#8217;éviter l&#8217;<a href="http://www.codinghorror.com/blog/2009/05/i-just-logged-in-as-you.html">effroyable</a>!</p>
+    <content type="html"><![CDATA[<p>Utilisez vous le même mot de passe plusieurs fois ? Qui n&#8217;a pas été victime de la <a href="http://en.wikipedia.org/wiki/Password_fatigue">&#8220;fatigue des mots de passe&#8221;</a> ? Je sais bien que les <a href="http://en.wikipedia.org/wiki/Password_manager">Gestionnaires</a> présentent des avantages mais je ne suis pas prêt à accepter leurs défauts. Sans aucune prétention, je vais vous décrire ma façon d&#8217;en retenir un facilement qui soit unique et complexe pour chaque service que j&#8217;utilise sur internet avec une seule règle &#8230; et d&#8217;éviter l&#8217;<a href="http://www.codinghorror.com/blog/2009/05/i-just-logged-in-as-you.html">effroyable</a>!</p>
 
-<p>Mon astuce n&#8217;est qu&#8217;une variante très simple du <a href="http://en.wikipedia.org/wiki/Caesar_cipher">chiffrement par décalage</a>, que j&#8217;ai imaginé en regardant un épisode de  <a href="http://en.wikipedia.org/wiki/The_Wire">&#8220;sur écoute&#8221;</a>. Dans la série, les hommes de main de <a href="http://en.wikipedia.org/wiki/Stringer_Bell">Stringer Bell</a> s&#8217;échangent des numéros de téléphone  par <a href="http://en.wikipedia.org/wiki/Pager">pagers</a>. Ces numéros sont échangés de manière codée, ainsi si le message est intercepté par la police, il ne menera à rien. Dans un souci de commodité, les opérations de cryptage et de décryptage ont été simplifiées: elle se font sans algorithme mathématique mais simplement par une sorte de <a href="http://en.wikipedia.org/wiki/Point_reflection">symétrie</a> appliquée à la disposition d&#8217;un clavier de numérotation téléphonique, et donc très facile à appliquer et à retenir. <em>#NOBRAINER</em></p>
+<p>Appliquer quelques bonnes pratiques pour créer un mot de passe robuste est surmontable pour la plupart d&#8217;entre nous. En retenir un différent pour chacun des dizaines de services différents que nous utilisons au minimum, donne beaucoup plus de fil à retordre. La plupart des articles font le même constat, mais très peu essaient d&#8217;apporter une solution autre que d&#8217;avoir recours à un gestionnaire&#8230; Il existe pourtant une méthode assez évidente qui résout le problème: pour que le mot de passe soit unique, il suffit d&#8217;utiliser le nom du service. Mais n&#8217;y a-t-il pas une faille ? En effet, il serait trivial pour quelqu&#8217;un qui accède à un seul mot de passe, de comprendre cette façon de faire et de deviner tous les autres.</p>
+
+<h3>Crypted Secrets</h3>
+
+<p>Mon astuce pour cacher ma logique n&#8217;est qu&#8217;une variante très simple du <a href="http://en.wikipedia.org/wiki/Caesar_cipher">chiffrement par décalage</a>, que j&#8217;ai imaginé en regardant un épisode de  <a href="http://en.wikipedia.org/wiki/The_Wire">&#8220;sur écoute&#8221;</a>. Dans la série, les hommes de main de <a href="http://en.wikipedia.org/wiki/Stringer_Bell">Stringer Bell</a> s&#8217;échangent des numéros de téléphone  par <a href="http://en.wikipedia.org/wiki/Pager">pagers</a>. Ces numéros sont échangés de manière codée, ainsi si le message est intercepté par la police, il ne mènera à rien. Dans un souci de commodité, les opérations de cryptage et de décryptage ont été simplifiées: elle se font sans algorithme mathématique mais simplement par une sorte de <a href="http://en.wikipedia.org/wiki/Point_reflection">symétrie</a> appliquée à la disposition d&#8217;un clavier de numérotation téléphonique, et donc très facile à appliquer et à retenir. <em>#NOBRAINER</em></p>
 
 <p>&#8220;if it was a code that involves math, algebra or whatever, these littles yos in the project wouldn&#8217;t be able to follow along. Ain&#8217;t no math to it. It&#8217;s just&#8230; how the phone looks when you look at it.&#8221;</p>
 
 <p><img src="http://www.smknstd.io/images/thewire.png" title="Avon Barksdale's hint on hinding himself" alt="the wire screencap" /></p>
 
-<p>Pour être capable de mémoriser mes mots de passes, j&#8217;ai librement adapté cette idée aux claviers <a href="http://en.wikipedia.org/wiki/AZERTY">AZERTY</a> que j&#8217;utilise la plupart du temps. Evidemment pour que le mot de passe de chaque service soit unique, il faut intégrer un élément propre: le nom du service evidemment ! Ainsi je transpose chaque lettre du nom d&#8217;un service, et elle devient la lettre suivante selon le sens des 3 lignes du clavier (en minuscule). <code>A</code> devient <code>Z</code>, <code>Z</code> devient <code>E</code>, <code>P</code> devient <code>Q</code>, <code>N</code> devient <code>A</code>, etc. Eventuellement il est possible de faire pareil avec les chiffres: <code>1</code> devient <code>2</code>, <code>2</code> devient <code>3</code>, <code>0</code> devient <code>1</code>, etc. Cette façon de faire est facile à mémoriser et à appliquer. #WIN</p>
+<p>J&#8217;ai librement adapté cette idée aux claviers <a href="http://en.wikipedia.org/wiki/AZERTY">AZERTY</a> que j&#8217;utilise la plupart du temps. Ainsi je transpose chaque lettre du nom d&#8217;un service, et elle devient la lettre suivante selon le sens des 3 lignes du clavier (en minuscule). <code>A</code> devient <code>Z</code>, <code>Z</code> devient <code>E</code>, <code>P</code> devient <code>Q</code>, <code>N</code> devient <code>A</code>, etc. Eventuellement il est possible de faire pareil avec les chiffres: <code>1</code> devient <code>2</code>, <code>2</code> devient <code>3</code>, <code>0</code> devient <code>1</code>, etc. J&#8217;affirme que cette façon de faire est facile à appliquer <strong>sans se tromper</strong>. #WIN</p>
 
-<p>Aussi pour rendre plus robuste chacun des mots de passe (longeur, majuscules, caracteres spéciaux, etc), je rajoute un &#8220;radical&#8221; commun à tous les mots de passes. Finalement en n&#8217;ayant besoin de retenir que celui-ci, j&#8217;obtiens sans effort, des mots de passe uniques (suffisamment longs et complexes) pour chaque service et surtout dont la reversibilité n&#8217;est pas triviale.</p>
+<p>Aussi pour rendre plus robuste chacun des mots de passe (longeur, majuscules, caracteres spéciaux, etc), je rajoute un &#8220;radical&#8221; commun à tous les mots de passes et qui peut jouer le rôle de &#8221;<a href="http://en.wikipedia.org/wiki/Salt_%28cryptography%29">sel</a>&#8221;. Finalement en n&#8217;ayant besoin de retenir que celui-ci, j&#8217;obtiens sans effort, des mots de passe uniques (suffisamment longs et complexes) pour chaque service et surtout dont la réversibilité n&#8217;est pas triviale.</p>
 
 <p>Par exemple si mon radical était <code>!m0nR4d_Cal</code>, cela donnerait:</p>
 
@@ -643,19 +1045,21 @@ reM-gu le 22/07/2011 mis en application le
 </ul>
 
 
-<p><em>J&#8217;ai bien pris soin de finir mon radical par des lettres en minuscule, ainsi l&#8217;analogie entre le nom du service et une partie du mot de passe est plus difficile à faire que quelquechose comme <code>MONRADICALyxoyyrt</code>)</em></p>
+<p><em>J&#8217;ai bien pris soin de finir mon radical par des lettres en minuscule pour tenter de &#8220;camoufler&#8221; le nom du service, ainsi l&#8217;analogie entre celui-ci et une partie du mot de passe est plus difficile à faire que quelque-chose comme <code>MONRADICALyxoyyrt</code>)</em></p>
 
-<p>Cette méthode n&#8217;est pas parfaite et n&#8217;est qu&#8217;un compromis, d&#8217;ailleurs dans l&#8217;épisode de la série dont je me suis inspiré, <a href="http://en.wikipedia.org/wiki/Roland_Pryzbylewski">&#8220;Prezbo&#8221;</a> déjoue assez facilement le stratagème, probablement parcequ&#8217;il a pu récupérer plusieurs numéros différents et procéder par <a href="http://en.wikipedia.org/wiki/Analogy">analogie</a>. Evidemment je considère que la probabilité que quelqu&#8217;un récupère plusieurs de mes mots de passe (et se donne la peine de retrouver ma facon de faire) est assez faible pour continuer à utiliser cette technique. Aussi par prudence, je l&#8217;exclus pour les services dont j&#8217;éstime la sécurité critique (compte mail, paypal, dropbox etc).</p>
+<p>Cette méthode n&#8217;est pas parfaite et n&#8217;est qu&#8217;un compromis, d&#8217;ailleurs dans l&#8217;épisode de la série dont je me suis inspiré, <a href="http://en.wikipedia.org/wiki/Roland_Pryzbylewski">&#8220;Prezbo&#8221;</a> déjoue assez facilement le stratagème, probablement parcequ&#8217;il a pu récupérer plusieurs numéros différents et procéder par <a href="http://en.wikipedia.org/wiki/Analogy">analogie</a>. Évidemment je considère que la probabilité que quelqu&#8217;un récupère plusieurs de mes mots de passe (et se donne la peine de retrouver ma façon de faire) est assez faible pour continuer à utiliser cette technique. Aussi par prudence, je l&#8217;exclus pour les services dont j’estime la sécurité critique (gmail, paypal, dropbox etc).</p>
 
 <h4>Ressources</h4>
 
 <ul>
-<li><a href="http://www.wired.com/politics/security/commentary/securitymatters/2006/12/72300?currentPage=all">article de 2006</a> dans lequel Bruce Schneier révèle qu&#8217;un des mots de passe les plus courants sur myspace était &#8220;Blink182&#8221;</li>
-<li><a href="http://www.amazon.fr/Perfect-Password-Selection-Protection-Authentication/dp/1597490415">182 pages</a> sur le sujet !?</li>
+<li>un <a href="http://www.wired.com/politics/security/commentary/securitymatters/2006/12/72300?currentPage=all">article de 2006</a> dans lequel Bruce Schneier révèle qu&#8217;un des mots de passe les plus courants sur myspace était &#8220;Blink182&#8221; lol</li>
+<li><a href="http://www.amazon.fr/Perfect-Password-Selection-Protection-Authentication/dp/1597490415">182 pages</a> uniquement dédiées à ce sujet !?</li>
 <li><a href="http://www.passwordmeter.com/">password strength meter</a></li>
 <li><a href="https://www.grc.com/haystack.htm">how big is your haystack</a></li>
 <li><a href="http://stackoverflow.com/questions/98768/should-i-impose-a-maximum-length-on-passwords">WTF</a> !?</li>
-<li><a href="http://en.wikipedia.org/wiki/Three_Days_of_the_Condor">un film</a> que j&#8217;aime beaucoup :)</li>
+<li>un <a href="http://www.wired.com/2012/11/ff-mat-honan-password-hacker/all/">article</a> pessimiste de 2012 sur l&#8217;importance du mot de passe</li>
+<li>un <a href="http://www.ted.com/talks/lorrie_faith_cranor_what_s_wrong_with_your_pa_w0rd">ted talk</a> plutôt intéressant</li>
+<li>une <a href="https://medium.com/@N/how-i-lost-my-50-000-twitter-username-24eb09e026dd">histoire</a> effrayante qui n&#8217;est pourtant pas lié au mot de passe :(</li>
 </ul>
 
 ]]></content>

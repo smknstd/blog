@@ -6,7 +6,7 @@ comments: false
 categories: 
 ---
 
-Il y a seulement quelques années, lorsque j'ai commencé à utiliser la commande shell, j'ai très vite pu apprécié la puissance et l'ingéniosité de certains outils surtout dans la manipulation courante des données. A ce stade, je savais écrire un programme en C ou en java, mais Xavier, un programmeur expérimenté de 25 ans mon aîné que j'avais désigné comme mon mentor, a particulièrement attiré mon attention sur cet étrange outil dont j'ignorais tout: awk.
+Il y a seulement quelques années, lorsque j'ai commencé à utiliser la commande shell, j'ai très vite pu apprécier la puissance et l'ingéniosité de certains outils surtout dans la manipulation courante des données. A ce stade, je savais écrire un programme en C ou en java, mais Xavier, un programmeur expérimenté de 25 ans mon aîné que j'avais désigné comme mon mentor, a particulièrement attiré mon attention sur cet étrange outil dont j'ignorais tout: awk.
 
 J'ai rapidement compris que malgré son apparence rebutante, il allait me devenir indispensable! Associé au ["pipe"](http://doc.cat-v.org/unix/pipes/), il est capable de résoudre de véritables casse-têtes en une commande d'une seule ligne. Bien sûr le prix d'une ligne c'est qu'elle est souvent à rallonge, mais pour de nombreuses opérations elle évite d'écrire un script. Au moins deux spécificités sont particulièrement appréciées dans Awk:
 
@@ -62,6 +62,6 @@ et enfin en RUBY
 - [inestimable ressource sur les "one-liners" en PERL](http://web.archive.org/web/20090602215912/http://sial.org/howto/perl/one-liner/) (merci à la bonne âme qui l'a archivée)
 - [très bon tutoriel PERL](http://articles.mongueurs.net/magazines/linuxmag50.html) en français
 - [article magistrale sur l'héritage d'awk dans ruby](http://tomayko.com/writings/awkward-ruby)
-- unilignes [socials](https://twitter.com/rubyoneliner) ?!
+- unilignes [sociaux](https://twitter.com/rubyoneliner) ?!
 
 

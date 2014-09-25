@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Regrouper et compter: SQL (partie 1/5) - smknstd.io</title>
+  <meta name="author" content="smknstd">
+
+  
+  <meta name="description" content="Compter des données ou en estimer la cardinalité est une opération dont les applications sont très variées mais surtout tellement utiles et courantes &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.smknstd.io/2014/05/23/counting-part1/">
+  <link href="/images/favicon.ico" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feedpress.me/smknstd" rel="alternate" title="smknstd.io" type="application/atom+xml">
+  <script type="text/javascript" src="//use.typekit.net/oqc4yak.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<script type="text/javascript">
+function show_new() {
+	var j=0;
+    var chila = document.getElementById("blog-archives").children;
+	for(var i = 0; i < chila.length; i++) {
+			var ch = chila[i].getElementsByTagName('h1')[0];
+		    var lien = ch.getElementsByTagName('a')[0].getAttribute("href");
+		    mytab = lien.split("/");
+		    var parsedDate = new Date(parseInt(mytab[1]), parseInt(mytab[2])-1, parseInt(mytab[3]), 0, 0, 0, 0);
+		    var today = new Date();
+		    var diffDays = Math.floor((today - parsedDate)/(1000*60*60*24));
+		    if(diffDays<45){
+		    	j++;
+		        ch.innerHTML=chila[i].getElementsByTagName('h1')[0].innerHTML+"<div id='new'>NEW</div>";
+		    }else{
+		    	// comme les articles sont ordonnées chronologiquement on peut s'arreter de chercher au premier article de plus de 45 jours trouvé 
+		    	break;
+		    }
+
+	}
+	console.log("[function show_new] " + j +" articles de moins de 45 jours (rajout de l'etiquette NEW)");
+}
+</script>
+
+  
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5215670-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+
+
+</head>
+
+<body onload="show_new()"   >
+  <header role="banner">  <div id="logo"><a href="/"><img src="/images/logo.png" alt="logo" /></a></div>
+  <div id="legend">{type: "web log", localhost: "Paris", about: "trapped all day, got my cheese and an indexed key"}</div>
+
+</header>
+  <nav role="navigation">
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    <div id="archive_header">
+    
+      <h2 class="entry-title">Regrouper Et Compter: SQL (Partie 1/5)</h2>
+    
+    </div>
+  </header>
+  <header>
+    <div id="archive_header">
+    
+      <h3 class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-23T19:23:00+02:00" pubdate data-updated="true">May 23<span>rd</span>, 2014</time>
+      </h3>
+    
+    </div>
+  </header>
+
+
+<div class="entry-content"><p>Compter des données ou en estimer la cardinalité est une opération dont les applications sont très variées mais surtout tellement utiles et courantes que tout le monde ou presque a besoin de le faire. Au fil de mes expériences, j&#8217;ai pu observer de nombreux moyens de le faire en fonction des contextes et de la grande variété des outils utilisés. Bien que ce soit une opération basique, sa mise en œuvre révèle souvent des subtilités. Cette série d&#8217;articles se veut être une brève présentation non-exhaustive et surtout un peu naïve des opérations de comptage sous différentes technologies. Je vais essayer d&#8217;aborder à certains moments quelques aspects liés aux performances, toutefois sans rentrer dans beaucoup de détails malheureusement.</p>
+
+<p>Il m&#8217;a semblé naturel de commencer par les SGBDR, car c&#8217;est probablement l&#8217;outil le plus rependu (après le bricolage dans Microsoft Excel et ses <a href="http://en.wikipedia.org/wiki/Pivot_table">tableaux croisés dynamiques</a> ;). Lorsque les données sont correctement rangées dans un SGBDR en état de marche, la facilité d&#8217;utilisation et la puissance du langage SQL est évidente. Même s&#8217;il est à la mode de remettre en cause la pertinence de cet outil pour certains besoins, se priver de ses possibilités reste souvent douloureux ! Sous son abstraction et son apparente simplicité, on oublie souvent que ce langage d’interrogation est issu d&#8217;un héritage théorique complexe.</p>
+
+<h3>SQL</h3>
+
+<p><code>COUNT</code> et <code>GROUP BY</code> sont les protagonistes principaux du comptage du nombre d&#8217;éléments uniques. Quand les besoins se compliquent, la palette d&#8217;outils généralement proposés par les principaux systèmes répond aux cas d&#8217;utilisation les plus complexes: <code>WHERE</code>, <code>DISTINCT</code> , <code>EXISTS</code> , <code>HAVING</code> , etc.</p>
+
+<p><img src="/images/mysql-count.png" title="mysql count() group by" alt="mysql" /></p>
+
+<p>Le volume de données traité reste un enjeu majeur de l&#8217;usage des SGBDR et le niveau d&#8217;exigence requis en dépend la plupart du temps. Les contraintes liés à la performance des différents systèmes ont historiquement souvent posés des problèmes à la patience des utilisateurs notamment lors de la consultation de rapports d&#8217;analyses. Il est courant d&#8217;avoir recours à des <a href="http://en.wikipedia.org/wiki/Aggregate_%28data_warehouse%29">pré-calcul</a> pour résoudre ce problème mais cela mériterait un autre article pour être développé.</p>
+
+<h3>Index Bitmap</h3>
+
+<p>Un des outils intéressant pour améliorer les performances des SGBDR est l&#8217;index. Il en existe de plusieurs types et l&#8217;un deux, reste assez méconnu : c&#8217;est l&#8217;index <a href="http://en.wikipedia.org/wiki/Bitmap_index">bitmap</a>. Si vous ne le connaissez pas, je vous encourage à étudier son principe de fonctionnement. Il peut avoir des usages variés comme aider aux jointures mais nécessite de nombreuses précautions et un niveau de connaissance avancé. Par exemple, ces indexs ne doivent porter que sur une seule colonne, ce qui n’empêche bien sûr pas de cumuler leurs utilisations. Concernant notre calcul, cet index peut se révéler en théorie très efficace puisqu&#8217;il contient à lui seul toute l&#8217;information dont nous avons besoin et dans certains cas même déjà calculée!</p>
+
+<p>Ci dessous un <a href="http://en.wikipedia.org/wiki/Query_plan">plan exécution</a> d&#8217;un comptage mettant à contribution un index bitmap sous Oracle 11g:</p>
+
+<p><img src="/images/bitmap.png" title="bitmap plan" alt="bitmap" /></p>
+
+<h3>Bases vectorielles</h3>
+
+<p>Dans la famille des systèmes relationnels, une autre approche prometteuse souhaite répondre à la problématique du volume de données: les <a href="http://en.wikipedia.org/wiki/Vectorwise">bases vectorielles</a>. Basé sur une orientation <a href="http://en.wikipedia.org/wiki/Column-oriented_DBMS">colonne</a> tout en gardant la commodité de l&#8217;interrogation d&#8217;un modèle relationnel, cette base promet des performances incroyables. Gardons à l&#8217;esprit que le gain se fait bien sûr au détriment de quelques sacrifices comme les contraintes ou le principe de transaction. Privé de polyvalence, elles sont exclues de nombreux domaines d&#8217;applications opérationnels.</p>
+
+<h3>Ressources</h3>
+
+<ul>
+<li>les <a href="http://www.football-data.co.uk/germanym.php">données</a> du championnat de football allemand que j&#8217;ai utilisé pour certains exemples</li>
+<li>un <a href="http://web.archive.org/web/20130113080935/http://backstage.soundcloud.com/2011/07/mysql-stats-old-faithful/">exemple détaillé</a> pas si vieux que j&#8217;aime beaucoup sur les problèmes de performance de regroupements et comptage et des subtilités du moteur de mysql avec de grosses volumétries</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">smknstd</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-23T19:23:00+02:00" pubdate data-updated="true">May 23<span>rd</span>, 2014</time>
+      
+
+
+    </p>
+    <div id="archive_header2">
+      <div id="archive_header3">
+      
+        <a class="basic-alignment left" href="/2014/04/27/command-lines-percy/" title="Previous Post: Mes outils en ligne de commande préférés">&laquo; Mes outils en ligne de commande préférés</a>
+      
+      
+        <a class="basic-alignment right" href="/2014/06/28/counting-part2/" title="Next Post: Regrouper et compter: Mongo (partie 2/5)">Regrouper et compter: Mongo (partie 2/5) &raquo;</a>
+      
+      </div>
+    </div>
+  </footer>
+</article>
+</div>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  2014 - smknstd -
+  <span class="credit">designed with <a href="http://octopress.org">Octopress</a> and hosted by <a href="http://heroku.com">Heroku</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

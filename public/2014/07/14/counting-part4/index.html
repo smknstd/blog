@@ -1,0 +1,244 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Regrouper et compter: Hadoop (partie 4/5) - smknstd.io</title>
+  <meta name="author" content="smknstd">
+
+  
+  <meta name="description" content="Pour ce quatrième article de cette série sur le comptage et le regroupement, j&#8217;ai souhaité aborder Hadoop que je n&#8217;ai eut l&#8217; &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.smknstd.io/2014/07/14/counting-part4/">
+  <link href="/images/favicon.ico" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feedpress.me/smknstd" rel="alternate" title="smknstd.io" type="application/atom+xml">
+  <script type="text/javascript" src="//use.typekit.net/oqc4yak.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<script type="text/javascript">
+function show_new() {
+	var j=0;
+    var chila = document.getElementById("blog-archives").children;
+	for(var i = 0; i < chila.length; i++) {
+			var ch = chila[i].getElementsByTagName('h1')[0];
+		    var lien = ch.getElementsByTagName('a')[0].getAttribute("href");
+		    mytab = lien.split("/");
+		    var parsedDate = new Date(parseInt(mytab[1]), parseInt(mytab[2])-1, parseInt(mytab[3]), 0, 0, 0, 0);
+		    var today = new Date();
+		    var diffDays = Math.floor((today - parsedDate)/(1000*60*60*24));
+		    if(diffDays<45){
+		    	j++;
+		        ch.innerHTML=chila[i].getElementsByTagName('h1')[0].innerHTML+"<div id='new'>NEW</div>";
+		    }else{
+		    	// comme les articles sont ordonnées chronologiquement on peut s'arreter de chercher au premier article de plus de 45 jours trouvé 
+		    	break;
+		    }
+
+	}
+	console.log("[function show_new] " + j +" articles de moins de 45 jours (rajout de l'etiquette NEW)");
+}
+</script>
+
+  
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5215670-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+
+
+</head>
+
+<body onload="show_new()"   >
+  <header role="banner">  <div id="logo"><a href="/"><img src="/images/logo.png" alt="logo" /></a></div>
+  <div id="legend">{type: "web log", localhost: "Paris", about: "trapped all day, got my cheese and an indexed key"}</div>
+
+</header>
+  <nav role="navigation">
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    <div id="archive_header">
+    
+      <h2 class="entry-title">Regrouper Et Compter: Hadoop (Partie 4/5)</h2>
+    
+    </div>
+  </header>
+  <header>
+    <div id="archive_header">
+    
+      <h3 class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-14T16:00:00+02:00" pubdate data-updated="true">Jul 14<span>th</span>, 2014</time>
+      </h3>
+    
+    </div>
+  </header>
+
+
+<div class="entry-content"><p>Pour ce quatrième article de cette série sur le comptage et le regroupement, j&#8217;ai souhaité aborder Hadoop que je n&#8217;ai eut l&#8217;occasion de manipuler que brièvement comparé à d&#8217;autres <a href="http://en.wikipedia.org/wiki/Oracle_Grid_Engine">technologies</a> vaguement similaires. Comme les autres articles de cette série ne vous attendez pas à rentrer en profondeur car je me contenterai d&#8217;aborder rapidement la seule problématique du comptage.</p>
+
+<h3>TL;DR</h3>
+
+<p>Hadoop, qui s&#8217;appuie notamment sur HDFS, est un framework Java qui permet de faire du traitement distribué sur des fichiers volumineux en mode batch. Le buzz autour du &#8220;bigdata&#8221; a probablement vendu beaucoup de <a href="http://service-architecture.blogspot.fr/2014/01/six-reasons-your-big-data-hadoop.html">rêve</a> et je ne suis pas convaincu que cette technologie soit adapté à tant de problématiques qu&#8217;on aimerait le croire. Surtout avec ses nombreux coins sombres (jointures, debbug, pig, etc) il reste définitivement un outil de spécialistes difficile à mettre en oeuvre.</p>
+
+<h3>Regrouper et compter !</h3>
+
+<p>Heureusement pour nous, aborder la question de la cardinalité va nous permettre de bien comprendre le principe de fonctionnement du paradigme <a href="http://en.wikipedia.org/wiki/MapReduce">map/reduce</a>. TL;DR: issu de la programmation fonctionnelle, le principe consiste a décomposer une tâche pour opérations paralelisables. Pour effectuer le comptage sur un ensemble, hadoop divise l&#8217;opération en plusieurs comptages sur des sous ensembles et agrège le résultat.</p>
+
+<p><img src="/images/mapreduce_sum.png" title="mapreduce1" alt="map_reduce" /></p>
+
+<p>&#8220;regrouper&#8221; des données sur une clef est une fonction qui est donc au cœur du framework. Il est donc plutôt simple à implémenter puisqu&#8217;on se sert principalement du comportement déjà existant. Schématiquement: toutes les valeurs de clefs sont regroupées et rassemblées dans le &#8220;reducer&#8221;. Il suffit de sélectionner les champs sur lesquels on souhaite faire un regroupement dans le &#8220;mapper&#8221;, le regroupement en lui même est entièrement pris en charge par le framework !</p>
+
+<p>Voici les quelques lignes de java qui suffisent à implémenter un comptage de cardinalité dans le &#8220;reducer&#8221;:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">CountReducer</span> <span class="kd">extends</span> <span class="n">Reducer</span><span class="o">&lt;</span><span class="n">Text</span><span class="o">,</span> <span class="n">MinMaxCountTuple</span><span class="o">,</span> <span class="n">Text</span><span class="o">,</span> <span class="n">MinMaxCountTuple</span><span class="o">&gt;</span> <span class="o">{</span>
+</span><span class='line'>  <span class="c1">// Our output value Writable</span>
+</span><span class='line'>  <span class="kd">private</span> <span class="n">CountTuple</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CountTuple</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">reduce</span><span class="o">(</span><span class="n">Text</span> <span class="n">key</span><span class="o">,</span> <span class="n">Iterable</span><span class="o">&lt;</span><span class="n">CountTuple</span><span class="o">&gt;</span> <span class="n">values</span><span class="o">,</span><span class="n">Context</span> <span class="n">context</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">InterruptedException</span> <span class="o">{</span>
+</span><span class='line'>      <span class="c1">// Initialize our result</span>
+</span><span class='line'>      <span class="n">result</span><span class="o">.</span><span class="na">setCount</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+</span><span class='line'>      <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// Iterate through all input values for this key</span>
+</span><span class='line'>      <span class="k">for</span> <span class="o">(</span><span class="n">CountTuple</span> <span class="n">val</span> <span class="o">:</span> <span class="n">values</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="c1">// Add to our sum the count for value</span>
+</span><span class='line'>          <span class="n">sum</span> <span class="o">+=</span> <span class="n">val</span><span class="o">.</span><span class="na">getCount</span><span class="o">();</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>      <span class="c1">// Set our count to the number of input values</span>
+</span><span class='line'>      <span class="n">result</span><span class="o">.</span><span class="na">setCount</span><span class="o">(</span><span class="n">sum</span><span class="o">);</span>
+</span><span class='line'>      <span class="n">context</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Regardez comme ça à l&#8217;air simple sur cet exemple d&#8217;illustration (que j&#8217;ai volé qqpart ;).</p>
+
+<p><img src="/images/mapreduce_combine.png" title="mapreduce2" alt="map_reduce" /></p>
+
+<p>That&#8217;s all, Folks !</p>
+
+<h3>Ressources</h3>
+
+<ul>
+<li>un <a href="http://www.amazon.com/MapReduce-Design-Patterns-Effective-Algorithms/dp/1449327176">ouvrage</a> de référence sur le framework Map/Reduce</li>
+<li>une <a href="https://www.youtube.com/watch?v=oIkhgagvrjI">vidéo</a> amusante d&#8217;explications sur un des compteurs les plus célèbres de notre époque</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">smknstd</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-14T16:00:00+02:00" pubdate data-updated="true">Jul 14<span>th</span>, 2014</time>
+      
+
+
+    </p>
+    <div id="archive_header2">
+      <div id="archive_header3">
+      
+        <a class="basic-alignment left" href="/2014/07/04/counting-part3/" title="Previous Post: Regrouper et compter: Unix (partie 3/5)">&laquo; Regrouper et compter: Unix (partie 3/5)</a>
+      
+      
+      </div>
+    </div>
+  </footer>
+</article>
+</div>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  2014 - smknstd -
+  <span class="credit">designed with <a href="http://octopress.org">Octopress</a> and hosted by <a href="http://heroku.com">Heroku</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
