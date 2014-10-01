@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Regrouper et compter: SQL (partie 1/5) - smknstd.io</title>
+  <title>Regrouper et compter: SQL (partie 1/6) - smknstd.io</title>
   <meta name="author" content="smknstd">
 
   
@@ -83,7 +83,7 @@ function show_new() {
   <header>
     <div id="archive_header">
     
-      <h2 class="entry-title">Regrouper Et Compter: SQL (Partie 1/5)</h2>
+      <h2 class="entry-title">Regrouper Et Compter: SQL (Partie 1/6)</h2>
     
     </div>
   </header>
@@ -124,9 +124,9 @@ function show_new() {
 
 <h3>Index Bitmap</h3>
 
-<p>Un des outils intéressant pour améliorer les performances des SGBDR est l&#8217;index. Il en existe de plusieurs types et l&#8217;un deux, reste assez méconnu : c&#8217;est l&#8217;index <a href="http://en.wikipedia.org/wiki/Bitmap_index">bitmap</a>. Si vous ne le connaissez pas, je vous encourage à étudier son principe de fonctionnement. Il peut avoir des usages variés comme aider aux jointures mais nécessite de nombreuses précautions et un niveau de connaissance avancé. Par exemple, ces indexs ne doivent porter que sur une seule colonne, ce qui n’empêche bien sûr pas de cumuler leurs utilisations. Concernant notre calcul, cet index peut se révéler en théorie très efficace puisqu&#8217;il contient à lui seul toute l&#8217;information dont nous avons besoin et dans certains cas même déjà calculée!</p>
+<p>Un des outils intéressant pour améliorer les performances des SGBDR est l&#8217;index. Il en existe de plusieurs types et l&#8217;un d&#8217;eux reste assez méconnu : l&#8217;index <a href="http://en.wikipedia.org/wiki/Bitmap_index">bitmap</a>. Si vous ne le connaissez pas, je vous encourage à étudier son principe de fonctionnement. Il peut avoir des usages variés comme aider aux jointures mais nécessite de nombreuses précautions et impose de nombreuses contraintes et un niveau de connaissance avancé. Par exemple, ces indexs ne doivent porter que sur une seule colonne, ce qui n’empêche bien sûr pas de cumuler leurs utilisations. Concernant notre calcul, cet index peut se révéler en théorie très efficace puisqu&#8217;il contient à lui seul toute l&#8217;information dont nous avons besoin. Que nous pouvons traduire par éviter le parcours de la table et donc de précieux accès &#8220;disque&#8221;.</p>
 
-<p>Ci dessous un <a href="http://en.wikipedia.org/wiki/Query_plan">plan exécution</a> d&#8217;un comptage mettant à contribution un index bitmap sous Oracle 11g:</p>
+<p>Même si l&#8217;implémentation interne détaillée des indexs bitmaps dans la plupart des SGBDR reste obscure et mal documentée, on peut observer leur fonctionement au travers du <a href="http://en.wikipedia.org/wiki/Query_plan">plan exécution</a>. Ci-dessous, celui d&#8217;un comptage mettant à contribution un index bitmap sous Oracle 11g. Notez bien l&#8217;étape de conversion, qui compte simplement le nombre d&#8217;entrée, sans jamais se servir de leur adresse (rowid):</p>
 
 <p><img src="/images/bitmap.png" title="bitmap plan" alt="bitmap" /></p>
 
@@ -174,7 +174,7 @@ function show_new() {
         <a class="basic-alignment left" href="/2014/04/27/command-lines-percy/" title="Previous Post: Mes outils en ligne de commande préférés">&laquo; Mes outils en ligne de commande préférés</a>
       
       
-        <a class="basic-alignment right" href="/2014/06/28/counting-part2/" title="Next Post: Regrouper et compter: Mongo (partie 2/5)">Regrouper et compter: Mongo (partie 2/5) &raquo;</a>
+        <a class="basic-alignment right" href="/2014/06/28/counting-part2/" title="Next Post: Regrouper et compter: Mongo (partie 2/6)">Regrouper et compter: Mongo (partie 2/6) &raquo;</a>
       
       </div>
     </div>

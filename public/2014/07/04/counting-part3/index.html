@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Regrouper et compter: Unix (partie 3/5) - smknstd.io</title>
+  <title>Regrouper et compter: Unix (partie 3/6) - smknstd.io</title>
   <meta name="author" content="smknstd">
 
   
@@ -83,7 +83,7 @@ function show_new() {
   <header>
     <div id="archive_header">
     
-      <h2 class="entry-title">Regrouper Et Compter: Unix (Partie 3/5)</h2>
+      <h2 class="entry-title">Regrouper Et Compter: Unix (Partie 3/6)</h2>
     
     </div>
   </header>
@@ -136,23 +136,11 @@ function show_new() {
 
 <p><img src="/images/mkstoolkit.png" title="nutcracker" alt="mkstoolkit" /></p>
 
-<h3>Big Data</h3>
-
-<p>Quand la taille des datasets augmente, l&#8217;approche stricte des algorithmes classiques se montre souvent trop gourmande en ressources. La consommation de mémoire et le temps d’exécution notamment peuvent devenir problématiques. Certaines techniques proposent une approche probabiliste pour améliorer les performances. Citons &#8220;Hyperloglog&#8221; basé sur les travaux du malheureusement défunt chercheur français <a href="http://inria-alumni.fr/index.php/fr/page/article/id/202">Philippe Flajolet</a>, qui permet de compter les éléments uniques dans une collection au prix d&#8217;une faible approximation (faux positifs). Mais d&#8217;autres algorithmes qui partagent l&#8217;approche comme &#8221;<a href="http://en.wikipedia.org/wiki/Bloom_filter">Bloomfilter</a>&#8221; existent. Ils sont implémentés par les géants du web (cassandra, hadoop, google, etc) depuis plusieurs années. Les ressources notamment issues de la recherche abondent, si vous souhaitez tenter de comprendre comment ces algorithmes fonctionnent ;)</p>
-
-<p>Il est évident que ces outils représentent une petite révolution et que leur utilisation va tendre à se démocratiser. La page wikipedia de &#8221;<a href="http://en.wikipedia.org/wiki/HyperLogLog">hyperloglog</a>&#8221; n&#8217;a été créée qu&#8217;en mars 2014 !? Le célèbre système de gestion de &#8220;clé/valeur&#8221; <code>redis</code>, en a déjà fait une <a href="http://antirez.com/news/75">implémentation</a> (disponible depuis avril 2014 avec la version 2.8.9) que j&#8217;aimerai d&#8217;ailleurs décrire dans un prochain article :) J&#8217;ai pour ma part fait quelques essais très concluents avec une implémentation en java que je ne saurai trop vous conseiller: <a href="https://github.com/addthis/stream-lib">stream-lib</a></p>
-
-<p><img src="/images/count-bundesliga.png" title="count unixVSbloom" alt="count" /></p>
-
 <h3>Ressources</h3>
 
 <ul>
 <li>un <a href="http://www.gregreda.com/2013/07/15/unix-commands-for-data-science/">article</a> sur les outils d&#8217;UNIX en lignes de commande</li>
 <li>quelques <a href="http://lists.freebsd.org/pipermail/freebsd-current/2010-August/019310.html">explications</a> du dev de GNU grep</li>
-<li>un <a href="http://highscalability.com/blog/2012/4/5/big-data-counting-how-to-count-a-billion-distinct-objects-us.html">article</a> générique sur la cardinalité plein à craquer de buzzwords</li>
-<li>un <a href="http://research.neustar.biz/2012/10/25/sketch-of-the-day-hyperloglog-cornerstone-of-a-big-data-infrastructure/">article</a> sur hyperloglog</li>
-<li>un <a href="http://spyced.blogspot.fr/2009/01/all-you-ever-wanted-to-know-about.html">article de 2009</a> sur les bloomfilters</li>
-<li>un autre <a href="http://billmill.org/bloomfilter-tutorial/">article</a> sur les bloomfilters avec de nombreuses références</li>
 </ul>
 
 </div>
@@ -185,10 +173,10 @@ function show_new() {
     <div id="archive_header2">
       <div id="archive_header3">
       
-        <a class="basic-alignment left" href="/2014/06/28/counting-part2/" title="Previous Post: Regrouper et compter: Mongo (partie 2/5)">&laquo; Regrouper et compter: Mongo (partie 2/5)</a>
+        <a class="basic-alignment left" href="/2014/06/28/counting-part2/" title="Previous Post: Regrouper et compter: Mongo (partie 2/6)">&laquo; Regrouper et compter: Mongo (partie 2/6)</a>
       
       
-        <a class="basic-alignment right" href="/2014/07/14/counting-part4/" title="Next Post: Regrouper et compter: Hadoop (partie 4/5)">Regrouper et compter: Hadoop (partie 4/5) &raquo;</a>
+        <a class="basic-alignment right" href="/2014/07/14/counting-part4/" title="Next Post: Regrouper et compter: Hadoop (partie 4/6)">Regrouper et compter: Hadoop (partie 4/6) &raquo;</a>
       
       </div>
     </div>

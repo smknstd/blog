@@ -4,7 +4,7 @@
   <title><![CDATA[smknstd.io]]></title>
   <link href="http://www.smknstd.io/atom.xml" rel="self"/>
   <link href="http://www.smknstd.io/"/>
-  <updated>2014-09-25T14:19:16+02:00</updated>
+  <updated>2014-10-01T18:33:04+02:00</updated>
   <id>http://www.smknstd.io/</id>
   <author>
     <name><![CDATA[smknstd]]></name>
@@ -14,23 +14,82 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Regrouper et compter: Hadoop (partie 4/5)]]></title>
+    <title type="html"><![CDATA[Regrouper et compter: Algorithmes d'approximation (partie 5/6)]]></title>
+    <link href="http://www.smknstd.io/2014/08/03/counting-part5/"/>
+    <updated>2014-08-03T14:20:00+02:00</updated>
+    <id>http://www.smknstd.io/2014/08/03/counting-part5</id>
+    <content type="html"><![CDATA[<p>Quand la taille des datasets augmente, l&#8217;approche stricte des algorithmes classiques se montre souvent trop gourmande en ressources. La consommation de mémoire et le temps d’exécution notamment peuvent devenir problématiques. Il existe une famille d&#8217;algorithmes qui propose une approche différente radicalement moins consommatrice en mémoire, à de nombreux problèmes dont le comptage de cardinalité: <a href="http://en.wikipedia.org/wiki/Streaming_algorithm">Streaming algorithms</a>.</p>
+
+<p>Loin d&#8217;avoir les connaissances suffisantes, je vais m&#8217;abstenir d&#8217;essayer d&#8217;expliquer leur fonctionement détaillé, je vais me contenter de vous expliquer leur utilité et quelques cas d&#8217;utilisations des plus populaires. En simplifiant beaucoup, ces outils permettent de traiter les élements uniques de manière miraculeuse. En contre partie, la plupart d&#8217;entre eux sont basé sur des structures probabilistes qui ne garantissent pas toujours l&#8217;exactitude du résultat. Certaines valeurs sont inexactes selon un certains taux d&#8217;erreur (<a href="http://hur.st/bloomfilter">défini</a>) généralement faible :)</p>
+
+<p>Issu de la recherche, le domaine n&#8217;est pas nouveau mais reste un sujet réservé aux experts. De nombreux outils qui font face à de grands volumes de données ou à de faible latences les implémentent dans leur fonctionnement interne. Toutefois leur utilisation commence à se populariser, et même si aucun outils comme ceux de bases de données ne les mets a disposition, des librairies dans de nombreux langages de programmation tentent d&#8217;en faire des implémentations.</p>
+
+<h4>Bloom filters</h4>
+
+<p>&#8220;<a href="http://en.wikipedia.org/wiki/Bloom_filter">Bloomfilter</a>&#8221; est probablement le plus répandu. En simplifiant beaucoup, il permet de rapidement répondre a une question du type &#8220;oui/non&#8221;. En gros il très utiliser pour éviter d&#8217;effectuer une opération coûteuse quand ce n&#8217;est pas nécessaire ! Il est souvent implémenté sans qu&#8217;on le sache au cœur de nombreuses applications comme les moteurs de base de données. C&#8217;est notamment google qui a popularisé son utilisation, mais c&#8217;est désormais le cas de tous les géants du web. Voici quelques cas d&#8217;utilisation connus:</p>
+
+<ul>
+<li>optimisation de requête: éviter de parcourir une partition si l&#8217;information n&#8217;est pas présente</li>
+<li>black list: interdire l’accès si l&#8217;information est présente</li>
+<li>publicité en ligne: éviter d&#8217;afficher une publicité déjà montrée</li>
+<li>statistiques web : compter les visites uniques</li>
+<li>etc</li>
+</ul>
+
+
+<p>En plus des &#8220;faux positifs&#8221; qui excluent certains domaines d&#8217;application qui ne peuvent pas se permettre d&#8217;erreur, d&#8217;autres limites à l&#8217;utilisation de cet outil existent. Citons notamment l&#8217;impossibilité de retirer une clef de la structure, une fois insérée !</p>
+
+<p>Pour rejoindre le sujet de notre article, une variation de cet outils existe qui peut répondre à notre problématique du regroupement et du comptage. Une version améliorée appelée &#8220;counting bloom filters&#8221; permet de stocker en plus dans la structure de données pour chaque valeur distincte de clef, un compteur. Évidemment les coûts liés à cette fonctionnalité ne sont pas négligeables (stockage, accès, temps de réponse). Une implémentation en java qui se sert de Redis comme support a particulièrement retenu mon attention: <a href="https://github.com/Baqend/Orestes-Bloomfilter">Orestes Bloom filter library</a>.</p>
+
+<h4>Hyperloglog</h4>
+
+<p>Hyperloglog est un autre outil encore plus récent basé sur les travaux du malheureusement défunt chercheur français <a href="http://inria-alumni.fr/index.php/fr/page/article/id/202">Philippe Flajolet</a>. Il met en œuvre une structure de données probabiliste qui permet lui de compter les éléments uniques dans une collection (comme dit précédemment au prix d&#8217;une faible approximation de faux positifs).</p>
+
+<p>Concernant le sujet de l&#8217;article, il ne répond pas exactement à la même problématique puisqu&#8217;il ne permet pas de compter le nombre d’éléments pour une clef. Toutefois récemment (La page wikipedia de &#8221;<a href="http://en.wikipedia.org/wiki/HyperLogLog">hyperloglog</a>&#8221; n&#8217;a été créée qu&#8217;en mars 2014 !?), il fait l&#8217;objet de beaucoup d&#8217;attention. En plus de nombreuses librairies qui l’implémentent, le système de gestion de &#8220;clé/valeur&#8221; <code>redis</code>, en a fait une <a href="http://antirez.com/news/75">implémentation</a> (disponible depuis avril 2014 avec la version 2.8.9).</p>
+
+<h4>Count-min sketch</h4>
+
+<p>Loin de moi l&#8217;idée de faire l&#8217;eventail complet de tous ces algorithmes, mais un dernier d&#8217;entre eux répond à la problématique de cette série d&#8217;articles: <a href="http://en.wikipedia.org/wiki/Count%E2%80%93min_sketch">&#8220;count-min sketch&#8221;</a>.</p>
+
+<p>Celui ci n&#8217;est qu&#8217;une variation du bloom filter évoqué plus tôt. J&#8217;ai pour ma part fait quelques essais très concluants avec une implémentation en java que je ne saurai trop vous conseiller: <a href="https://github.com/addthis/stream-lib">stream-lib</a>. Ci-dessous la mise en œuvre &#8220;clef en main&#8221; en ligne de commande d&#8217;un regroupement et comptage:</p>
+
+<p><img src="http://www.smknstd.io/images/count-bundesliga.png" title="count unixVSbloom" alt="count" /></p>
+
+<h3>Ressources</h3>
+
+<ul>
+<li>une <a href="https://www.youtube.com/watch?v=Hpd3f_MLdXo">video</a> de présentation avec des exemples du &#8220;monde réel&#8221;</li>
+<li>une <a href="http://blog.kiip.me/engineering/sketching-scaling-everyday-hyperloglog/">série</a> d&#8217;articles sur les techniques d&#8217;approximation</li>
+<li>un <a href="http://highscalability.com/blog/2012/4/5/big-data-counting-how-to-count-a-billion-distinct-objects-us.html">article</a> générique sur la cardinalité plein à craquer de buzzwords</li>
+<li>un <a href="http://antirez.com/news/75">article</a> extrêmement bien écrit sur l’implémentation d&#8217;hyperloglog dans Redis</li>
+<li>un <a href="http://research.neustar.biz/2012/10/25/sketch-of-the-day-hyperloglog-cornerstone-of-a-big-data-infrastructure/">article</a> sur hyperloglog</li>
+<li>un <a href="http://spyced.blogspot.fr/2009/01/all-you-ever-wanted-to-know-about.html">article de 2009</a> sur les bloomfilters</li>
+<li>un autre <a href="http://billmill.org/bloomfilter-tutorial/">article</a> sur les bloomfilters avec de nombreuses références</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Regrouper et compter: Hadoop (partie 4/6)]]></title>
     <link href="http://www.smknstd.io/2014/07/14/counting-part4/"/>
     <updated>2014-07-14T16:00:00+02:00</updated>
     <id>http://www.smknstd.io/2014/07/14/counting-part4</id>
     <content type="html"><![CDATA[<p>Pour ce quatrième article de cette série sur le comptage et le regroupement, j&#8217;ai souhaité aborder Hadoop que je n&#8217;ai eut l&#8217;occasion de manipuler que brièvement comparé à d&#8217;autres <a href="http://en.wikipedia.org/wiki/Oracle_Grid_Engine">technologies</a> vaguement similaires. Comme les autres articles de cette série ne vous attendez pas à rentrer en profondeur car je me contenterai d&#8217;aborder rapidement la seule problématique du comptage.</p>
 
-<h3>TL;DR</h3>
+<h3>Hadoop</h3>
 
 <p>Hadoop, qui s&#8217;appuie notamment sur HDFS, est un framework Java qui permet de faire du traitement distribué sur des fichiers volumineux en mode batch. Le buzz autour du &#8220;bigdata&#8221; a probablement vendu beaucoup de <a href="http://service-architecture.blogspot.fr/2014/01/six-reasons-your-big-data-hadoop.html">rêve</a> et je ne suis pas convaincu que cette technologie soit adapté à tant de problématiques qu&#8217;on aimerait le croire. Surtout avec ses nombreux coins sombres (jointures, debbug, pig, etc) il reste définitivement un outil de spécialistes difficile à mettre en oeuvre.</p>
 
 <h3>Regrouper et compter !</h3>
 
-<p>Heureusement pour nous, aborder la question de la cardinalité va nous permettre de bien comprendre le principe de fonctionnement du paradigme <a href="http://en.wikipedia.org/wiki/MapReduce">map/reduce</a>. TL;DR: issu de la programmation fonctionnelle, le principe consiste a décomposer une tâche pour opérations paralelisables. Pour effectuer le comptage sur un ensemble, hadoop divise l&#8217;opération en plusieurs comptages sur des sous ensembles et agrège le résultat.</p>
+<p>Heureusement pour nous, aborder la question de la cardinalité va nous permettre de bien comprendre le principe de fonctionnement du paradigme <a href="http://en.wikipedia.org/wiki/MapReduce">map/reduce</a>.</p>
+
+<p><strong>TL;DR</strong>: issu de la programmation fonctionnelle, le principe consiste a décomposer une tâche en sous-opérations parallélisables. Pour effectuer le comptage sur un ensemble, hadoop divise l&#8217;opération en plusieurs comptages sur des sous ensembles et agrège le résultat.</p>
 
 <p><img src="http://www.smknstd.io/images/mapreduce_sum.png" title="mapreduce1" alt="map_reduce" /></p>
 
-<p>&#8220;regrouper&#8221; des données sur une clef est une fonction qui est donc au cœur du framework. Il est donc plutôt simple à implémenter puisqu&#8217;on se sert principalement du comportement déjà existant. Schématiquement: toutes les valeurs de clefs sont regroupées et rassemblées dans le &#8220;reducer&#8221;. Il suffit de sélectionner les champs sur lesquels on souhaite faire un regroupement dans le &#8220;mapper&#8221;, le regroupement en lui même est entièrement pris en charge par le framework !</p>
+<p>Aggréger ou &#8220;regrouper&#8221; des données sur une clef est une fonction qui est au cœur du framework. Notre fonction souhaité de comptage est donc plutôt simple à implémenter puisqu&#8217;on se sert principalement du comportement déjà existant. Schématiquement: toutes les valeurs de clefs sont regroupées et rassemblées dans le &#8220;reducer&#8221;. Il suffit de sélectionner les champs sur lesquels on souhaite faire un regroupement dans le &#8220;mapper&#8221; et de mettre en place un compteur, le regroupement en lui même est entièrement pris en charge par le framework !</p>
 
 <p>Voici les quelques lignes de java qui suffisent à implémenter un comptage de cardinalité dans le &#8220;reducer&#8221;:</p>
 
@@ -75,7 +134,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Regardez comme ça à l&#8217;air simple sur cet exemple d&#8217;illustration (que j&#8217;ai volé qqpart ;).</p>
+<p>Regardez comme ça à l&#8217;air évident sur cet exemple d&#8217;illustration (que j&#8217;ai volé qqpart ;). Ne vous méprenez pas, cela à l&#8217;air très simple, pourtant comme évoqué en introduction ce concept appliqué à un cluster de machines de grande taille peut décomposer et paralléliser la tâche sur de multiples Datasets. Autrement dit effectuer une tâche immense très rapidement et uniquement avec du matériel &#8220;modeste&#8221; :)</p>
 
 <p><img src="http://www.smknstd.io/images/mapreduce_combine.png" title="mapreduce2" alt="map_reduce" /></p>
 
@@ -92,7 +151,7 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Regrouper et compter: Unix (partie 3/5)]]></title>
+    <title type="html"><![CDATA[Regrouper et compter: Unix (partie 3/6)]]></title>
     <link href="http://www.smknstd.io/2014/07/04/counting-part3/"/>
     <updated>2014-07-04T18:00:00+02:00</updated>
     <id>http://www.smknstd.io/2014/07/04/counting-part3</id>
@@ -122,30 +181,18 @@
 
 <p><img src="http://www.smknstd.io/images/mkstoolkit.png" title="nutcracker" alt="mkstoolkit" /></p>
 
-<h3>Big Data</h3>
-
-<p>Quand la taille des datasets augmente, l&#8217;approche stricte des algorithmes classiques se montre souvent trop gourmande en ressources. La consommation de mémoire et le temps d’exécution notamment peuvent devenir problématiques. Certaines techniques proposent une approche probabiliste pour améliorer les performances. Citons &#8220;Hyperloglog&#8221; basé sur les travaux du malheureusement défunt chercheur français <a href="http://inria-alumni.fr/index.php/fr/page/article/id/202">Philippe Flajolet</a>, qui permet de compter les éléments uniques dans une collection au prix d&#8217;une faible approximation (faux positifs). Mais d&#8217;autres algorithmes qui partagent l&#8217;approche comme &#8221;<a href="http://en.wikipedia.org/wiki/Bloom_filter">Bloomfilter</a>&#8221; existent. Ils sont implémentés par les géants du web (cassandra, hadoop, google, etc) depuis plusieurs années. Les ressources notamment issues de la recherche abondent, si vous souhaitez tenter de comprendre comment ces algorithmes fonctionnent ;)</p>
-
-<p>Il est évident que ces outils représentent une petite révolution et que leur utilisation va tendre à se démocratiser. La page wikipedia de &#8221;<a href="http://en.wikipedia.org/wiki/HyperLogLog">hyperloglog</a>&#8221; n&#8217;a été créée qu&#8217;en mars 2014 !? Le célèbre système de gestion de &#8220;clé/valeur&#8221; <code>redis</code>, en a déjà fait une <a href="http://antirez.com/news/75">implémentation</a> (disponible depuis avril 2014 avec la version 2.8.9) que j&#8217;aimerai d&#8217;ailleurs décrire dans un prochain article :) J&#8217;ai pour ma part fait quelques essais très concluents avec une implémentation en java que je ne saurai trop vous conseiller: <a href="https://github.com/addthis/stream-lib">stream-lib</a></p>
-
-<p><img src="http://www.smknstd.io/images/count-bundesliga.png" title="count unixVSbloom" alt="count" /></p>
-
 <h3>Ressources</h3>
 
 <ul>
 <li>un <a href="http://www.gregreda.com/2013/07/15/unix-commands-for-data-science/">article</a> sur les outils d&#8217;UNIX en lignes de commande</li>
 <li>quelques <a href="http://lists.freebsd.org/pipermail/freebsd-current/2010-August/019310.html">explications</a> du dev de GNU grep</li>
-<li>un <a href="http://highscalability.com/blog/2012/4/5/big-data-counting-how-to-count-a-billion-distinct-objects-us.html">article</a> générique sur la cardinalité plein à craquer de buzzwords</li>
-<li>un <a href="http://research.neustar.biz/2012/10/25/sketch-of-the-day-hyperloglog-cornerstone-of-a-big-data-infrastructure/">article</a> sur hyperloglog</li>
-<li>un <a href="http://spyced.blogspot.fr/2009/01/all-you-ever-wanted-to-know-about.html">article de 2009</a> sur les bloomfilters</li>
-<li>un autre <a href="http://billmill.org/bloomfilter-tutorial/">article</a> sur les bloomfilters avec de nombreuses références</li>
 </ul>
 
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Regrouper et compter: Mongo (partie 2/5)]]></title>
+    <title type="html"><![CDATA[Regrouper et compter: Mongo (partie 2/6)]]></title>
     <link href="http://www.smknstd.io/2014/06/28/counting-part2/"/>
     <updated>2014-06-28T11:12:00+02:00</updated>
     <id>http://www.smknstd.io/2014/06/28/counting-part2</id>
@@ -308,14 +355,16 @@
 <ul>
 <li>un <a href="http://web.archive.org/web/20100128030005/http://kylebanker.com/blog/2009/11/mongodb-count-group">article</a> précurseur sur le comptage</li>
 <li>un <a href="http://fiestacc.tumblr.com/post/11319522700/walkthrough-mongodb-data-modeling">article</a> fondateur sur les subtilités d&#8217;utilisation et de modélisation</li>
+<li>un autre <a href="http://www.railstips.org/blog/archives/2011/06/28/counters-everywhere/">article</a> de 2011 sur la mise en place des statistiques</li>
 <li>une <a href="http://highlyscalable.wordpress.com/2012/03/01/nosql-data-modeling-techniques/">synthèse</a> sur les différentes techniques de modélisation adaptées aux systèmes dits &#8220;NOSQL&#8221;</li>
+<li>une <a href="https://speakerdeck.com/jnunemaker/mongodb-for-analytics-3">presentation</a> sur les problématique d&#8217;aggregation</li>
 </ul>
 
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Regrouper et compter: SQL (partie 1/5)]]></title>
+    <title type="html"><![CDATA[Regrouper et compter: SQL (partie 1/6)]]></title>
     <link href="http://www.smknstd.io/2014/05/23/counting-part1/"/>
     <updated>2014-05-23T19:23:00+02:00</updated>
     <id>http://www.smknstd.io/2014/05/23/counting-part1</id>
@@ -333,9 +382,9 @@
 
 <h3>Index Bitmap</h3>
 
-<p>Un des outils intéressant pour améliorer les performances des SGBDR est l&#8217;index. Il en existe de plusieurs types et l&#8217;un deux, reste assez méconnu : c&#8217;est l&#8217;index <a href="http://en.wikipedia.org/wiki/Bitmap_index">bitmap</a>. Si vous ne le connaissez pas, je vous encourage à étudier son principe de fonctionnement. Il peut avoir des usages variés comme aider aux jointures mais nécessite de nombreuses précautions et un niveau de connaissance avancé. Par exemple, ces indexs ne doivent porter que sur une seule colonne, ce qui n’empêche bien sûr pas de cumuler leurs utilisations. Concernant notre calcul, cet index peut se révéler en théorie très efficace puisqu&#8217;il contient à lui seul toute l&#8217;information dont nous avons besoin et dans certains cas même déjà calculée!</p>
+<p>Un des outils intéressant pour améliorer les performances des SGBDR est l&#8217;index. Il en existe de plusieurs types et l&#8217;un d&#8217;eux reste assez méconnu : l&#8217;index <a href="http://en.wikipedia.org/wiki/Bitmap_index">bitmap</a>. Si vous ne le connaissez pas, je vous encourage à étudier son principe de fonctionnement. Il peut avoir des usages variés comme aider aux jointures mais nécessite de nombreuses précautions et impose de nombreuses contraintes et un niveau de connaissance avancé. Par exemple, ces indexs ne doivent porter que sur une seule colonne, ce qui n’empêche bien sûr pas de cumuler leurs utilisations. Concernant notre calcul, cet index peut se révéler en théorie très efficace puisqu&#8217;il contient à lui seul toute l&#8217;information dont nous avons besoin. Que nous pouvons traduire par éviter le parcours de la table et donc de précieux accès &#8220;disque&#8221;.</p>
 
-<p>Ci dessous un <a href="http://en.wikipedia.org/wiki/Query_plan">plan exécution</a> d&#8217;un comptage mettant à contribution un index bitmap sous Oracle 11g:</p>
+<p>Même si l&#8217;implémentation interne détaillée des indexs bitmaps dans la plupart des SGBDR reste obscure et mal documentée, on peut observer leur fonctionement au travers du <a href="http://en.wikipedia.org/wiki/Query_plan">plan exécution</a>. Ci-dessous, celui d&#8217;un comptage mettant à contribution un index bitmap sous Oracle 11g. Notez bien l&#8217;étape de conversion, qui compte simplement le nombre d&#8217;entrée, sans jamais se servir de leur adresse (rowid):</p>
 
 <p><img src="http://www.smknstd.io/images/bitmap.png" title="bitmap plan" alt="bitmap" /></p>
 

@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Regrouper et compter: Hadoop (partie 4/5) - smknstd.io</title>
+  <title>Regrouper et compter: Hadoop (partie 4/6) - smknstd.io</title>
   <meta name="author" content="smknstd">
 
   
@@ -83,7 +83,7 @@ function show_new() {
   <header>
     <div id="archive_header">
     
-      <h2 class="entry-title">Regrouper Et Compter: Hadoop (Partie 4/5)</h2>
+      <h2 class="entry-title">Regrouper Et Compter: Hadoop (Partie 4/6)</h2>
     
     </div>
   </header>
@@ -112,17 +112,19 @@ function show_new() {
 
 <div class="entry-content"><p>Pour ce quatrième article de cette série sur le comptage et le regroupement, j&#8217;ai souhaité aborder Hadoop que je n&#8217;ai eut l&#8217;occasion de manipuler que brièvement comparé à d&#8217;autres <a href="http://en.wikipedia.org/wiki/Oracle_Grid_Engine">technologies</a> vaguement similaires. Comme les autres articles de cette série ne vous attendez pas à rentrer en profondeur car je me contenterai d&#8217;aborder rapidement la seule problématique du comptage.</p>
 
-<h3>TL;DR</h3>
+<h3>Hadoop</h3>
 
 <p>Hadoop, qui s&#8217;appuie notamment sur HDFS, est un framework Java qui permet de faire du traitement distribué sur des fichiers volumineux en mode batch. Le buzz autour du &#8220;bigdata&#8221; a probablement vendu beaucoup de <a href="http://service-architecture.blogspot.fr/2014/01/six-reasons-your-big-data-hadoop.html">rêve</a> et je ne suis pas convaincu que cette technologie soit adapté à tant de problématiques qu&#8217;on aimerait le croire. Surtout avec ses nombreux coins sombres (jointures, debbug, pig, etc) il reste définitivement un outil de spécialistes difficile à mettre en oeuvre.</p>
 
 <h3>Regrouper et compter !</h3>
 
-<p>Heureusement pour nous, aborder la question de la cardinalité va nous permettre de bien comprendre le principe de fonctionnement du paradigme <a href="http://en.wikipedia.org/wiki/MapReduce">map/reduce</a>. TL;DR: issu de la programmation fonctionnelle, le principe consiste a décomposer une tâche pour opérations paralelisables. Pour effectuer le comptage sur un ensemble, hadoop divise l&#8217;opération en plusieurs comptages sur des sous ensembles et agrège le résultat.</p>
+<p>Heureusement pour nous, aborder la question de la cardinalité va nous permettre de bien comprendre le principe de fonctionnement du paradigme <a href="http://en.wikipedia.org/wiki/MapReduce">map/reduce</a>.</p>
+
+<p><strong>TL;DR</strong>: issu de la programmation fonctionnelle, le principe consiste a décomposer une tâche en sous-opérations parallélisables. Pour effectuer le comptage sur un ensemble, hadoop divise l&#8217;opération en plusieurs comptages sur des sous ensembles et agrège le résultat.</p>
 
 <p><img src="/images/mapreduce_sum.png" title="mapreduce1" alt="map_reduce" /></p>
 
-<p>&#8220;regrouper&#8221; des données sur une clef est une fonction qui est donc au cœur du framework. Il est donc plutôt simple à implémenter puisqu&#8217;on se sert principalement du comportement déjà existant. Schématiquement: toutes les valeurs de clefs sont regroupées et rassemblées dans le &#8220;reducer&#8221;. Il suffit de sélectionner les champs sur lesquels on souhaite faire un regroupement dans le &#8220;mapper&#8221;, le regroupement en lui même est entièrement pris en charge par le framework !</p>
+<p>Aggréger ou &#8220;regrouper&#8221; des données sur une clef est une fonction qui est au cœur du framework. Notre fonction souhaité de comptage est donc plutôt simple à implémenter puisqu&#8217;on se sert principalement du comportement déjà existant. Schématiquement: toutes les valeurs de clefs sont regroupées et rassemblées dans le &#8220;reducer&#8221;. Il suffit de sélectionner les champs sur lesquels on souhaite faire un regroupement dans le &#8220;mapper&#8221; et de mettre en place un compteur, le regroupement en lui même est entièrement pris en charge par le framework !</p>
 
 <p>Voici les quelques lignes de java qui suffisent à implémenter un comptage de cardinalité dans le &#8220;reducer&#8221;:</p>
 
@@ -167,7 +169,7 @@ function show_new() {
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Regardez comme ça à l&#8217;air simple sur cet exemple d&#8217;illustration (que j&#8217;ai volé qqpart ;).</p>
+<p>Regardez comme ça à l&#8217;air évident sur cet exemple d&#8217;illustration (que j&#8217;ai volé qqpart ;). Ne vous méprenez pas, cela à l&#8217;air très simple, pourtant comme évoqué en introduction ce concept appliqué à un cluster de machines de grande taille peut décomposer et paralléliser la tâche sur de multiples Datasets. Autrement dit effectuer une tâche immense très rapidement et uniquement avec du matériel &#8220;modeste&#8221; :)</p>
 
 <p><img src="/images/mapreduce_combine.png" title="mapreduce2" alt="map_reduce" /></p>
 
@@ -210,8 +212,10 @@ function show_new() {
     <div id="archive_header2">
       <div id="archive_header3">
       
-        <a class="basic-alignment left" href="/2014/07/04/counting-part3/" title="Previous Post: Regrouper et compter: Unix (partie 3/5)">&laquo; Regrouper et compter: Unix (partie 3/5)</a>
+        <a class="basic-alignment left" href="/2014/07/04/counting-part3/" title="Previous Post: Regrouper et compter: Unix (partie 3/6)">&laquo; Regrouper et compter: Unix (partie 3/6)</a>
       
+      
+        <a class="basic-alignment right" href="/2014/08/03/counting-part5/" title="Next Post: Regrouper et compter: Algorithmes d'approximation (partie 5/6)">Regrouper et compter: Algorithmes d'approximation (partie 5/6) &raquo;</a>
       
       </div>
     </div>

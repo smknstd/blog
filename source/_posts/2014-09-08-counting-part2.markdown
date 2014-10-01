@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Regrouper et compter: Mongo (partie 2/5)"
+title: "Regrouper et compter: Mongo (partie 2/6)"
 date: 2014-06-28 11:12
 comments: false
 categories: 
@@ -102,4 +102,6 @@ Pour revenir à notre sujet du comptage du nombre d'éléments uniques, ce n'est
 
 - un [article](http://web.archive.org/web/20100128030005/http://kylebanker.com/blog/2009/11/mongodb-count-group) précurseur sur le comptage
 - un [article](http://fiestacc.tumblr.com/post/11319522700/walkthrough-mongodb-data-modeling) fondateur sur les subtilités d'utilisation et de modélisation
+- un autre [article](http://www.railstips.org/blog/archives/2011/06/28/counters-everywhere/) de 2011 sur la mise en place des statistiques 
 - une [synthèse](http://highlyscalable.wordpress.com/2012/03/01/nosql-data-modeling-techniques/) sur les différentes techniques de modélisation adaptées aux systèmes dits "NOSQL"
+- une [presentation](https://speakerdeck.com/jnunemaker/mongodb-for-analytics-3) sur les problématique d'aggregation

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Regrouper et compter: SQL (partie 1/5)"
+title: "Regrouper et compter: SQL (partie 1/6)"
 date: 2014-05-23 19:23
 comments: false
 categories: 
@@ -19,9 +19,9 @@ Le volume de données traité reste un enjeu majeur de l'usage des SGBDR et le n
 
 ### Index Bitmap
 
-Un des outils intéressant pour améliorer les performances des SGBDR est l'index. Il en existe de plusieurs types et l'un deux, reste assez méconnu : c'est l'index [bitmap](http://en.wikipedia.org/wiki/Bitmap_index). Si vous ne le connaissez pas, je vous encourage à étudier son principe de fonctionnement. Il peut avoir des usages variés comme aider aux jointures mais nécessite de nombreuses précautions et un niveau de connaissance avancé. Par exemple, ces indexs ne doivent porter que sur une seule colonne, ce qui n’empêche bien sûr pas de cumuler leurs utilisations. Concernant notre calcul, cet index peut se révéler en théorie très efficace puisqu'il contient à lui seul toute l'information dont nous avons besoin et dans certains cas même déjà calculée!
+Un des outils intéressant pour améliorer les performances des SGBDR est l'index. Il en existe de plusieurs types et l'un d'eux reste assez méconnu : l'index [bitmap](http://en.wikipedia.org/wiki/Bitmap_index). Si vous ne le connaissez pas, je vous encourage à étudier son principe de fonctionnement. Il peut avoir des usages variés comme aider aux jointures mais nécessite de nombreuses précautions et impose de nombreuses contraintes et un niveau de connaissance avancé. Par exemple, ces indexs ne doivent porter que sur une seule colonne, ce qui n’empêche bien sûr pas de cumuler leurs utilisations. Concernant notre calcul, cet index peut se révéler en théorie très efficace puisqu'il contient à lui seul toute l'information dont nous avons besoin. Que nous pouvons traduire par éviter le parcours de la table et donc de précieux accès "disque".
 
-Ci dessous un [plan exécution](http://en.wikipedia.org/wiki/Query_plan) d'un comptage mettant à contribution un index bitmap sous Oracle 11g: 
+Même si l'implémentation interne détaillée des indexs bitmaps dans la plupart des SGBDR reste obscure et mal documentée, on peut observer leur fonctionement au travers du [plan exécution](http://en.wikipedia.org/wiki/Query_plan). Ci-dessous, celui d'un comptage mettant à contribution un index bitmap sous Oracle 11g. Notez bien l'étape de conversion, qui compte simplement le nombre d'entrée, sans jamais se servir de leur adresse (rowid): 
 
 ![bitmap]({{ root_url }}/images/bitmap.png "bitmap plan")
 

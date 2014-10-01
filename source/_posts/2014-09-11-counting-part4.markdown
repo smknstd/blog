@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Regrouper et compter: Hadoop (partie 4/5)"
+title: "Regrouper et compter: Hadoop (partie 4/6)"
 date: 2014-07-14 16:00
 comments: false
 categories: 
@@ -8,18 +8,19 @@ categories:
 
 Pour ce quatrième article de cette série sur le comptage et le regroupement, j'ai souhaité aborder Hadoop que je n'ai eut l'occasion de manipuler que brièvement comparé à d'autres [technologies](http://en.wikipedia.org/wiki/Oracle_Grid_Engine) vaguement similaires. Comme les autres articles de cette série ne vous attendez pas à rentrer en profondeur car je me contenterai d'aborder rapidement la seule problématique du comptage.
 
-### TL;DR
+### Hadoop
 
 Hadoop, qui s'appuie notamment sur HDFS, est un framework Java qui permet de faire du traitement distribué sur des fichiers volumineux en mode batch. Le buzz autour du "bigdata" a probablement vendu beaucoup de [rêve](http://service-architecture.blogspot.fr/2014/01/six-reasons-your-big-data-hadoop.html) et je ne suis pas convaincu que cette technologie soit adapté à tant de problématiques qu'on aimerait le croire. Surtout avec ses nombreux coins sombres (jointures, debbug, pig, etc) il reste définitivement un outil de spécialistes difficile à mettre en oeuvre.
 
 ### Regrouper et compter !
 
-Heureusement pour nous, aborder la question de la cardinalité va nous permettre de bien comprendre le principe de fonctionnement du paradigme [map/reduce](http://en.wikipedia.org/wiki/MapReduce). TL;DR: issu de la programmation fonctionnelle, le principe consiste a décomposer une tâche pour opérations paralelisables. Pour effectuer le comptage sur un ensemble, hadoop divise l'opération en plusieurs comptages sur des sous ensembles et agrège le résultat. 
+Heureusement pour nous, aborder la question de la cardinalité va nous permettre de bien comprendre le principe de fonctionnement du paradigme [map/reduce](http://en.wikipedia.org/wiki/MapReduce). 
+
+__TL;DR__: issu de la programmation fonctionnelle, le principe consiste a décomposer une tâche en sous-opérations parallélisables. Pour effectuer le comptage sur un ensemble, hadoop divise l'opération en plusieurs comptages sur des sous ensembles et agrège le résultat. 
 
 ![map_reduce]({{ root_url }}/images/mapreduce_sum.png "mapreduce1")
 
-"regrouper" des données sur une clef est une fonction qui est donc au cœur du framework. Il est donc plutôt simple à implémenter puisqu'on se sert principalement du comportement déjà existant. Schématiquement: toutes les valeurs de clefs sont regroupées et rassemblées dans le "reducer". Il suffit de sélectionner les champs sur lesquels on souhaite faire un regroupement dans le "mapper", le regroupement en lui même est entièrement pris en charge par le framework !
-
+Aggréger ou "regrouper" des données sur une clef est une fonction qui est au cœur du framework. Notre fonction souhaité de comptage est donc plutôt simple à implémenter puisqu'on se sert principalement du comportement déjà existant. Schématiquement: toutes les valeurs de clefs sont regroupées et rassemblées dans le "reducer". Il suffit de sélectionner les champs sur lesquels on souhaite faire un regroupement dans le "mapper" et de mettre en place un compteur, le regroupement en lui même est entièrement pris en charge par le framework !
 
 
 Voici les quelques lignes de java qui suffisent à implémenter un comptage de cardinalité dans le "reducer":
@@ -45,7 +46,7 @@ public static class CountReducer extends Reducer<Text, MinMaxCountTuple, Text, M
 	}
 }
 ```
-Regardez comme ça à l'air simple sur cet exemple d'illustration (que j'ai volé qqpart ;).
+Regardez comme ça à l'air évident sur cet exemple d'illustration (que j'ai volé qqpart ;). Ne vous méprenez pas, cela à l'air très simple, pourtant comme évoqué en introduction ce concept appliqué à un cluster de machines de grande taille peut décomposer et paralléliser la tâche sur de multiples Datasets. Autrement dit effectuer une tâche immense très rapidement et uniquement avec du matériel "modeste" :)
 
 ![map_reduce]({{ root_url }}/images/mapreduce_combine.png "mapreduce2")
 
