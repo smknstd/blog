@@ -4,7 +4,7 @@
   <title><![CDATA[smknstd.io]]></title>
   <link href="http://www.smknstd.io/atom.xml" rel="self"/>
   <link href="http://www.smknstd.io/"/>
-  <updated>2014-10-02T13:03:07+02:00</updated>
+  <updated>2014-10-02T13:05:54+02:00</updated>
   <id>http://www.smknstd.io/</id>
   <author>
     <name><![CDATA[smknstd]]></name>
@@ -167,7 +167,7 @@
 
 <h4>Limites</h4>
 
-<p>Même si l&#8217;implémentation de ces outils utilise ce qu&#8217;il y a de plus <a href="[efficients](http://en.wikipedia.org/wiki/Merge_sort">performant</a>.), leur utilisation reste couteuse pour le système. En plus du temps d&#8217;execution, la taille des données à regrouper et compter ne peut pas dépasser les capacités physiques de la machine (RAM notamment).</p>
+<p>Même si l&#8217;implémentation de ces outils utilise ce qu&#8217;il y a de plus <a href="http://en.wikipedia.org/wiki/Merge_sort">performant</a>, leur utilisation reste coûteuse pour le système. En plus du temps d’exécution, la taille des données à regrouper et compter ne peut pas dépasser les capacités physiques de la machine (RAM notamment).</p>
 
 <h3>&#8220;Les bons outils font les bons ouvriers&#8221;</h3>
 

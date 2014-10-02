@@ -14,7 +14,7 @@ Lorsqu'on souhiate compter le nombre d'éléments uniques on peut s'en sortir tr
 
 #### Limites
 
-Même si l'implémentation de ces outils utilise ce qu'il y a de plus [performant]([efficients](http://en.wikipedia.org/wiki/Merge_sort).), leur utilisation reste couteuse pour le système. En plus du temps d'execution, la taille des données à regrouper et compter ne peut pas dépasser les capacités physiques de la machine (RAM notamment).
+Même si l'implémentation de ces outils utilise ce qu'il y a de plus [performant](http://en.wikipedia.org/wiki/Merge_sort), leur utilisation reste coûteuse pour le système. En plus du temps d’exécution, la taille des données à regrouper et compter ne peut pas dépasser les capacités physiques de la machine (RAM notamment).
 
 ### "Les bons outils font les bons ouvriers"
 
