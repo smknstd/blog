@@ -6,7 +6,7 @@ comments: false
 categories: 
 ---
 
-Pour continuer cette série d'articles de présentation sur la thématique du regroupement et du comptage, j'ai souhaité aborder la base orientée documents [Mongo](http://en.wikipedia.org/wiki/MongoDB). L'explication est simple car parmi les bases de données non-relationnelles qui ont tendance à se démocratiser ces dernières années, c'est celle que je connais le mieux ;)
+Pour continuer cette série d'articles de présentation sur la thématique du regroupement et du comptage, j'ai souhaité aborder la base orientée documents [Mongo](http://en.wikipedia.org/wiki/MongoDB). Bien sûr, j'aurai pu parler d'un autre systeme parmi toutes les nombreuses bases de données non-relationnelles qui ont tendance à se démocratiser ces dernières années, mais je n'ai pas l'ambition d'essayer d'être exaustif et pour être honête c'est celle que je connais le mieux ;)
 
 D'abord je souhaite rappeler que Mongo est un outil qui dans le paysage des outils de gestion de base de données est relativement jeune (2009). Bien que Mongo ait rencontré un succès massif en répondant à de nombreux besoins notamment de flexibilité et de performance, la manipulation des données ne me semble pas avoir été au cœur des préoccupations dès le début. Les capacités du système à répondre aux besoins d'analyse des données ont amené certains utilisateurs à de sérieuses déconvenues. En effet, en plus de ne mettre à disposition que des outils d'interrogation ["sommaires"](http://docs.mongodb.org/manual/tutorial/map-reduce-examples/) pour dire le moins, la performance de ceux-ci est grandement affecté par des choix souvent subtiles lors de la modélisation !
 
@@ -49,7 +49,7 @@ L'utilisation d'indexs est essentiel au fonctionnement de Mongo. Leur mise en pl
 ```
 
 
-Pour revenir à notre sujet du comptage du nombre d'éléments uniques, ce n'est toujours pas un des points fort de Mongo. Consulter le plan d’exécution de la fonction ".aggregate()" du framework d'aggregation n'est disponible que depuis la version 2.6 (début 2014). Malgré cela, selon mon expérience, il reste difficile d'analyser le comportement des requêtes de ce type et pire il toujours presque impossible d'[influer](https://jira.mongodb.org/browse/SERVER-7944) sur le comportement !? Par exemple, dans cette requête de regroupement et de comptage je ne peux que constater que l’accès se fait par un curseur "basique" (comprenez `FullScan`) qui semble ignorer l'index que j'ai pourtant réussi à utiliser précédemment et qui contient bien l'information dont on a besoin :(
+Pour revenir à notre sujet du comptage du nombre d'éléments uniques, ce n'est toujours pas un des points forts de Mongo. Consulter le plan d’exécution de la fonction ".aggregate()" du framework d'aggregation n'est disponible que depuis la version 2.6 (début 2014). Malgré cela, selon mon expérience, il reste difficile d'analyser le comportement des requêtes de ce type et pire il toujours presque impossible d'[influer](https://jira.mongodb.org/browse/SERVER-7944) sur le comportement !? Par exemple, dans cette requête de regroupement et de comptage je ne peux que constater que l’accès se fait par un curseur "basique" (comprenez `FullScan`) qui semble ignorer l'index que j'ai pourtant réussi à utiliser précédemment et qui contient bien l'information dont on a besoin :(
 
 
 ```
@@ -102,6 +102,8 @@ Pour revenir à notre sujet du comptage du nombre d'éléments uniques, ce n'est
 
 - un [article](http://web.archive.org/web/20100128030005/http://kylebanker.com/blog/2009/11/mongodb-count-group) précurseur sur le comptage
 - un [article](http://fiestacc.tumblr.com/post/11319522700/walkthrough-mongodb-data-modeling) fondateur sur les subtilités d'utilisation et de modélisation
+- une série d'[articles](http://blog.mongodb.org/post/87200945828/6-rules-of-thumb-for-mongodb-schema-design-part-1) plus récente sur la modélisation
 - un autre [article](http://www.railstips.org/blog/archives/2011/06/28/counters-everywhere/) de 2011 sur la mise en place des statistiques 
 - une [synthèse](http://highlyscalable.wordpress.com/2012/03/01/nosql-data-modeling-techniques/) sur les différentes techniques de modélisation adaptées aux systèmes dits "NOSQL"
-- une [presentation](https://speakerdeck.com/jnunemaker/mongodb-for-analytics-3) sur les problématique d'aggregation
+- une [presentation](https://speakerdeck.com/jnunemaker/mongodb-for-analytics-3) sur les problématiques d'aggregation
+- un [article](http://thecodebarbarian.wordpress.com/2014/02/14/crunching-30-years-of-nba-data-with-mongodb-aggregation/) enthousiaste sur les possibilités du "aggregation framework"

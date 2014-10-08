@@ -6,17 +6,17 @@ comments: false
 categories: 
 ---
 
-Pour ce quatrième article de cette série sur le comptage et le regroupement, j'ai souhaité aborder Hadoop que je n'ai eut l'occasion de manipuler que brièvement comparé à d'autres [technologies](http://en.wikipedia.org/wiki/Oracle_Grid_Engine) vaguement similaires. Comme les autres articles de cette série ne vous attendez pas à rentrer en profondeur car je me contenterai d'aborder rapidement la seule problématique du comptage.
+Pour ce quatrième article de cette série sur le comptage et le regroupement, j'ai souhaité aborder Hadoop. Je préfère être honnête: je n'ai eut l'occasion de manipuler ce système que brièvement comparé à d'autres [technologies](http://en.wikipedia.org/wiki/Oracle_Grid_Engine) vaguement similaires et je n'en ai qu'une connaissance limitée. Toutefois, hadoop est je pense un système qui compte et je pense qu'il est important d'en comprendre le principe. Comme les autres articles de cette série, ne vous attendez pas à rentrer en profondeur car je me contenterai d'aborder rapidement la seule problématique du regroupement et du comptage.
 
 ### Hadoop
 
-Hadoop, qui s'appuie notamment sur HDFS, est un framework Java qui permet de faire du traitement distribué sur des fichiers volumineux en mode batch. Le buzz autour du "bigdata" a probablement vendu beaucoup de [rêve](http://service-architecture.blogspot.fr/2014/01/six-reasons-your-big-data-hadoop.html) et je ne suis pas convaincu que cette technologie soit adapté à tant de problématiques qu'on aimerait le croire. Surtout avec ses nombreux coins sombres (jointures, debbug, pig, etc) il reste définitivement un outil de spécialistes difficile à mettre en oeuvre.
+Hadoop, qui s'appuie notamment sur HDFS, est un framework Java qui permet de faire du traitement distribué à grande échelle sur des fichiers volumineux en mode batch. Developpé et mis en oeuvre par Yahoo au milieu des années 2000, il a ensuite nourrit beaucoup de fantasmes. Le buzz autour du "bigdata" a probablement vendu beaucoup de [rêve](http://service-architecture.blogspot.fr/2014/01/six-reasons-your-big-data-hadoop.html) et je ne suis pas convaincu que cette technologie soit adaptée à tant de problématiques et surtout de contextes qu'on aimerait le croire. Surtout avec ses nombreux coins sombres (jointures, debug, pig, etc) il reste définitivement un outil de spécialistes, difficile et coûteux à mettre en oeuvre.
 
 ### Regrouper et compter !
 
-Heureusement pour nous, aborder la question de la cardinalité va nous permettre de bien comprendre le principe de fonctionnement du paradigme [map/reduce](http://en.wikipedia.org/wiki/MapReduce). 
+Heureusement pour nous, aborder la question de la cardinalité va nous permettre de bien comprendre le principe de fonctionnement du paradigme [map/reduce](http://en.wikipedia.org/wiki/MapReduce) puisqu'il est un des cas typiques d'utilisation. 
 
-__TL;DR__: issu de la programmation fonctionnelle, le principe consiste a décomposer une tâche en sous-opérations parallélisables. Pour effectuer le comptage sur un ensemble, hadoop divise l'opération en plusieurs comptages sur des sous ensembles et agrège le résultat. 
+__TL;DR__: issu de la programmation fonctionnelle, son principe consiste a décomposer une tâche en sous-opérations parallélisables. Pour effectuer le comptage sur un ensemble, hadoop divise l'opération en plusieurs comptages sur des sous ensembles qu'il va pouvoir paralléliser et agrège le résultat.
 
 ![map_reduce]({{ root_url }}/images/mapreduce_sum.png "mapreduce1")
 
@@ -56,3 +56,4 @@ That's all, Folks !
 
 - un [ouvrage](http://www.amazon.com/MapReduce-Design-Patterns-Effective-Algorithms/dp/1449327176) de référence sur le framework Map/Reduce
 - une [vidéo](https://www.youtube.com/watch?v=oIkhgagvrjI) amusante d'explications sur un des compteurs les plus célèbres de notre époque
+- map/reduce [éxpliqué](http://www.chrisstucchio.com/blog/2011/mapreduce_explained.html) aux enfants

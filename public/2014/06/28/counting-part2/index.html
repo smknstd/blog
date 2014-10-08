@@ -110,7 +110,7 @@ function show_new() {
   </header>
 
 
-<div class="entry-content"><p>Pour continuer cette série d&#8217;articles de présentation sur la thématique du regroupement et du comptage, j&#8217;ai souhaité aborder la base orientée documents <a href="http://en.wikipedia.org/wiki/MongoDB">Mongo</a>. L&#8217;explication est simple car parmi les bases de données non-relationnelles qui ont tendance à se démocratiser ces dernières années, c&#8217;est celle que je connais le mieux ;)</p>
+<div class="entry-content"><p>Pour continuer cette série d&#8217;articles de présentation sur la thématique du regroupement et du comptage, j&#8217;ai souhaité aborder la base orientée documents <a href="http://en.wikipedia.org/wiki/MongoDB">Mongo</a>. Bien sûr, j&#8217;aurai pu parler d&#8217;un autre systeme parmi toutes les nombreuses bases de données non-relationnelles qui ont tendance à se démocratiser ces dernières années, mais je n&#8217;ai pas l&#8217;ambition d&#8217;essayer d&#8217;être exaustif et pour être honête c&#8217;est celle que je connais le mieux ;)</p>
 
 <p>D&#8217;abord je souhaite rappeler que Mongo est un outil qui dans le paysage des outils de gestion de base de données est relativement jeune (2009). Bien que Mongo ait rencontré un succès massif en répondant à de nombreux besoins notamment de flexibilité et de performance, la manipulation des données ne me semble pas avoir été au cœur des préoccupations dès le début. Les capacités du système à répondre aux besoins d&#8217;analyse des données ont amené certains utilisateurs à de sérieuses déconvenues. En effet, en plus de ne mettre à disposition que des outils d&#8217;interrogation <a href="http://docs.mongodb.org/manual/tutorial/map-reduce-examples/">&#8220;sommaires&#8221;</a> pour dire le moins, la performance de ceux-ci est grandement affecté par des choix souvent subtiles lors de la modélisation !</p>
 
@@ -174,7 +174,7 @@ function show_new() {
 </span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
-<p>Pour revenir à notre sujet du comptage du nombre d&#8217;éléments uniques, ce n&#8217;est toujours pas un des points fort de Mongo. Consulter le plan d’exécution de la fonction &#8220;.aggregate()&#8221; du framework d&#8217;aggregation n&#8217;est disponible que depuis la version 2.6 (début 2014). Malgré cela, selon mon expérience, il reste difficile d&#8217;analyser le comportement des requêtes de ce type et pire il toujours presque impossible d&#8217;<a href="https://jira.mongodb.org/browse/SERVER-7944">influer</a> sur le comportement !? Par exemple, dans cette requête de regroupement et de comptage je ne peux que constater que l’accès se fait par un curseur &#8220;basique&#8221; (comprenez <code>FullScan</code>) qui semble ignorer l&#8217;index que j&#8217;ai pourtant réussi à utiliser précédemment et qui contient bien l&#8217;information dont on a besoin :(</p>
+<p>Pour revenir à notre sujet du comptage du nombre d&#8217;éléments uniques, ce n&#8217;est toujours pas un des points forts de Mongo. Consulter le plan d’exécution de la fonction &#8220;.aggregate()&#8221; du framework d&#8217;aggregation n&#8217;est disponible que depuis la version 2.6 (début 2014). Malgré cela, selon mon expérience, il reste difficile d&#8217;analyser le comportement des requêtes de ce type et pire il toujours presque impossible d&#8217;<a href="https://jira.mongodb.org/browse/SERVER-7944">influer</a> sur le comportement !? Par exemple, dans cette requête de regroupement et de comptage je ne peux que constater que l’accès se fait par un curseur &#8220;basique&#8221; (comprenez <code>FullScan</code>) qui semble ignorer l&#8217;index que j&#8217;ai pourtant réussi à utiliser précédemment et qui contient bien l&#8217;information dont on a besoin :(</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -269,9 +269,11 @@ function show_new() {
 <ul>
 <li>un <a href="http://web.archive.org/web/20100128030005/http://kylebanker.com/blog/2009/11/mongodb-count-group">article</a> précurseur sur le comptage</li>
 <li>un <a href="http://fiestacc.tumblr.com/post/11319522700/walkthrough-mongodb-data-modeling">article</a> fondateur sur les subtilités d&#8217;utilisation et de modélisation</li>
+<li>une série d&#8217;<a href="http://blog.mongodb.org/post/87200945828/6-rules-of-thumb-for-mongodb-schema-design-part-1">articles</a> plus récente sur la modélisation</li>
 <li>un autre <a href="http://www.railstips.org/blog/archives/2011/06/28/counters-everywhere/">article</a> de 2011 sur la mise en place des statistiques</li>
 <li>une <a href="http://highlyscalable.wordpress.com/2012/03/01/nosql-data-modeling-techniques/">synthèse</a> sur les différentes techniques de modélisation adaptées aux systèmes dits &#8220;NOSQL&#8221;</li>
-<li>une <a href="https://speakerdeck.com/jnunemaker/mongodb-for-analytics-3">presentation</a> sur les problématique d&#8217;aggregation</li>
+<li>une <a href="https://speakerdeck.com/jnunemaker/mongodb-for-analytics-3">presentation</a> sur les problématiques d&#8217;aggregation</li>
+<li>un <a href="http://thecodebarbarian.wordpress.com/2014/02/14/crunching-30-years-of-nba-data-with-mongodb-aggregation/">article</a> enthousiaste sur les possibilités du &#8220;aggregation framework&#8221;</li>
 </ul>
 
 </div>

@@ -1,0 +1,204 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Regrouper et compter: Panda (partie 6/6) - smknstd.io</title>
+  <meta name="author" content="smknstd">
+
+  
+  <meta name="description" content="Dans cette série d&#8217;articles consacrée aux différentes approches d&#8217;une opération de regroupement et de comptage de données, j&#8217;ai &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.smknstd.io/2014/09/01/counting-part6/">
+  <link href="/images/favicon.ico" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feedpress.me/smknstd" rel="alternate" title="smknstd.io" type="application/atom+xml">
+  <script type="text/javascript" src="//use.typekit.net/oqc4yak.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<script type="text/javascript">
+function show_new() {
+	var j=0;
+    var chila = document.getElementById("blog-archives").children;
+	for(var i = 0; i < chila.length; i++) {
+			var ch = chila[i].getElementsByTagName('h1')[0];
+		    var lien = ch.getElementsByTagName('a')[0].getAttribute("href");
+		    mytab = lien.split("/");
+		    var parsedDate = new Date(parseInt(mytab[1]), parseInt(mytab[2])-1, parseInt(mytab[3]), 0, 0, 0, 0);
+		    var today = new Date();
+		    var diffDays = Math.floor((today - parsedDate)/(1000*60*60*24));
+		    if(diffDays<45){
+		    	j++;
+		        ch.innerHTML=chila[i].getElementsByTagName('h1')[0].innerHTML+"<div id='new'>NEW</div>";
+		    }else{
+		    	// comme les articles sont ordonnées chronologiquement on peut s'arreter de chercher au premier article de plus de 45 jours trouvé 
+		    	break;
+		    }
+
+	}
+	console.log("[function show_new] " + j +" articles de moins de 45 jours (rajout de l'etiquette NEW)");
+}
+</script>
+
+  
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5215670-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+
+
+</head>
+
+<body onload="show_new()"   >
+  <header role="banner">  <div id="logo"><a href="/"><img src="/images/logo.png" alt="logo" /></a></div>
+  <div id="legend">{type: "web log", localhost: "Paris", about: "trapped all day, got my cheese and an indexed key"}</div>
+
+</header>
+  <nav role="navigation">
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    <div id="archive_header">
+    
+      <h2 class="entry-title">Regrouper Et Compter: Panda (Partie 6/6)</h2>
+    
+    </div>
+  </header>
+  <header>
+    <div id="archive_header">
+    
+      <h3 class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-09-01T09:14:00+02:00" pubdate data-updated="true">Sep 1<span>st</span>, 2014</time>
+      </h3>
+    
+    </div>
+  </header>
+
+
+<div class="entry-content"><p>Dans cette série d&#8217;articles consacrée aux différentes approches d&#8217;une opération de regroupement et de comptage de données, j&#8217;ai essayé de ne pas me concentrer uniquement sur les bases de données. Pour ce dernier article, j&#8217;ai voulu rappeler qu&#8217;il existe bien d&#8217;autres outils spécialisés qui peuvent répondre à des besoins variés. Il existe notamment des outils sophistiqués de manipulation et de calcul statistique plus ou moins récents comme le langage <a href="http://en.wikipedia.org/wiki/NumPy">R</a> (~1993) ou <a href="http://fr.wikipedia.org/wiki/SAS_%28langage%29">SAS</a> (~années 60). Rien de nouveau sous le soleil, mais depuis quelques années (~2012) une petite librairie python fait beaucoup de bruit dans ce paysage: le framework <a href="https://github.com/pydata/pandas">Panda</a> !</p>
+
+<h3>Panda ?</h3>
+
+<p>Panda est une boite à outils de manipulation et d&#8217;analyse de données en mémoire ! Ce n&#8217;est pas un outil aussi spécialisé que peut l&#8217;être R par exemple, mais plutôt une libraire généraliste et facile à mettre en œuvre. Basé sur une <a href="http://en.wikipedia.org/wiki/NumPy">structure</a> interne de données très performante, il est vraiment souple et très facile à prendre en main. Il est aussi très bien documenté et offre de vastes possibilités, ce qui en fait un outil redoutablement efficace !</p>
+
+<p>Bien sûr, toutes les opérations se font en mémoire donc on est forcement limité par les ressources de sa machine. Mais en ne chargeant que les données nécessaires pour chaque opération, et en se rappelant qu&#8217;il n&#8217;est pas rare de voir un PC portable avec 16go de RAM, cela ouvre de belles perspectives, non ?</p>
+
+<p>Panda se présente donc comme une solution convaincante pour manipuler et analyser des données volumineuses, surtout si vous devez le faire rapidement et que ce n&#8217;est pas un besoin récurrent. Il n&#8217;est pas vraiment question ici, d&#8217;implémenter un mode batch.</p>
+
+<h3>Regrouper et compter</h3>
+
+<p>Comme évoqué précédemment, Panda est vraiment facile à mettre en œuvre. Il existe de nombreuses possibilités pour charger tous types de données structurées, le plus simple étant bien évidemment un bon vieux fichier CSV. Ensuite il ne vous reste plus qu&#8217;à vous familiariser avec les deux structures de données principales du framework: les <code>Series</code> (tableaux) et les <code>Dataframes</code> (~tableaux multidimensions). Le reste est <a href="https://www.youtube.com/watch?v=fvxFzBLv1s0">simple comme bonjour</a> !</p>
+
+<p>Le comptage <code>.count()</code> et le regroupement <code>.groupby()</code> sont des opérations très intuitives, performantes et bien <a href="http://pandas.pydata.org/pandas-docs/stable/groupby.html#groupby">documentées</a>. Je ne suis pas sûr que tout le monde puisse en dire <a href="http://stackoverflow.com/questions/10352346/group-by-in-sas">autant</a>.</p>
+
+<p>Je n&#8217;ai pas grand chose à rajouter alors je finis sur cet aperçu d&#8217;un regroupement très simple au travers d&#8217;<a href="http://en.wikipedia.org/wiki/IPython">IPython</a>. Auf Wiedersehen !</p>
+
+<p><img src="/images/panda_groupby.jpg" title="group by avec panda" alt="groupbypanda" /></p>
+
+<h3>Ressources</h3>
+
+<ul>
+<li>une très bonne <a href="http://sametmax.com/le-pandas-cest-bon-mangez-en/">introduction</a> à Panda en français !</li>
+<li>un blog avec des <a href="http://www.gregreda.com/tag/pandas.html">publications régulières</a> et bien écrites sur l&#8217;utilisation de la librairie</li>
+<li>une <a href="https://s3.amazonaws.com/quandl-static-content/Documents/Quandl+-+Pandas,+SciPy,+NumPy+Cheat+Sheet.pdf">cheatsheet</a> qui ne fait pas de mal</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">smknstd</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-09-01T09:14:00+02:00" pubdate data-updated="true">Sep 1<span>st</span>, 2014</time>
+      
+
+
+    </p>
+    <div id="archive_header2">
+      <div id="archive_header3">
+      
+        <a class="basic-alignment left" href="/2014/08/03/counting-part5/" title="Previous Post: Regrouper et compter: Algorithmes d'approximation (partie 5/6)">&laquo; Regrouper et compter: Algorithmes d'approximation (partie 5/6)</a>
+      
+      
+        <a class="basic-alignment right" href="/2014/09/24/mongodb-injections/" title="Next Post: Méfiez vous des injections même avec MongoDB">Méfiez vous des injections même avec MongoDB &raquo;</a>
+      
+      </div>
+    </div>
+  </footer>
+</article>
+</div>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  2014 - smknstd -
+  <span class="credit">designed with <a href="http://octopress.org">Octopress</a> and hosted by <a href="http://heroku.com">Heroku</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

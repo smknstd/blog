@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Méfiez vous des injections même avec MongoDB - smknstd.io</title>
+  <meta name="author" content="smknstd">
+
+  
+  <meta name="description" content="L&#8217;injection SQL est probablement l&#8217;un des sujets les plus populaires dans le domaine de la sécurité web. C&#8217;est aussi l&#8217;un des &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.smknstd.io/2014/09/24/mongodb-injections/">
+  <link href="/images/favicon.ico" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feedpress.me/smknstd" rel="alternate" title="smknstd.io" type="application/atom+xml">
+  <script type="text/javascript" src="//use.typekit.net/oqc4yak.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<script type="text/javascript">
+function show_new() {
+	var j=0;
+    var chila = document.getElementById("blog-archives").children;
+	for(var i = 0; i < chila.length; i++) {
+			var ch = chila[i].getElementsByTagName('h1')[0];
+		    var lien = ch.getElementsByTagName('a')[0].getAttribute("href");
+		    mytab = lien.split("/");
+		    var parsedDate = new Date(parseInt(mytab[1]), parseInt(mytab[2])-1, parseInt(mytab[3]), 0, 0, 0, 0);
+		    var today = new Date();
+		    var diffDays = Math.floor((today - parsedDate)/(1000*60*60*24));
+		    if(diffDays<45){
+		    	j++;
+		        ch.innerHTML=chila[i].getElementsByTagName('h1')[0].innerHTML+"<div id='new'>NEW</div>";
+		    }else{
+		    	// comme les articles sont ordonnées chronologiquement on peut s'arreter de chercher au premier article de plus de 45 jours trouvé 
+		    	break;
+		    }
+
+	}
+	console.log("[function show_new] " + j +" articles de moins de 45 jours (rajout de l'etiquette NEW)");
+}
+</script>
+
+  
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5215670-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+
+
+</head>
+
+<body onload="show_new()"   >
+  <header role="banner">  <div id="logo"><a href="/"><img src="/images/logo.png" alt="logo" /></a></div>
+  <div id="legend">{type: "web log", localhost: "Paris", about: "trapped all day, got my cheese and an indexed key"}</div>
+
+</header>
+  <nav role="navigation">
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    <div id="archive_header">
+    
+      <h2 class="entry-title">Méfiez Vous Des Injections Même Avec MongoDB</h2>
+    
+    </div>
+  </header>
+  <header>
+    <div id="archive_header">
+    
+      <h3 class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-09-24T08:11:00+02:00" pubdate data-updated="true">Sep 24<span>th</span>, 2014</time>
+      </h3>
+    
+    </div>
+  </header>
+
+
+<div class="entry-content"><p>L&#8217;<a href="http://en.wikipedia.org/wiki/SQL_injection">injection SQL</a> est probablement l&#8217;un des sujets les plus populaires dans le domaine de la sécurité web. C&#8217;est aussi l&#8217;un des sujet les mieux <a href="http://www.root-me.org/fr/Documentation/Web/Injection-SQL">documenté</a> et donc le mieux <a href="http://stackoverflow.com/questions/60174/how-can-i-prevent-sql-injection-in-php">pris en compte</a>.</p>
+
+<p>Lorsqu&#8217;une application utilise un système de base de données qui ne dispose pas de la commodité du langage SQL, elle est par la même occasion épargnée par les risques d&#8217;injection généralement liés. Pour autant, il ne faudrait pas systématiquement se croire à l’abri de comportements malicieux.</p>
+
+<h3>MongoDB</h3>
+
+<p>Pour interroger une collection ou modifier des données, on n&#8217;écrit pas de requête comme on pourrait le faire en SQL, et surtout cela ne prend pas la forme d&#8217;une chaîne de caractères. A travers les librairies &#8220;client&#8221; des différents langages, on utilise généralement une méthode spécifique pour l&#8217;opération souhaitée qui se traduit ensuite par la création d&#8217;un objet BSON. En conséquence la logique de l&#8217;injection SQL ne peut pas s&#8217;appliquer. On ne pourra jamais profiter d&#8217;une opération de consultation pour modifier ou supprimer des données ! #YOUPI</p>
+
+<h4>Javascript coté serveur</h4>
+
+<p>Toutefois, comme le tempère la <a href="http://docs.mongodb.org/manual/faq/developers/#how-does-mongodb-address-sql-or-query-injection">documentation officielle</a>, il faut se méfier de certaines opérations spécifiques qui peuvent exécuter du Javascript arbitraire directement sur serveur comme <code>$where</code> ou <code>group</code>.</p>
+
+<blockquote><p>You must exercise care in these cases to prevent users from submitting malicious JavaScript.</p></blockquote>
+
+<h4>Caractère réservé aux opérateurs</h4>
+
+<p>D&#8217;autre part, Mongo réserve le caractère <code>$</code> à certains opérateurs comme ceux de <a href="http://docs.mongodb.org/manual/reference/operator/query-comparison/">comparaison</a> par exemple.</p>
+
+<blockquote><p>Field names in MongoDB’s query language have semantic meaning. The dollar sign (i.e $) is a reserved character used to represent operators (i.e. $inc.) Thus, you should ensure that your application’s users cannot inject operators into their inputs.</p></blockquote>
+
+<p>On peut <a href="http://cirw.in/blog/hash-injection">trouver</a>, <a href="https://www.idontplaydarts.com/2010/07/mongodb-is-vulnerable-to-sql-injection-in-php-at-least/">plusieurs</a> <a href="http://blog.websecurify.com/2014/08/hacking-nodejs-and-mongodb.html">ressources</a> qui mettent en lumières des cas pratiques dans lesquels le comportement attendu d&#8217;une requête est modifié grâce à l&#8217;utilisation malicieuse d&#8217;un <strong>opérateur</strong> à la place d&#8217;une valeur habituelle.</p>
+
+<p>Tiré d&#8217;un de ces articles, voici un exemple frappant (parmi d&#8217;autres) dans lequel un utilisateur, grâce à une implémentation php trop permissive, a pu substituer l&#8217;opérateur &#8220;not equal&#8221; (<code>$ne</code>) à la valeur du mot de passe et réussir l&#8217;authentification (sauf dans le cas où le mot de passe était valorisé à 1 lol). Bien sûr dans cet exemple un peu naïf, on valorise les paramètres directement dans l&#8217;url: <code>login.php?username=admin&amp;passwd[$ne]=1</code>. Voilà comment on pourrait représenter l’interprétation problématique et trop permissive qui en découle:</p>
+
+<pre><code>$collection-&gt;find(array(
+    "username" =&gt; "admin",
+    "passwd" =&gt; array("$ne" =&gt; 1)
+));
+</code></pre>
+
+<p>Ces exemples montrent bien que même si l&#8217;interrogation sur MongoDB est par nature plus solide face aux injections, il faut malgré tout rester vigilent lorsqu&#8217;on conçoit l&#8217;interface liée. Tout comme on a appris le faire avec SQL, avec Mongo, il faut aussi porter un soin particulier à vérifier le contenu des valeurs paramétrées par l&#8217;utilisateur.</p>
+
+<p>Passez une bonne journée :)</p>
+
+<h3>Ressources</h3>
+
+<ul>
+<li>une bonne petite <a href="http://xkcd.com/327/">blague</a></li>
+<li>une <a href="http://php.net/manual/en/mongo.security.php">note</a> officielle sur la sécurité du client php de mongo</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">smknstd</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-09-24T08:11:00+02:00" pubdate data-updated="true">Sep 24<span>th</span>, 2014</time>
+      
+
+
+    </p>
+    <div id="archive_header2">
+      <div id="archive_header3">
+      
+        <a class="basic-alignment left" href="/2014/09/01/counting-part6/" title="Previous Post: Regrouper et compter: Panda (partie 6/6)">&laquo; Regrouper et compter: Panda (partie 6/6)</a>
+      
+      
+      </div>
+    </div>
+  </footer>
+</article>
+</div>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  2014 - smknstd -
+  <span class="credit">designed with <a href="http://octopress.org">Octopress</a> and hosted by <a href="http://heroku.com">Heroku</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -9,7 +9,7 @@
   <meta name="author" content="smknstd">
 
   
-  <meta name="description" content="Quand la taille des datasets augmente, l&#8217;approche stricte des algorithmes classiques se montre souvent trop gourmande en ressources. La &hellip;">
+  <meta name="description" content="Bienvenue dans le 5ème article de cette série dédié au regroupement et comptage, une opération courante pour ne pas dire systématique dans les &hellip;">
   
 
   <meta name="HandheldFriendly" content="True">
@@ -110,15 +110,19 @@ function show_new() {
   </header>
 
 
-<div class="entry-content"><p>Quand la taille des datasets augmente, l&#8217;approche stricte des algorithmes classiques se montre souvent trop gourmande en ressources. La consommation de mémoire et le temps d’exécution notamment peuvent devenir problématiques. Il existe une famille d&#8217;algorithmes qui propose une approche différente radicalement moins consommatrice en mémoire, à de nombreux problèmes dont le comptage de cardinalité: <a href="http://en.wikipedia.org/wiki/Streaming_algorithm">Streaming algorithms</a>.</p>
+<div class="entry-content"><p>Bienvenue dans le 5ème article de cette série dédié au regroupement et comptage, une opération courante pour ne pas dire systématique dans les applications actuelles. Pour rappel, j&#8217;essaie dans chaque article de décrire assez naïvement les possibilités et l&#8217;approche avec différentes technologies.</p>
 
-<p>Loin d&#8217;avoir les connaissances suffisantes, je vais m&#8217;abstenir d&#8217;essayer d&#8217;expliquer leur fonctionement détaillé, je vais me contenter de vous expliquer leur utilité et quelques cas d&#8217;utilisations des plus populaires. En simplifiant beaucoup, ces outils permettent de traiter les élements uniques de manière miraculeuse. En contre partie, la plupart d&#8217;entre eux sont basé sur des structures probabilistes qui ne garantissent pas toujours l&#8217;exactitude du résultat. Certaines valeurs sont inexactes selon un certains taux d&#8217;erreur (<a href="http://hur.st/bloomfilter">défini</a>) généralement faible :)</p>
+<p>Quand la taille des datasets que l&#8217;on souhaite traiter augmente, l&#8217;approche stricte des algorithmes classiques se montre souvent trop gourmande et dépasse vite les ressources disponible. La consommation de mémoire ou le temps d’exécution notamment peuvent devenir problématiques. Il existe une famille d&#8217;algorithmes qui propose une approche différente radicalement moins consommatrice en mémoire, à de nombreux problèmes dont le comptage de cardinalité: <a href="http://en.wikipedia.org/wiki/Streaming_algorithm">Streaming algorithms</a>.</p>
 
-<p>Issu de la recherche, le domaine n&#8217;est pas nouveau mais reste un sujet réservé aux experts. De nombreux outils qui font face à de grands volumes de données ou à de faible latences les implémentent dans leur fonctionnement interne. Toutefois leur utilisation commence à se populariser, et même si aucun outils comme ceux de bases de données ne les mets a disposition, des librairies dans de nombreux langages de programmation tentent d&#8217;en faire des implémentations.</p>
+<p>Loin d&#8217;avoir les connaissances suffisantes, je vais m&#8217;abstenir d&#8217;essayer d&#8217;expliquer leur fonctionnement détaillé, je vais me contenter de vous expliquer leur utilité et quelques cas d&#8217;utilisations des plus populaires d&#8217;entre eux. En simplifiant beaucoup, ces outils permettent de traiter les éléments uniques de manière miraculeuse et donc de procéder à des regroupements. En contre partie, la plupart d&#8217;entre eux sont basés sur des structures probabilistes qui ne garantissent pas toujours l&#8217;exactitude du résultat. Certaines valeurs sont inexactes selon un certains taux d&#8217;erreur (<a href="http://hur.st/bloomfilter">défini</a>) généralement faible :)</p>
+
+<p><strong>TL;DR:</strong> En sacrifiant l&#8217;exactitude absolue des résultats, une famille d&#8217;algorithme permet de réduire radicalement les coûts de calcul, notamment pour les besoins habituels des statistiques.</p>
+
+<p>Issu de la recherche, le domaine n&#8217;est pas nouveau mais reste un sujet réservé aux experts. De nombreux outils qui font face à de grands volumes de données ou à de faible latences les implémentent dans leur fonctionnement interne. Toutefois leur utilisation commence à se populariser, et même si aucun outil comme ceux de bases de données ne les met à disposition directement (comme structure de données par exemple), des librairies dans de nombreux langages de programmation tentent elles d&#8217;en faire des implémentations.</p>
 
 <h4>Bloom filters</h4>
 
-<p>&#8220;<a href="http://en.wikipedia.org/wiki/Bloom_filter">Bloomfilter</a>&#8221; est probablement le plus répandu. En simplifiant beaucoup, il permet de rapidement répondre a une question du type &#8220;oui/non&#8221;. En gros il très utiliser pour éviter d&#8217;effectuer une opération coûteuse quand ce n&#8217;est pas nécessaire ! Il est souvent implémenté sans qu&#8217;on le sache au cœur de nombreuses applications comme les moteurs de base de données. C&#8217;est notamment google qui a popularisé son utilisation, mais c&#8217;est désormais le cas de tous les géants du web. Voici quelques cas d&#8217;utilisation connus:</p>
+<p>&#8220;<a href="http://en.wikipedia.org/wiki/Bloom_filter">Bloomfilter</a>&#8221; est probablement le plus répandu. En simplifiant beaucoup, il permet de rapidement répondre par &#8220;oui/non&#8221; à une question du type &#8220;Est ce que cette clef existe dans ce dataset ?&#8221;. En gros il est généralement utilisé pour éviter d&#8217;effectuer une opération coûteuse quand ce n&#8217;est pas nécessaire ! Il est souvent implémenté sans qu&#8217;on le sache au cœur de nombreuses applications comme les moteurs de base de données. C&#8217;est notamment google qui a popularisé son utilisation, mais  il est désormais connu que tous les géants du web s&#8217;en servent. Voici quelques cas d&#8217;utilisation:</p>
 
 <ul>
 <li>optimisation de requête: éviter de parcourir une partition si l&#8217;information n&#8217;est pas présente</li>
@@ -191,6 +195,8 @@ function show_new() {
       
         <a class="basic-alignment left" href="/2014/07/14/counting-part4/" title="Previous Post: Regrouper et compter: Hadoop (partie 4/6)">&laquo; Regrouper et compter: Hadoop (partie 4/6)</a>
       
+      
+        <a class="basic-alignment right" href="/2014/09/01/counting-part6/" title="Next Post: Regrouper et compter: Panda (partie 6/6)">Regrouper et compter: Panda (partie 6/6) &raquo;</a>
       
       </div>
     </div>

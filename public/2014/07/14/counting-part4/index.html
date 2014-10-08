@@ -9,7 +9,7 @@
   <meta name="author" content="smknstd">
 
   
-  <meta name="description" content="Pour ce quatrième article de cette série sur le comptage et le regroupement, j&#8217;ai souhaité aborder Hadoop que je n&#8217;ai eut l&#8217; &hellip;">
+  <meta name="description" content="Pour ce quatrième article de cette série sur le comptage et le regroupement, j&#8217;ai souhaité aborder Hadoop. Je préfère être honnête: je n&#8217; &hellip;">
   
 
   <meta name="HandheldFriendly" content="True">
@@ -110,17 +110,17 @@ function show_new() {
   </header>
 
 
-<div class="entry-content"><p>Pour ce quatrième article de cette série sur le comptage et le regroupement, j&#8217;ai souhaité aborder Hadoop que je n&#8217;ai eut l&#8217;occasion de manipuler que brièvement comparé à d&#8217;autres <a href="http://en.wikipedia.org/wiki/Oracle_Grid_Engine">technologies</a> vaguement similaires. Comme les autres articles de cette série ne vous attendez pas à rentrer en profondeur car je me contenterai d&#8217;aborder rapidement la seule problématique du comptage.</p>
+<div class="entry-content"><p>Pour ce quatrième article de cette série sur le comptage et le regroupement, j&#8217;ai souhaité aborder Hadoop. Je préfère être honnête: je n&#8217;ai eut l&#8217;occasion de manipuler ce système que brièvement comparé à d&#8217;autres <a href="http://en.wikipedia.org/wiki/Oracle_Grid_Engine">technologies</a> vaguement similaires et je n&#8217;en ai qu&#8217;une connaissance limitée. Toutefois, hadoop est je pense un système qui compte et je pense qu&#8217;il est important d&#8217;en comprendre le principe. Comme les autres articles de cette série, ne vous attendez pas à rentrer en profondeur car je me contenterai d&#8217;aborder rapidement la seule problématique du regroupement et du comptage.</p>
 
 <h3>Hadoop</h3>
 
-<p>Hadoop, qui s&#8217;appuie notamment sur HDFS, est un framework Java qui permet de faire du traitement distribué sur des fichiers volumineux en mode batch. Le buzz autour du &#8220;bigdata&#8221; a probablement vendu beaucoup de <a href="http://service-architecture.blogspot.fr/2014/01/six-reasons-your-big-data-hadoop.html">rêve</a> et je ne suis pas convaincu que cette technologie soit adapté à tant de problématiques qu&#8217;on aimerait le croire. Surtout avec ses nombreux coins sombres (jointures, debbug, pig, etc) il reste définitivement un outil de spécialistes difficile à mettre en oeuvre.</p>
+<p>Hadoop, qui s&#8217;appuie notamment sur HDFS, est un framework Java qui permet de faire du traitement distribué à grande échelle sur des fichiers volumineux en mode batch. Developpé et mis en oeuvre par Yahoo au milieu des années 2000, il a ensuite nourrit beaucoup de fantasmes. Le buzz autour du &#8220;bigdata&#8221; a probablement vendu beaucoup de <a href="http://service-architecture.blogspot.fr/2014/01/six-reasons-your-big-data-hadoop.html">rêve</a> et je ne suis pas convaincu que cette technologie soit adaptée à tant de problématiques et surtout de contextes qu&#8217;on aimerait le croire. Surtout avec ses nombreux coins sombres (jointures, debug, pig, etc) il reste définitivement un outil de spécialistes, difficile et coûteux à mettre en oeuvre.</p>
 
 <h3>Regrouper et compter !</h3>
 
-<p>Heureusement pour nous, aborder la question de la cardinalité va nous permettre de bien comprendre le principe de fonctionnement du paradigme <a href="http://en.wikipedia.org/wiki/MapReduce">map/reduce</a>.</p>
+<p>Heureusement pour nous, aborder la question de la cardinalité va nous permettre de bien comprendre le principe de fonctionnement du paradigme <a href="http://en.wikipedia.org/wiki/MapReduce">map/reduce</a> puisqu&#8217;il est un des cas typiques d&#8217;utilisation.</p>
 
-<p><strong>TL;DR</strong>: issu de la programmation fonctionnelle, le principe consiste a décomposer une tâche en sous-opérations parallélisables. Pour effectuer le comptage sur un ensemble, hadoop divise l&#8217;opération en plusieurs comptages sur des sous ensembles et agrège le résultat.</p>
+<p><strong>TL;DR</strong>: issu de la programmation fonctionnelle, son principe consiste a décomposer une tâche en sous-opérations parallélisables. Pour effectuer le comptage sur un ensemble, hadoop divise l&#8217;opération en plusieurs comptages sur des sous ensembles qu&#8217;il va pouvoir paralléliser et agrège le résultat.</p>
 
 <p><img src="/images/mapreduce_sum.png" title="mapreduce1" alt="map_reduce" /></p>
 
@@ -180,6 +180,7 @@ function show_new() {
 <ul>
 <li>un <a href="http://www.amazon.com/MapReduce-Design-Patterns-Effective-Algorithms/dp/1449327176">ouvrage</a> de référence sur le framework Map/Reduce</li>
 <li>une <a href="https://www.youtube.com/watch?v=oIkhgagvrjI">vidéo</a> amusante d&#8217;explications sur un des compteurs les plus célèbres de notre époque</li>
+<li>map/reduce <a href="http://www.chrisstucchio.com/blog/2011/mapreduce_explained.html">éxpliqué</a> aux enfants</li>
 </ul>
 
 </div>

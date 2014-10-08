@@ -4,7 +4,7 @@
   <title><![CDATA[smknstd.io]]></title>
   <link href="http://www.smknstd.io/atom.xml" rel="self"/>
   <link href="http://www.smknstd.io/"/>
-  <updated>2014-10-02T13:07:59+02:00</updated>
+  <updated>2014-10-08T12:05:06+02:00</updated>
   <id>http://www.smknstd.io/</id>
   <author>
     <name><![CDATA[smknstd]]></name>
@@ -14,19 +14,108 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Méfiez vous des injections même avec MongoDB]]></title>
+    <link href="http://www.smknstd.io/2014/09/24/mongodb-injections/"/>
+    <updated>2014-09-24T08:11:00+02:00</updated>
+    <id>http://www.smknstd.io/2014/09/24/mongodb-injections</id>
+    <content type="html"><![CDATA[<p>L&#8217;<a href="http://en.wikipedia.org/wiki/SQL_injection">injection SQL</a> est probablement l&#8217;un des sujets les plus populaires dans le domaine de la sécurité web. C&#8217;est aussi l&#8217;un des sujet les mieux <a href="http://www.root-me.org/fr/Documentation/Web/Injection-SQL">documenté</a> et donc le mieux <a href="http://stackoverflow.com/questions/60174/how-can-i-prevent-sql-injection-in-php">pris en compte</a>.</p>
+
+<p>Lorsqu&#8217;une application utilise un système de base de données qui ne dispose pas de la commodité du langage SQL, elle est par la même occasion épargnée par les risques d&#8217;injection généralement liés. Pour autant, il ne faudrait pas systématiquement se croire à l’abri de comportements malicieux.</p>
+
+<h3>MongoDB</h3>
+
+<p>Pour interroger une collection ou modifier des données, on n&#8217;écrit pas de requête comme on pourrait le faire en SQL, et surtout cela ne prend pas la forme d&#8217;une chaîne de caractères. A travers les librairies &#8220;client&#8221; des différents langages, on utilise généralement une méthode spécifique pour l&#8217;opération souhaitée qui se traduit ensuite par la création d&#8217;un objet BSON. En conséquence la logique de l&#8217;injection SQL ne peut pas s&#8217;appliquer. On ne pourra jamais profiter d&#8217;une opération de consultation pour modifier ou supprimer des données ! #YOUPI</p>
+
+<h4>Javascript coté serveur</h4>
+
+<p>Toutefois, comme le tempère la <a href="http://docs.mongodb.org/manual/faq/developers/#how-does-mongodb-address-sql-or-query-injection">documentation officielle</a>, il faut se méfier de certaines opérations spécifiques qui peuvent exécuter du Javascript arbitraire directement sur serveur comme <code>$where</code> ou <code>group</code>.</p>
+
+<blockquote><p>You must exercise care in these cases to prevent users from submitting malicious JavaScript.</p></blockquote>
+
+<h4>Caractère réservé aux opérateurs</h4>
+
+<p>D&#8217;autre part, Mongo réserve le caractère <code>$</code> à certains opérateurs comme ceux de <a href="http://docs.mongodb.org/manual/reference/operator/query-comparison/">comparaison</a> par exemple.</p>
+
+<blockquote><p>Field names in MongoDB’s query language have semantic meaning. The dollar sign (i.e $) is a reserved character used to represent operators (i.e. $inc.) Thus, you should ensure that your application’s users cannot inject operators into their inputs.</p></blockquote>
+
+<p>On peut <a href="http://cirw.in/blog/hash-injection">trouver</a>, <a href="https://www.idontplaydarts.com/2010/07/mongodb-is-vulnerable-to-sql-injection-in-php-at-least/">plusieurs</a> <a href="http://blog.websecurify.com/2014/08/hacking-nodejs-and-mongodb.html">ressources</a> qui mettent en lumières des cas pratiques dans lesquels le comportement attendu d&#8217;une requête est modifié grâce à l&#8217;utilisation malicieuse d&#8217;un <strong>opérateur</strong> à la place d&#8217;une valeur habituelle.</p>
+
+<p>Tiré d&#8217;un de ces articles, voici un exemple frappant (parmi d&#8217;autres) dans lequel un utilisateur, grâce à une implémentation php trop permissive, a pu substituer l&#8217;opérateur &#8220;not equal&#8221; (<code>$ne</code>) à la valeur du mot de passe et réussir l&#8217;authentification (sauf dans le cas où le mot de passe était valorisé à 1 lol). Bien sûr dans cet exemple un peu naïf, on valorise les paramètres directement dans l&#8217;url: <code>login.php?username=admin&amp;passwd[$ne]=1</code>. Voilà comment on pourrait représenter l’interprétation problématique et trop permissive qui en découle:</p>
+
+<pre><code>$collection-&gt;find(array(
+    "username" =&gt; "admin",
+    "passwd" =&gt; array("$ne" =&gt; 1)
+));
+</code></pre>
+
+<p>Ces exemples montrent bien que même si l&#8217;interrogation sur MongoDB est par nature plus solide face aux injections, il faut malgré tout rester vigilent lorsqu&#8217;on conçoit l&#8217;interface liée. Tout comme on a appris le faire avec SQL, avec Mongo, il faut aussi porter un soin particulier à vérifier le contenu des valeurs paramétrées par l&#8217;utilisateur.</p>
+
+<p>Passez une bonne journée :)</p>
+
+<h3>Ressources</h3>
+
+<ul>
+<li>une bonne petite <a href="http://xkcd.com/327/">blague</a></li>
+<li>une <a href="http://php.net/manual/en/mongo.security.php">note</a> officielle sur la sécurité du client php de mongo</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Regrouper et compter: Panda (partie 6/6)]]></title>
+    <link href="http://www.smknstd.io/2014/09/01/counting-part6/"/>
+    <updated>2014-09-01T09:14:00+02:00</updated>
+    <id>http://www.smknstd.io/2014/09/01/counting-part6</id>
+    <content type="html"><![CDATA[<p>Dans cette série d&#8217;articles consacrée aux différentes approches d&#8217;une opération de regroupement et de comptage de données, j&#8217;ai essayé de ne pas me concentrer uniquement sur les bases de données. Pour ce dernier article, j&#8217;ai voulu rappeler qu&#8217;il existe bien d&#8217;autres outils spécialisés qui peuvent répondre à des besoins variés. Il existe notamment des outils sophistiqués de manipulation et de calcul statistique plus ou moins récents comme le langage <a href="http://en.wikipedia.org/wiki/NumPy">R</a> (~1993) ou <a href="http://fr.wikipedia.org/wiki/SAS_%28langage%29">SAS</a> (~années 60). Rien de nouveau sous le soleil, mais depuis quelques années (~2012) une petite librairie python fait beaucoup de bruit dans ce paysage: le framework <a href="https://github.com/pydata/pandas">Panda</a> !</p>
+
+<h3>Panda ?</h3>
+
+<p>Panda est une boite à outils de manipulation et d&#8217;analyse de données en mémoire ! Ce n&#8217;est pas un outil aussi spécialisé que peut l&#8217;être R par exemple, mais plutôt une libraire généraliste et facile à mettre en œuvre. Basé sur une <a href="http://en.wikipedia.org/wiki/NumPy">structure</a> interne de données très performante, il est vraiment souple et très facile à prendre en main. Il est aussi très bien documenté et offre de vastes possibilités, ce qui en fait un outil redoutablement efficace !</p>
+
+<p>Bien sûr, toutes les opérations se font en mémoire donc on est forcement limité par les ressources de sa machine. Mais en ne chargeant que les données nécessaires pour chaque opération, et en se rappelant qu&#8217;il n&#8217;est pas rare de voir un PC portable avec 16go de RAM, cela ouvre de belles perspectives, non ?</p>
+
+<p>Panda se présente donc comme une solution convaincante pour manipuler et analyser des données volumineuses, surtout si vous devez le faire rapidement et que ce n&#8217;est pas un besoin récurrent. Il n&#8217;est pas vraiment question ici, d&#8217;implémenter un mode batch.</p>
+
+<h3>Regrouper et compter</h3>
+
+<p>Comme évoqué précédemment, Panda est vraiment facile à mettre en œuvre. Il existe de nombreuses possibilités pour charger tous types de données structurées, le plus simple étant bien évidemment un bon vieux fichier CSV. Ensuite il ne vous reste plus qu&#8217;à vous familiariser avec les deux structures de données principales du framework: les <code>Series</code> (tableaux) et les <code>Dataframes</code> (~tableaux multidimensions). Le reste est <a href="https://www.youtube.com/watch?v=fvxFzBLv1s0">simple comme bonjour</a> !</p>
+
+<p>Le comptage <code>.count()</code> et le regroupement <code>.groupby()</code> sont des opérations très intuitives, performantes et bien <a href="http://pandas.pydata.org/pandas-docs/stable/groupby.html#groupby">documentées</a>. Je ne suis pas sûr que tout le monde puisse en dire <a href="http://stackoverflow.com/questions/10352346/group-by-in-sas">autant</a>.</p>
+
+<p>Je n&#8217;ai pas grand chose à rajouter alors je finis sur cet aperçu d&#8217;un regroupement très simple au travers d&#8217;<a href="http://en.wikipedia.org/wiki/IPython">IPython</a>. Auf Wiedersehen !</p>
+
+<p><img src="http://www.smknstd.io/images/panda_groupby.jpg" title="group by avec panda" alt="groupbypanda" /></p>
+
+<h3>Ressources</h3>
+
+<ul>
+<li>une très bonne <a href="http://sametmax.com/le-pandas-cest-bon-mangez-en/">introduction</a> à Panda en français !</li>
+<li>un blog avec des <a href="http://www.gregreda.com/tag/pandas.html">publications régulières</a> et bien écrites sur l&#8217;utilisation de la librairie</li>
+<li>une <a href="https://s3.amazonaws.com/quandl-static-content/Documents/Quandl+-+Pandas,+SciPy,+NumPy+Cheat+Sheet.pdf">cheatsheet</a> qui ne fait pas de mal</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Regrouper et compter: Algorithmes d'approximation (partie 5/6)]]></title>
     <link href="http://www.smknstd.io/2014/08/03/counting-part5/"/>
     <updated>2014-08-03T14:20:00+02:00</updated>
     <id>http://www.smknstd.io/2014/08/03/counting-part5</id>
-    <content type="html"><![CDATA[<p>Quand la taille des datasets augmente, l&#8217;approche stricte des algorithmes classiques se montre souvent trop gourmande en ressources. La consommation de mémoire et le temps d’exécution notamment peuvent devenir problématiques. Il existe une famille d&#8217;algorithmes qui propose une approche différente radicalement moins consommatrice en mémoire, à de nombreux problèmes dont le comptage de cardinalité: <a href="http://en.wikipedia.org/wiki/Streaming_algorithm">Streaming algorithms</a>.</p>
+    <content type="html"><![CDATA[<p>Bienvenue dans le 5ème article de cette série dédié au regroupement et comptage, une opération courante pour ne pas dire systématique dans les applications actuelles. Pour rappel, j&#8217;essaie dans chaque article de décrire assez naïvement les possibilités et l&#8217;approche avec différentes technologies.</p>
 
-<p>Loin d&#8217;avoir les connaissances suffisantes, je vais m&#8217;abstenir d&#8217;essayer d&#8217;expliquer leur fonctionement détaillé, je vais me contenter de vous expliquer leur utilité et quelques cas d&#8217;utilisations des plus populaires. En simplifiant beaucoup, ces outils permettent de traiter les élements uniques de manière miraculeuse. En contre partie, la plupart d&#8217;entre eux sont basé sur des structures probabilistes qui ne garantissent pas toujours l&#8217;exactitude du résultat. Certaines valeurs sont inexactes selon un certains taux d&#8217;erreur (<a href="http://hur.st/bloomfilter">défini</a>) généralement faible :)</p>
+<p>Quand la taille des datasets que l&#8217;on souhaite traiter augmente, l&#8217;approche stricte des algorithmes classiques se montre souvent trop gourmande et dépasse vite les ressources disponible. La consommation de mémoire ou le temps d’exécution notamment peuvent devenir problématiques. Il existe une famille d&#8217;algorithmes qui propose une approche différente radicalement moins consommatrice en mémoire, à de nombreux problèmes dont le comptage de cardinalité: <a href="http://en.wikipedia.org/wiki/Streaming_algorithm">Streaming algorithms</a>.</p>
 
-<p>Issu de la recherche, le domaine n&#8217;est pas nouveau mais reste un sujet réservé aux experts. De nombreux outils qui font face à de grands volumes de données ou à de faible latences les implémentent dans leur fonctionnement interne. Toutefois leur utilisation commence à se populariser, et même si aucun outils comme ceux de bases de données ne les mets a disposition, des librairies dans de nombreux langages de programmation tentent d&#8217;en faire des implémentations.</p>
+<p>Loin d&#8217;avoir les connaissances suffisantes, je vais m&#8217;abstenir d&#8217;essayer d&#8217;expliquer leur fonctionnement détaillé, je vais me contenter de vous expliquer leur utilité et quelques cas d&#8217;utilisations des plus populaires d&#8217;entre eux. En simplifiant beaucoup, ces outils permettent de traiter les éléments uniques de manière miraculeuse et donc de procéder à des regroupements. En contre partie, la plupart d&#8217;entre eux sont basés sur des structures probabilistes qui ne garantissent pas toujours l&#8217;exactitude du résultat. Certaines valeurs sont inexactes selon un certains taux d&#8217;erreur (<a href="http://hur.st/bloomfilter">défini</a>) généralement faible :)</p>
+
+<p><strong>TL;DR:</strong> En sacrifiant l&#8217;exactitude absolue des résultats, une famille d&#8217;algorithme permet de réduire radicalement les coûts de calcul, notamment pour les besoins habituels des statistiques.</p>
+
+<p>Issu de la recherche, le domaine n&#8217;est pas nouveau mais reste un sujet réservé aux experts. De nombreux outils qui font face à de grands volumes de données ou à de faible latences les implémentent dans leur fonctionnement interne. Toutefois leur utilisation commence à se populariser, et même si aucun outil comme ceux de bases de données ne les met à disposition directement (comme structure de données par exemple), des librairies dans de nombreux langages de programmation tentent elles d&#8217;en faire des implémentations.</p>
 
 <h4>Bloom filters</h4>
 
-<p>&#8220;<a href="http://en.wikipedia.org/wiki/Bloom_filter">Bloomfilter</a>&#8221; est probablement le plus répandu. En simplifiant beaucoup, il permet de rapidement répondre a une question du type &#8220;oui/non&#8221;. En gros il très utiliser pour éviter d&#8217;effectuer une opération coûteuse quand ce n&#8217;est pas nécessaire ! Il est souvent implémenté sans qu&#8217;on le sache au cœur de nombreuses applications comme les moteurs de base de données. C&#8217;est notamment google qui a popularisé son utilisation, mais c&#8217;est désormais le cas de tous les géants du web. Voici quelques cas d&#8217;utilisation connus:</p>
+<p>&#8220;<a href="http://en.wikipedia.org/wiki/Bloom_filter">Bloomfilter</a>&#8221; est probablement le plus répandu. En simplifiant beaucoup, il permet de rapidement répondre par &#8220;oui/non&#8221; à une question du type &#8220;Est ce que cette clef existe dans ce dataset ?&#8221;. En gros il est généralement utilisé pour éviter d&#8217;effectuer une opération coûteuse quand ce n&#8217;est pas nécessaire ! Il est souvent implémenté sans qu&#8217;on le sache au cœur de nombreuses applications comme les moteurs de base de données. C&#8217;est notamment google qui a popularisé son utilisation, mais  il est désormais connu que tous les géants du web s&#8217;en servent. Voici quelques cas d&#8217;utilisation:</p>
 
 <ul>
 <li>optimisation de requête: éviter de parcourir une partition si l&#8217;information n&#8217;est pas présente</li>
@@ -75,17 +164,17 @@
     <link href="http://www.smknstd.io/2014/07/14/counting-part4/"/>
     <updated>2014-07-14T16:00:00+02:00</updated>
     <id>http://www.smknstd.io/2014/07/14/counting-part4</id>
-    <content type="html"><![CDATA[<p>Pour ce quatrième article de cette série sur le comptage et le regroupement, j&#8217;ai souhaité aborder Hadoop que je n&#8217;ai eut l&#8217;occasion de manipuler que brièvement comparé à d&#8217;autres <a href="http://en.wikipedia.org/wiki/Oracle_Grid_Engine">technologies</a> vaguement similaires. Comme les autres articles de cette série ne vous attendez pas à rentrer en profondeur car je me contenterai d&#8217;aborder rapidement la seule problématique du comptage.</p>
+    <content type="html"><![CDATA[<p>Pour ce quatrième article de cette série sur le comptage et le regroupement, j&#8217;ai souhaité aborder Hadoop. Je préfère être honnête: je n&#8217;ai eut l&#8217;occasion de manipuler ce système que brièvement comparé à d&#8217;autres <a href="http://en.wikipedia.org/wiki/Oracle_Grid_Engine">technologies</a> vaguement similaires et je n&#8217;en ai qu&#8217;une connaissance limitée. Toutefois, hadoop est je pense un système qui compte et je pense qu&#8217;il est important d&#8217;en comprendre le principe. Comme les autres articles de cette série, ne vous attendez pas à rentrer en profondeur car je me contenterai d&#8217;aborder rapidement la seule problématique du regroupement et du comptage.</p>
 
 <h3>Hadoop</h3>
 
-<p>Hadoop, qui s&#8217;appuie notamment sur HDFS, est un framework Java qui permet de faire du traitement distribué sur des fichiers volumineux en mode batch. Le buzz autour du &#8220;bigdata&#8221; a probablement vendu beaucoup de <a href="http://service-architecture.blogspot.fr/2014/01/six-reasons-your-big-data-hadoop.html">rêve</a> et je ne suis pas convaincu que cette technologie soit adapté à tant de problématiques qu&#8217;on aimerait le croire. Surtout avec ses nombreux coins sombres (jointures, debbug, pig, etc) il reste définitivement un outil de spécialistes difficile à mettre en oeuvre.</p>
+<p>Hadoop, qui s&#8217;appuie notamment sur HDFS, est un framework Java qui permet de faire du traitement distribué à grande échelle sur des fichiers volumineux en mode batch. Developpé et mis en oeuvre par Yahoo au milieu des années 2000, il a ensuite nourrit beaucoup de fantasmes. Le buzz autour du &#8220;bigdata&#8221; a probablement vendu beaucoup de <a href="http://service-architecture.blogspot.fr/2014/01/six-reasons-your-big-data-hadoop.html">rêve</a> et je ne suis pas convaincu que cette technologie soit adaptée à tant de problématiques et surtout de contextes qu&#8217;on aimerait le croire. Surtout avec ses nombreux coins sombres (jointures, debug, pig, etc) il reste définitivement un outil de spécialistes, difficile et coûteux à mettre en oeuvre.</p>
 
 <h3>Regrouper et compter !</h3>
 
-<p>Heureusement pour nous, aborder la question de la cardinalité va nous permettre de bien comprendre le principe de fonctionnement du paradigme <a href="http://en.wikipedia.org/wiki/MapReduce">map/reduce</a>.</p>
+<p>Heureusement pour nous, aborder la question de la cardinalité va nous permettre de bien comprendre le principe de fonctionnement du paradigme <a href="http://en.wikipedia.org/wiki/MapReduce">map/reduce</a> puisqu&#8217;il est un des cas typiques d&#8217;utilisation.</p>
 
-<p><strong>TL;DR</strong>: issu de la programmation fonctionnelle, le principe consiste a décomposer une tâche en sous-opérations parallélisables. Pour effectuer le comptage sur un ensemble, hadoop divise l&#8217;opération en plusieurs comptages sur des sous ensembles et agrège le résultat.</p>
+<p><strong>TL;DR</strong>: issu de la programmation fonctionnelle, son principe consiste a décomposer une tâche en sous-opérations parallélisables. Pour effectuer le comptage sur un ensemble, hadoop divise l&#8217;opération en plusieurs comptages sur des sous ensembles qu&#8217;il va pouvoir paralléliser et agrège le résultat.</p>
 
 <p><img src="http://www.smknstd.io/images/mapreduce_sum.png" title="mapreduce1" alt="map_reduce" /></p>
 
@@ -145,6 +234,7 @@
 <ul>
 <li>un <a href="http://www.amazon.com/MapReduce-Design-Patterns-Effective-Algorithms/dp/1449327176">ouvrage</a> de référence sur le framework Map/Reduce</li>
 <li>une <a href="https://www.youtube.com/watch?v=oIkhgagvrjI">vidéo</a> amusante d&#8217;explications sur un des compteurs les plus célèbres de notre époque</li>
+<li>map/reduce <a href="http://www.chrisstucchio.com/blog/2011/mapreduce_explained.html">éxpliqué</a> aux enfants</li>
 </ul>
 
 ]]></content>
@@ -204,7 +294,7 @@
     <link href="http://www.smknstd.io/2014/06/28/counting-part2/"/>
     <updated>2014-06-28T11:12:00+02:00</updated>
     <id>http://www.smknstd.io/2014/06/28/counting-part2</id>
-    <content type="html"><![CDATA[<p>Pour continuer cette série d&#8217;articles de présentation sur la thématique du regroupement et du comptage, j&#8217;ai souhaité aborder la base orientée documents <a href="http://en.wikipedia.org/wiki/MongoDB">Mongo</a>. L&#8217;explication est simple car parmi les bases de données non-relationnelles qui ont tendance à se démocratiser ces dernières années, c&#8217;est celle que je connais le mieux ;)</p>
+    <content type="html"><![CDATA[<p>Pour continuer cette série d&#8217;articles de présentation sur la thématique du regroupement et du comptage, j&#8217;ai souhaité aborder la base orientée documents <a href="http://en.wikipedia.org/wiki/MongoDB">Mongo</a>. Bien sûr, j&#8217;aurai pu parler d&#8217;un autre systeme parmi toutes les nombreuses bases de données non-relationnelles qui ont tendance à se démocratiser ces dernières années, mais je n&#8217;ai pas l&#8217;ambition d&#8217;essayer d&#8217;être exaustif et pour être honête c&#8217;est celle que je connais le mieux ;)</p>
 
 <p>D&#8217;abord je souhaite rappeler que Mongo est un outil qui dans le paysage des outils de gestion de base de données est relativement jeune (2009). Bien que Mongo ait rencontré un succès massif en répondant à de nombreux besoins notamment de flexibilité et de performance, la manipulation des données ne me semble pas avoir été au cœur des préoccupations dès le début. Les capacités du système à répondre aux besoins d&#8217;analyse des données ont amené certains utilisateurs à de sérieuses déconvenues. En effet, en plus de ne mettre à disposition que des outils d&#8217;interrogation <a href="http://docs.mongodb.org/manual/tutorial/map-reduce-examples/">&#8220;sommaires&#8221;</a> pour dire le moins, la performance de ceux-ci est grandement affecté par des choix souvent subtiles lors de la modélisation !</p>
 
@@ -268,7 +358,7 @@
 </span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
-<p>Pour revenir à notre sujet du comptage du nombre d&#8217;éléments uniques, ce n&#8217;est toujours pas un des points fort de Mongo. Consulter le plan d’exécution de la fonction &#8220;.aggregate()&#8221; du framework d&#8217;aggregation n&#8217;est disponible que depuis la version 2.6 (début 2014). Malgré cela, selon mon expérience, il reste difficile d&#8217;analyser le comportement des requêtes de ce type et pire il toujours presque impossible d&#8217;<a href="https://jira.mongodb.org/browse/SERVER-7944">influer</a> sur le comportement !? Par exemple, dans cette requête de regroupement et de comptage je ne peux que constater que l’accès se fait par un curseur &#8220;basique&#8221; (comprenez <code>FullScan</code>) qui semble ignorer l&#8217;index que j&#8217;ai pourtant réussi à utiliser précédemment et qui contient bien l&#8217;information dont on a besoin :(</p>
+<p>Pour revenir à notre sujet du comptage du nombre d&#8217;éléments uniques, ce n&#8217;est toujours pas un des points forts de Mongo. Consulter le plan d’exécution de la fonction &#8220;.aggregate()&#8221; du framework d&#8217;aggregation n&#8217;est disponible que depuis la version 2.6 (début 2014). Malgré cela, selon mon expérience, il reste difficile d&#8217;analyser le comportement des requêtes de ce type et pire il toujours presque impossible d&#8217;<a href="https://jira.mongodb.org/browse/SERVER-7944">influer</a> sur le comportement !? Par exemple, dans cette requête de regroupement et de comptage je ne peux que constater que l’accès se fait par un curseur &#8220;basique&#8221; (comprenez <code>FullScan</code>) qui semble ignorer l&#8217;index que j&#8217;ai pourtant réussi à utiliser précédemment et qui contient bien l&#8217;information dont on a besoin :(</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -363,9 +453,11 @@
 <ul>
 <li>un <a href="http://web.archive.org/web/20100128030005/http://kylebanker.com/blog/2009/11/mongodb-count-group">article</a> précurseur sur le comptage</li>
 <li>un <a href="http://fiestacc.tumblr.com/post/11319522700/walkthrough-mongodb-data-modeling">article</a> fondateur sur les subtilités d&#8217;utilisation et de modélisation</li>
+<li>une série d&#8217;<a href="http://blog.mongodb.org/post/87200945828/6-rules-of-thumb-for-mongodb-schema-design-part-1">articles</a> plus récente sur la modélisation</li>
 <li>un autre <a href="http://www.railstips.org/blog/archives/2011/06/28/counters-everywhere/">article</a> de 2011 sur la mise en place des statistiques</li>
 <li>une <a href="http://highlyscalable.wordpress.com/2012/03/01/nosql-data-modeling-techniques/">synthèse</a> sur les différentes techniques de modélisation adaptées aux systèmes dits &#8220;NOSQL&#8221;</li>
-<li>une <a href="https://speakerdeck.com/jnunemaker/mongodb-for-analytics-3">presentation</a> sur les problématique d&#8217;aggregation</li>
+<li>une <a href="https://speakerdeck.com/jnunemaker/mongodb-for-analytics-3">presentation</a> sur les problématiques d&#8217;aggregation</li>
+<li>un <a href="http://thecodebarbarian.wordpress.com/2014/02/14/crunching-30-years-of-nba-data-with-mongodb-aggregation/">article</a> enthousiaste sur les possibilités du &#8220;aggregation framework&#8221;</li>
 </ul>
 
 ]]></content>
@@ -390,9 +482,9 @@
 
 <h3>Index Bitmap</h3>
 
-<p>Un des outils intéressant pour améliorer les performances des SGBDR est l&#8217;index. Il en existe de plusieurs types et l&#8217;un d&#8217;eux reste assez méconnu : l&#8217;index <a href="http://en.wikipedia.org/wiki/Bitmap_index">bitmap</a>. Si vous ne le connaissez pas, je vous encourage à étudier son principe de fonctionnement. Il peut avoir des usages variés comme aider aux jointures mais nécessite de nombreuses précautions et impose de nombreuses contraintes et un niveau de connaissance avancé. Par exemple, ces indexs ne doivent porter que sur une seule colonne, ce qui n’empêche bien sûr pas de cumuler leurs utilisations. Concernant notre calcul, cet index peut se révéler en théorie très efficace puisqu&#8217;il contient à lui seul toute l&#8217;information dont nous avons besoin. Que nous pouvons traduire par éviter le parcours de la table et donc de précieux accès &#8220;disque&#8221;.</p>
+<p>L&#8217;outil essentiel pour améliorer les performances des SGBDR est l&#8217;index. Il est généralement bien connu et largement utilisé. Toutefois, il en existe de plusieurs types et l&#8217;un d&#8217;eux reste assez méconnu : l&#8217;index <a href="http://en.wikipedia.org/wiki/Bitmap_index">bitmap</a>. Si vous ne le connaissez pas, je vous encourage à étudier son principe de fonctionnement. Il peut avoir des usages variés comme aider aux jointures mais nécessite de nombreuses précautions et impose de nombreuses contraintes et un niveau de connaissance avancé. Par exemple, ces indexs ne doivent généralement porter que sur une seule colonne, ce qui n’empêche bien sûr pas de cumuler leurs utilisations car au contraire ils sont particulierement efficaces pour combiner les critères. Concernant notre calcul, cet index peut se révéler en théorie très efficace puisqu&#8217;il contient à lui seul toute l&#8217;information dont nous avons besoin et ainsi éviter le parcours de la table (et donc de précieux accès &#8220;disque&#8221;).</p>
 
-<p>Même si l&#8217;implémentation interne détaillée des indexs bitmaps dans la plupart des SGBDR reste obscure et mal documentée, on peut observer leur fonctionement au travers du <a href="http://en.wikipedia.org/wiki/Query_plan">plan exécution</a>. Ci-dessous, celui d&#8217;un comptage mettant à contribution un index bitmap sous Oracle 11g. Notez bien l&#8217;étape de conversion, qui compte simplement le nombre d&#8217;entrée, sans jamais se servir de leur adresse (rowid):</p>
+<p>Même si l&#8217;implémentation interne détaillée des indexs bitmaps dans la plupart des SGBDR reste obscure et mal documentée, on peut observer leur fonctionement au travers du <a href="http://en.wikipedia.org/wiki/Query_plan">plan exécution</a>. Ci-dessous, celui d&#8217;un comptage mettant à contribution un index bitmap sous Oracle 11g. Notez bien l&#8217;étape de conversion, qui compte simplement le nombre d&#8217;entrées, sans jamais se servir de leur adresse (rowid):</p>
 
 <p><img src="http://www.smknstd.io/images/bitmap.png" title="bitmap plan" alt="bitmap" /></p>
 
