@@ -6,7 +6,7 @@ comments: false
 categories: 
 ---
 
-Dans cette série d'articles consacrée aux différentes approches d'une opération de regroupement et de comptage de données, j'ai essayé de ne pas me concentrer uniquement sur les bases de données. Pour ce dernier article, j'ai voulu rappeler qu'il existe bien d'autres outils spécialisés qui peuvent répondre à des besoins variés. Il existe notamment des outils sophistiqués de manipulation et de calcul statistique plus ou moins récents comme le langage [R](http://en.wikipedia.org/wiki/NumPy) (~1993) ou [SAS](http://fr.wikipedia.org/wiki/SAS_%28langage%29) (~années 60). Rien de nouveau sous le soleil, mais depuis quelques années (~2012) une petite librairie python fait beaucoup de bruit dans ce paysage: le framework [Panda](https://github.com/pydata/pandas) !
+Dans cette série d'articles consacrée aux différentes approches d'une opération de regroupement et de comptage, j'ai essayé de ne pas me concentrer uniquement sur les bases de données. Pour ce dernier article, j'ai voulu rappeler qu'il existe bien d'autres outils spécialisés qui peuvent répondre à des besoins variés. Il existe notamment des outils sophistiqués de manipulation et de calcul statistique plus ou moins récents comme le langage [R](http://en.wikipedia.org/wiki/NumPy) (~1993) ou [SAS](http://fr.wikipedia.org/wiki/SAS_%28langage%29) (~années 60). Rien de nouveau sous le soleil, mais depuis quelques années (~2012) une petite librairie python fait beaucoup de bruit dans ce paysage: le framework [Panda](https://github.com/pydata/pandas) !
 
 ### Panda ?
 

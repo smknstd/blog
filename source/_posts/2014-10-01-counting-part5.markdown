@@ -6,9 +6,9 @@ comments: false
 categories: 
 ---
 
-Bienvenue dans le 5ème article de cette série dédié au regroupement et comptage, une opération courante pour ne pas dire systématique dans les applications actuelles. Pour rappel, j'essaie dans chaque article de décrire assez naïvement les possibilités et l'approche avec différentes technologies.
+Bienvenue dans le 5ème article de cette série dédiée au regroupement et comptage, une opération courante pour ne pas dire systématique dans les applications actuelles. Pour rappel, j'essaie dans chaque article de décrire assez naïvement les possibilités et l'approche avec différentes technologies.
 
-Quand la taille des datasets que l'on souhaite traiter augmente, l'approche stricte des algorithmes classiques se montre souvent trop gourmande et dépasse vite les ressources disponible. La consommation de mémoire ou le temps d’exécution notamment peuvent devenir problématiques. Il existe une famille d'algorithmes qui propose une approche différente radicalement moins consommatrice en mémoire, à de nombreux problèmes dont le comptage de cardinalité: [Streaming algorithms](http://en.wikipedia.org/wiki/Streaming_algorithm).
+Quand la taille des datasets que l'on souhaite traiter augmente, l'approche stricte des algorithmes classiques se montre souvent trop gourmande et dépasse vite les ressources disponibles. La consommation de mémoire ou le temps d’exécution notamment peuvent devenir problématiques. Il existe une famille d'algorithmes qui propose une approche différente radicalement moins consommatrice en mémoire, à de nombreux problèmes dont le comptage de cardinalité: [Streaming algorithms](http://en.wikipedia.org/wiki/Streaming_algorithm).
 
 Loin d'avoir les connaissances suffisantes, je vais m'abstenir d'essayer d'expliquer leur fonctionnement détaillé, je vais me contenter de vous expliquer leur utilité et quelques cas d'utilisations des plus populaires d'entre eux. En simplifiant beaucoup, ces outils permettent de traiter les éléments uniques de manière miraculeuse et donc de procéder à des regroupements. En contre partie, la plupart d'entre eux sont basés sur des structures probabilistes qui ne garantissent pas toujours l'exactitude du résultat. Certaines valeurs sont inexactes selon un certains taux d'erreur ([défini](http://hur.st/bloomfilter)) généralement faible :)
 

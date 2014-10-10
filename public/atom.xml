@@ -4,7 +4,7 @@
   <title><![CDATA[smknstd.io]]></title>
   <link href="http://www.smknstd.io/atom.xml" rel="self"/>
   <link href="http://www.smknstd.io/"/>
-  <updated>2014-10-08T12:05:06+02:00</updated>
+  <updated>2014-10-10T19:07:30+02:00</updated>
   <id>http://www.smknstd.io/</id>
   <author>
     <name><![CDATA[smknstd]]></name>
@@ -67,7 +67,7 @@
     <link href="http://www.smknstd.io/2014/09/01/counting-part6/"/>
     <updated>2014-09-01T09:14:00+02:00</updated>
     <id>http://www.smknstd.io/2014/09/01/counting-part6</id>
-    <content type="html"><![CDATA[<p>Dans cette série d&#8217;articles consacrée aux différentes approches d&#8217;une opération de regroupement et de comptage de données, j&#8217;ai essayé de ne pas me concentrer uniquement sur les bases de données. Pour ce dernier article, j&#8217;ai voulu rappeler qu&#8217;il existe bien d&#8217;autres outils spécialisés qui peuvent répondre à des besoins variés. Il existe notamment des outils sophistiqués de manipulation et de calcul statistique plus ou moins récents comme le langage <a href="http://en.wikipedia.org/wiki/NumPy">R</a> (~1993) ou <a href="http://fr.wikipedia.org/wiki/SAS_%28langage%29">SAS</a> (~années 60). Rien de nouveau sous le soleil, mais depuis quelques années (~2012) une petite librairie python fait beaucoup de bruit dans ce paysage: le framework <a href="https://github.com/pydata/pandas">Panda</a> !</p>
+    <content type="html"><![CDATA[<p>Dans cette série d&#8217;articles consacrée aux différentes approches d&#8217;une opération de regroupement et de comptage, j&#8217;ai essayé de ne pas me concentrer uniquement sur les bases de données. Pour ce dernier article, j&#8217;ai voulu rappeler qu&#8217;il existe bien d&#8217;autres outils spécialisés qui peuvent répondre à des besoins variés. Il existe notamment des outils sophistiqués de manipulation et de calcul statistique plus ou moins récents comme le langage <a href="http://en.wikipedia.org/wiki/NumPy">R</a> (~1993) ou <a href="http://fr.wikipedia.org/wiki/SAS_%28langage%29">SAS</a> (~années 60). Rien de nouveau sous le soleil, mais depuis quelques années (~2012) une petite librairie python fait beaucoup de bruit dans ce paysage: le framework <a href="https://github.com/pydata/pandas">Panda</a> !</p>
 
 <h3>Panda ?</h3>
 
@@ -103,9 +103,9 @@
     <link href="http://www.smknstd.io/2014/08/03/counting-part5/"/>
     <updated>2014-08-03T14:20:00+02:00</updated>
     <id>http://www.smknstd.io/2014/08/03/counting-part5</id>
-    <content type="html"><![CDATA[<p>Bienvenue dans le 5ème article de cette série dédié au regroupement et comptage, une opération courante pour ne pas dire systématique dans les applications actuelles. Pour rappel, j&#8217;essaie dans chaque article de décrire assez naïvement les possibilités et l&#8217;approche avec différentes technologies.</p>
+    <content type="html"><![CDATA[<p>Bienvenue dans le 5ème article de cette série dédiée au regroupement et comptage, une opération courante pour ne pas dire systématique dans les applications actuelles. Pour rappel, j&#8217;essaie dans chaque article de décrire assez naïvement les possibilités et l&#8217;approche avec différentes technologies.</p>
 
-<p>Quand la taille des datasets que l&#8217;on souhaite traiter augmente, l&#8217;approche stricte des algorithmes classiques se montre souvent trop gourmande et dépasse vite les ressources disponible. La consommation de mémoire ou le temps d’exécution notamment peuvent devenir problématiques. Il existe une famille d&#8217;algorithmes qui propose une approche différente radicalement moins consommatrice en mémoire, à de nombreux problèmes dont le comptage de cardinalité: <a href="http://en.wikipedia.org/wiki/Streaming_algorithm">Streaming algorithms</a>.</p>
+<p>Quand la taille des datasets que l&#8217;on souhaite traiter augmente, l&#8217;approche stricte des algorithmes classiques se montre souvent trop gourmande et dépasse vite les ressources disponibles. La consommation de mémoire ou le temps d’exécution notamment peuvent devenir problématiques. Il existe une famille d&#8217;algorithmes qui propose une approche différente radicalement moins consommatrice en mémoire, à de nombreux problèmes dont le comptage de cardinalité: <a href="http://en.wikipedia.org/wiki/Streaming_algorithm">Streaming algorithms</a>.</p>
 
 <p>Loin d&#8217;avoir les connaissances suffisantes, je vais m&#8217;abstenir d&#8217;essayer d&#8217;expliquer leur fonctionnement détaillé, je vais me contenter de vous expliquer leur utilité et quelques cas d&#8217;utilisations des plus populaires d&#8217;entre eux. En simplifiant beaucoup, ces outils permettent de traiter les éléments uniques de manière miraculeuse et donc de procéder à des regroupements. En contre partie, la plupart d&#8217;entre eux sont basés sur des structures probabilistes qui ne garantissent pas toujours l&#8217;exactitude du résultat. Certaines valeurs sont inexactes selon un certains taux d&#8217;erreur (<a href="http://hur.st/bloomfilter">défini</a>) généralement faible :)</p>
 
