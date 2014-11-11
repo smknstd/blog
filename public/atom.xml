@@ -4,7 +4,7 @@
   <title><![CDATA[smknstd.io]]></title>
   <link href="http://www.smknstd.io/atom.xml" rel="self"/>
   <link href="http://www.smknstd.io/"/>
-  <updated>2014-10-10T19:07:30+02:00</updated>
+  <updated>2014-11-11T21:26:19+01:00</updated>
   <id>http://www.smknstd.io/</id>
   <author>
     <name><![CDATA[smknstd]]></name>
@@ -18,17 +18,17 @@
     <link href="http://www.smknstd.io/2014/09/24/mongodb-injections/"/>
     <updated>2014-09-24T08:11:00+02:00</updated>
     <id>http://www.smknstd.io/2014/09/24/mongodb-injections</id>
-    <content type="html"><![CDATA[<p>L&#8217;<a href="http://en.wikipedia.org/wiki/SQL_injection">injection SQL</a> est probablement l&#8217;un des sujets les plus populaires dans le domaine de la sécurité web. C&#8217;est aussi l&#8217;un des sujet les mieux <a href="http://www.root-me.org/fr/Documentation/Web/Injection-SQL">documenté</a> et donc le mieux <a href="http://stackoverflow.com/questions/60174/how-can-i-prevent-sql-injection-in-php">pris en compte</a>.</p>
+    <content type="html"><![CDATA[<p>L&#8217;<a href="http://en.wikipedia.org/wiki/SQL_injection">injection SQL</a> est probablement l&#8217;un des sujets les plus populaires dans le domaine de la sécurité web. C&#8217;est aussi l&#8217;un des mieux <a href="http://www.root-me.org/fr/Documentation/Web/Injection-SQL">documentés</a> et donc le mieux <a href="http://stackoverflow.com/questions/60174/how-can-i-prevent-sql-injection-in-php">pris en compte</a>.</p>
 
-<p>Lorsqu&#8217;une application utilise un système de base de données qui ne dispose pas de la commodité du langage SQL, elle est par la même occasion épargnée par les risques d&#8217;injection généralement liés. Pour autant, il ne faudrait pas systématiquement se croire à l’abri de comportements malicieux.</p>
+<p>Lorsqu&#8217;une application utilise un système de base de données dit NO-SQL, elle est intrinsèquement épargnée par les risques d&#8217;injection liés. Pour autant, il ne faudrait pas systématiquement se croire à l’abri de comportements malicieux.</p>
 
-<h3>MongoDB</h3>
+<h3>Le cas MongoDB</h3>
 
-<p>Pour interroger une collection ou modifier des données, on n&#8217;écrit pas de requête comme on pourrait le faire en SQL, et surtout cela ne prend pas la forme d&#8217;une chaîne de caractères. A travers les librairies &#8220;client&#8221; des différents langages, on utilise généralement une méthode spécifique pour l&#8217;opération souhaitée qui se traduit ensuite par la création d&#8217;un objet BSON. En conséquence la logique de l&#8217;injection SQL ne peut pas s&#8217;appliquer. On ne pourra jamais profiter d&#8217;une opération de consultation pour modifier ou supprimer des données ! #YOUPI</p>
+<p>Pour interroger une collection ou modifier des données, on n&#8217;écrit pas de requête comme on pourrait le faire en SQL, et surtout cela ne prend pas la forme d&#8217;une chaîne de caractères. A travers les librairies &#8220;client&#8221; des différents langages, on utilise généralement une méthode spécifique pour l&#8217;opération souhaitée qui se traduit ensuite par la création d&#8217;un objet BSON. En conséquence la logique de l&#8217;injection SQL ne peut pas s&#8217;appliquer: on ne pourra jamais profiter d&#8217;une opération de consultation pour modifier ou supprimer des données ! #YESSSS</p>
 
 <h4>Javascript coté serveur</h4>
 
-<p>Toutefois, comme le tempère la <a href="http://docs.mongodb.org/manual/faq/developers/#how-does-mongodb-address-sql-or-query-injection">documentation officielle</a>, il faut se méfier de certaines opérations spécifiques qui peuvent exécuter du Javascript arbitraire directement sur serveur comme <code>$where</code> ou <code>group</code>.</p>
+<p>Toutefois, comme le tempère la <a href="http://docs.mongodb.org/manual/faq/developers/#how-does-mongodb-address-sql-or-query-injection">documentation officielle</a>, il faut se méfier de certaines opérations spécifiques qui peuvent exécuter du Javascript arbitraire directement sur serveur comme <code>$where</code> ou <code>$group</code>.</p>
 
 <blockquote><p>You must exercise care in these cases to prevent users from submitting malicious JavaScript.</p></blockquote>
 
@@ -40,7 +40,7 @@
 
 <p>On peut <a href="http://cirw.in/blog/hash-injection">trouver</a>, <a href="https://www.idontplaydarts.com/2010/07/mongodb-is-vulnerable-to-sql-injection-in-php-at-least/">plusieurs</a> <a href="http://blog.websecurify.com/2014/08/hacking-nodejs-and-mongodb.html">ressources</a> qui mettent en lumières des cas pratiques dans lesquels le comportement attendu d&#8217;une requête est modifié grâce à l&#8217;utilisation malicieuse d&#8217;un <strong>opérateur</strong> à la place d&#8217;une valeur habituelle.</p>
 
-<p>Tiré d&#8217;un de ces articles, voici un exemple frappant (parmi d&#8217;autres) dans lequel un utilisateur, grâce à une implémentation php trop permissive, a pu substituer l&#8217;opérateur &#8220;not equal&#8221; (<code>$ne</code>) à la valeur du mot de passe et réussir l&#8217;authentification (sauf dans le cas où le mot de passe était valorisé à 1 lol). Bien sûr dans cet exemple un peu naïf, on valorise les paramètres directement dans l&#8217;url: <code>login.php?username=admin&amp;passwd[$ne]=1</code>. Voilà comment on pourrait représenter l’interprétation problématique et trop permissive qui en découle:</p>
+<p>Tiré d&#8217;un de ces articles, voici un exemple frappant (parmi d&#8217;autres) dans lequel un utilisateur, grâce à une implémentation php trop permissive, a pu substituer l&#8217;opérateur &#8220;not equal&#8221; (<code>$ne</code>) à la valeur du mot de passe et réussir l&#8217;authentification (sauf dans le cas où le mot de passe était <code>1</code> lol). Dans cet exemple un peu naïf, on valorise les paramètres directement dans l&#8217;url: <code>login.php?username=admin&amp;passwd[$ne]=1</code>. Voilà comment on pourrait représenter l’interprétation problématique qui en découle:</p>
 
 <pre><code>$collection-&gt;find(array(
     "username" =&gt; "admin",
@@ -50,12 +50,12 @@
 
 <p>Ces exemples montrent bien que même si l&#8217;interrogation sur MongoDB est par nature plus solide face aux injections, il faut malgré tout rester vigilent lorsqu&#8217;on conçoit l&#8217;interface liée. Tout comme on a appris le faire avec SQL, avec Mongo, il faut aussi porter un soin particulier à vérifier le contenu des valeurs paramétrées par l&#8217;utilisateur.</p>
 
-<p>Passez une bonne journée :)</p>
+<p>Passez une <a href="http://www.youtube.com/watch?v=IugOfDBWcGc">bonne journée</a> :)</p>
 
 <h3>Ressources</h3>
 
 <ul>
-<li>une bonne petite <a href="http://xkcd.com/327/">blague</a></li>
+<li>une <a href="http://xkcd.com/327/">blague</a></li>
 <li>une <a href="http://php.net/manual/en/mongo.security.php">note</a> officielle sur la sécurité du client php de mongo</li>
 </ul>
 
