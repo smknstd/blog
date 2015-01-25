@@ -4,7 +4,7 @@
   <title><![CDATA[smknstd.io]]></title>
   <link href="http://www.smknstd.io/atom.xml" rel="self"/>
   <link href="http://www.smknstd.io/"/>
-  <updated>2014-11-11T21:26:19+01:00</updated>
+  <updated>2015-01-25T17:04:52+01:00</updated>
   <id>http://www.smknstd.io/</id>
   <author>
     <name><![CDATA[smknstd]]></name>
@@ -14,11 +14,97 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Les arguments de fonctions en javascript]]></title>
+    <link href="http://www.smknstd.io/2015/01/25/js-function-arguments/"/>
+    <updated>2015-01-25T15:40:00+01:00</updated>
+    <id>http://www.smknstd.io/2015/01/25/js-function-arguments</id>
+    <content type="html"><![CDATA[<p>Cet article souhaite décrire une caractéristique de javascript pas toujours très bien connue des programmeurs. C&#8217;est loin d&#8217;être un concept essentiel mais je pense qu&#8217;il mérite une attention. En javascript, au moment d&#8217;appeler une fonction, on peut préciser autant de paramètre que l&#8217;on souhaite, peu importe ceux qui sont précisés dans sa déclaration. Si on en liste moins, ceux-ci prendront la valeur <code>undefined</code>. Mais on peut aussi en lister plus !</p>
+
+<h3>Le tableau des arguments</h3>
+
+<p>Le tableau <code>arguments</code> est un paramètre supplémentaire disponible lorsque les fonctions sont invoquées. Il donne à la fonction l&#8217;accès à tous les arguments fournis avec l&#8217;invocation, dont les arguments en excédent lorsqu&#8217;ils ne sont pas attribués à des paramètres existants. Il est donc possible d&#8217;écrire des fonctions qui prennent un nombre &#8220;indéfini&#8221; de paramètres !?</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var sum = function (  ) {
+</span><span class='line'>    var i;
+</span><span class='line'>    var sum = 0;
+</span><span class='line'>    for (i = 0; i &lt; arguments.length; i++) {
+</span><span class='line'>        sum += arguments[i];
+</span><span class='line'>    }
+</span><span class='line'>    return sum;
+</span><span class='line'>};
+</span><span class='line'>
+</span><span class='line'>console.log(sum(1,2,3,4)); // 10</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Il est souvent dit que cette feature n&#8217;a pas beaucoup d&#8217;utilité, elle est toutefois très puissante.</p>
+
+<h3>Une erreur d&#8217;implémentation</h3>
+
+<p>Mais javascript est un langage à l&#8217;histoire spéciale et il ne serait pas si discuté, si il n&#8217;amenait pas son lot de particularités. En effet, comme le cite l&#8217;ouvrage de référence &#8220;JavaScript: The Good Parts&#8221; de Douglas Crockford publié en 2008:</p>
+
+<blockquote><p>Because of a design error, arguments is not really an array. It is an array-like object. arguments has a length property, but it lacks all of the array methods.</p></blockquote>
+
+<p>En effet, il est important de savoir que c&#8217;est en fait un Objet javascript qui ressemble beaucoup à un tableau (propriété <code>legnth</code> et utilisation possible de la bouvle <code>for</code>).</p>
+
+<p>Heuresement il existe un moyen simple de le transformer en un &#8220;vrai&#8221; tableau et utiliser alors tous les outils de manipulation de tableaux que l&#8217;on souhaite comme <code>foreach</code> ou <code>join</code>. Voici deux variantes pour le faire:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var argArray = Array.prototype.slice.call(arguments);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ou</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var aRealArray = [].slice.call(arguments);</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Attention aux références</h3>
+
+<p>Il existe une autre particularité à ce &#8220;pseudo&#8221; tableau. Les parametres nommés dans la déclaration d&#8217;une fonction et <code>arguments</code> référencent les mêmes valeurs. En conséquence quand on modifie une valeur d&#8217;un paramètre &#8220;nommé&#8221; à l&#8217;interieur d&#8217;une fonction, sa valeur est aussi modifié dans le tableau <code>arguments</code> et reciproquement.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>function yolo(state) {
+</span><span class='line'>  x = 'yes'
+</span><span class='line'>  alert(arguments[0])
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>yolo('no'); //yes</span></code></pre></td></tr></table></div></figure>
+
+
+<p>On dit généralement que modifier les valeurs de <code>arguments</code> n&#8217;est pas une <strong>bonne pratique</strong> ;)</p>
+
+<h3>Ressources</h3>
+
+<ul>
+<li><a href="http://jsforallof.us/2014/07/29/arguments/">function arguments</a></li>
+<li><a href="http://modernweb.com/2013/12/23/45-useful-javascript-tips-tricks-and-best-practices/?utm_source=javascriptweekly&amp;utm_medium=email">45 Useful JavaScript Tips, Tricks and Best Practices</a></li>
+<li><a href="http://javascript.info/tutorial/arguments">Javascript tutorial</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Méfiez vous des injections même avec MongoDB]]></title>
     <link href="http://www.smknstd.io/2014/09/24/mongodb-injections/"/>
     <updated>2014-09-24T08:11:00+02:00</updated>
     <id>http://www.smknstd.io/2014/09/24/mongodb-injections</id>
-    <content type="html"><![CDATA[<p>L&#8217;<a href="http://en.wikipedia.org/wiki/SQL_injection">injection SQL</a> est probablement l&#8217;un des sujets les plus populaires dans le domaine de la sécurité web. C&#8217;est aussi l&#8217;un des mieux <a href="http://www.root-me.org/fr/Documentation/Web/Injection-SQL">documentés</a> et donc le mieux <a href="http://stackoverflow.com/questions/60174/how-can-i-prevent-sql-injection-in-php">pris en compte</a>.</p>
+    <content type="html"><![CDATA[<p>L&#8217;<a href="http://en.wikipedia.org/wiki/SQL_injection">injection SQL</a> est probablement l&#8217;un des sujets les plus populaires dans le domaine de la sécurité web. C&#8217;est aussi l&#8217;un des <a href="https://sysadmincasts.com/episodes/21-anatomy-of-a-sql-injection-attack-leading-to-code-execution">mieux</a> <a href="http://www.root-me.org/fr/Documentation/Web/Injection-SQL">documentés</a> et donc le mieux <a href="http://stackoverflow.com/questions/60174/how-can-i-prevent-sql-injection-in-php">pris en compte</a>.</p>
 
 <p>Lorsqu&#8217;une application utilise un système de base de données dit NO-SQL, elle est intrinsèquement épargnée par les risques d&#8217;injection liés. Pour autant, il ne faudrait pas systématiquement se croire à l’abri de comportements malicieux.</p>
 

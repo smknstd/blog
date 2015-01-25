@@ -6,7 +6,7 @@ comments: false
 categories: 
 ---
 
-L'[injection SQL](http://en.wikipedia.org/wiki/SQL_injection) est probablement l'un des sujets les plus populaires dans le domaine de la sécurité web. C'est aussi l'un des mieux [documentés](http://www.root-me.org/fr/Documentation/Web/Injection-SQL) et donc le mieux [pris en compte](http://stackoverflow.com/questions/60174/how-can-i-prevent-sql-injection-in-php).
+L'[injection SQL](http://en.wikipedia.org/wiki/SQL_injection) est probablement l'un des sujets les plus populaires dans le domaine de la sécurité web. C'est aussi l'un des [mieux](https://sysadmincasts.com/episodes/21-anatomy-of-a-sql-injection-attack-leading-to-code-execution) [documentés](http://www.root-me.org/fr/Documentation/Web/Injection-SQL) et donc le mieux [pris en compte](http://stackoverflow.com/questions/60174/how-can-i-prevent-sql-injection-in-php).
 
 Lorsqu'une application utilise un système de base de données dit NO-SQL, elle est intrinsèquement épargnée par les risques d'injection liés. Pour autant, il ne faudrait pas systématiquement se croire à l’abri de comportements malicieux.
 

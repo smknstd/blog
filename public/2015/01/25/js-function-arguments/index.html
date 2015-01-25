@@ -1,0 +1,252 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Les arguments de fonctions en javascript - smknstd.io</title>
+  <meta name="author" content="smknstd">
+
+  
+  <meta name="description" content="Cet article souhaite décrire une caractéristique de javascript pas toujours très bien connue des programmeurs. C&#8217;est loin d&#8217;être un &hellip;">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.smknstd.io/2015/01/25/js-function-arguments/">
+  <link href="/images/favicon.ico" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feedpress.me/smknstd" rel="alternate" title="smknstd.io" type="application/atom+xml">
+  <script type="text/javascript" src="//use.typekit.net/oqc4yak.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<script type="text/javascript">
+function show_new() {
+	var j=0;
+    var chila = document.getElementById("blog-archives").children;
+	for(var i = 0; i < chila.length; i++) {
+			var ch = chila[i].getElementsByTagName('h1')[0];
+		    var lien = ch.getElementsByTagName('a')[0].getAttribute("href");
+		    mytab = lien.split("/");
+		    var parsedDate = new Date(parseInt(mytab[1]), parseInt(mytab[2])-1, parseInt(mytab[3]), 0, 0, 0, 0);
+		    var today = new Date();
+		    var diffDays = Math.floor((today - parsedDate)/(1000*60*60*24));
+		    if(diffDays<45){
+		    	j++;
+		        ch.innerHTML=chila[i].getElementsByTagName('h1')[0].innerHTML+"<div id='new'>NEW</div>";
+		    }else{
+		    	// comme les articles sont ordonnées chronologiquement on peut s'arreter de chercher au premier article de plus de 45 jours trouvé 
+		    	break;
+		    }
+
+	}
+	console.log("[function show_new] " + j +" articles de moins de 45 jours (rajout de l'etiquette NEW)");
+}
+</script>
+
+  
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5215670-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+
+
+</head>
+
+<body onload="show_new()"   >
+  <header role="banner">  <div id="logo"><a href="/"><img src="/images/logo.png" alt="logo" /></a></div>
+  <div id="legend">{type: "web log", localhost: "Paris", about: "trapped all day, got my cheese and an indexed key"}</div>
+
+</header>
+  <nav role="navigation">
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    <div id="archive_header">
+    
+      <h2 class="entry-title">Les Arguments De Fonctions en Javascript</h2>
+    
+    </div>
+  </header>
+  <header>
+    <div id="archive_header">
+    
+      <h3 class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-25T15:40:00+01:00" pubdate data-updated="true">Jan 25<span>th</span>, 2015</time>
+      </h3>
+    
+    </div>
+  </header>
+
+
+<div class="entry-content"><p>Cet article souhaite décrire une caractéristique de javascript pas toujours très bien connue des programmeurs. C&#8217;est loin d&#8217;être un concept essentiel mais je pense qu&#8217;il mérite une attention. En javascript, au moment d&#8217;appeler une fonction, on peut préciser autant de paramètre que l&#8217;on souhaite, peu importe ceux qui sont précisés dans sa déclaration. Si on en liste moins, ceux-ci prendront la valeur <code>undefined</code>. Mais on peut aussi en lister plus !</p>
+
+<h3>Le tableau des arguments</h3>
+
+<p>Le tableau <code>arguments</code> est un paramètre supplémentaire disponible lorsque les fonctions sont invoquées. Il donne à la fonction l&#8217;accès à tous les arguments fournis avec l&#8217;invocation, dont les arguments en excédent lorsqu&#8217;ils ne sont pas attribués à des paramètres existants. Il est donc possible d&#8217;écrire des fonctions qui prennent un nombre &#8220;indéfini&#8221; de paramètres !?</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var sum = function (  ) {
+</span><span class='line'>    var i;
+</span><span class='line'>    var sum = 0;
+</span><span class='line'>    for (i = 0; i &lt; arguments.length; i++) {
+</span><span class='line'>        sum += arguments[i];
+</span><span class='line'>    }
+</span><span class='line'>    return sum;
+</span><span class='line'>};
+</span><span class='line'>
+</span><span class='line'>console.log(sum(1,2,3,4)); // 10</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Il est souvent dit que cette feature n&#8217;a pas beaucoup d&#8217;utilité, elle est toutefois très puissante.</p>
+
+<h3>Une erreur d&#8217;implémentation</h3>
+
+<p>Mais javascript est un langage à l&#8217;histoire spéciale et il ne serait pas si discuté, si il n&#8217;amenait pas son lot de particularités. En effet, comme le cite l&#8217;ouvrage de référence &#8220;JavaScript: The Good Parts&#8221; de Douglas Crockford publié en 2008:</p>
+
+<blockquote><p>Because of a design error, arguments is not really an array. It is an array-like object. arguments has a length property, but it lacks all of the array methods.</p></blockquote>
+
+<p>En effet, il est important de savoir que c&#8217;est en fait un Objet javascript qui ressemble beaucoup à un tableau (propriété <code>legnth</code> et utilisation possible de la bouvle <code>for</code>).</p>
+
+<p>Heuresement il existe un moyen simple de le transformer en un &#8220;vrai&#8221; tableau et utiliser alors tous les outils de manipulation de tableaux que l&#8217;on souhaite comme <code>foreach</code> ou <code>join</code>. Voici deux variantes pour le faire:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var argArray = Array.prototype.slice.call(arguments);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ou</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var aRealArray = [].slice.call(arguments);</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Attention aux références</h3>
+
+<p>Il existe une autre particularité à ce &#8220;pseudo&#8221; tableau. Les parametres nommés dans la déclaration d&#8217;une fonction et <code>arguments</code> référencent les mêmes valeurs. En conséquence quand on modifie une valeur d&#8217;un paramètre &#8220;nommé&#8221; à l&#8217;interieur d&#8217;une fonction, sa valeur est aussi modifié dans le tableau <code>arguments</code> et reciproquement.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>function yolo(state) {
+</span><span class='line'>  x = 'yes'
+</span><span class='line'>  alert(arguments[0])
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>yolo('no'); //yes</span></code></pre></td></tr></table></div></figure>
+
+
+<p>On dit généralement que modifier les valeurs de <code>arguments</code> n&#8217;est pas une <strong>bonne pratique</strong> ;)</p>
+
+<h3>Ressources</h3>
+
+<ul>
+<li><a href="http://jsforallof.us/2014/07/29/arguments/">function arguments</a></li>
+<li><a href="http://modernweb.com/2013/12/23/45-useful-javascript-tips-tricks-and-best-practices/?utm_source=javascriptweekly&amp;utm_medium=email">45 Useful JavaScript Tips, Tricks and Best Practices</a></li>
+<li><a href="http://javascript.info/tutorial/arguments">Javascript tutorial</a></li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">smknstd</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-01-25T15:40:00+01:00" pubdate data-updated="true">Jan 25<span>th</span>, 2015</time>
+      
+
+
+    </p>
+    <div id="archive_header2">
+      <div id="archive_header3">
+      
+        <a class="basic-alignment left" href="/2014/09/24/mongodb-injections/" title="Previous Post: Méfiez vous des injections même avec MongoDB">&laquo; Méfiez vous des injections même avec MongoDB</a>
+      
+      
+      </div>
+    </div>
+  </footer>
+</article>
+</div>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  2015 - smknstd -
+  <span class="credit">built with <a href="http://octopress.org">Octopress</a> and hosted @ <a href="http://heroku.com">Heroku</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
